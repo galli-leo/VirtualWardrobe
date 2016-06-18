@@ -64,3 +64,5 @@ Plugins/BLUI/Intermediate/
 DerivedDataCache/
 
 BluCache/
+
+*.pyc

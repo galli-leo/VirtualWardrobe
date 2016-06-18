@@ -1,7 +1,6 @@
 import sqlite3
+from DBWrappers import Category
 DBFILE = "shirt_db.db"
-
-
 
 class Database(object):
     """Our connection to the database"""
@@ -12,13 +11,21 @@ class Database(object):
         self.conn.row_factory = sqlite3.Row
         self.cursor = self.conn.cursor()
 
-    def select(self, table, fields=[], condition=[]):
+    def select(self, table, fields=[], condition=[], raw_values=False):
         #TODO: add fields and conditions
         self.cursor.execute("SELECT * from "+table+"")
-        return self.cursor.fetchall()
+        rows = self.cursor.fetchall()
+        if raw_values:
+            return rows
+        if table == "categories":
+            cats = []
+            for row in rows:
+                cat = Category(row)
+                cats.append(cat)
+            return cats
 
 
 if __name__ == "__main__":
     DB = Database()
-    for row in DB.select("categories"):
+    for row in DB.select("categories", raw_values=True):
         print(row["fullname"])
