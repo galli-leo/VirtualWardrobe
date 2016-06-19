@@ -3,6 +3,17 @@ import os, glob
 from PIL import Image
 import Vars
 
+class DatabaseWrapper(object):
+    def __init__(self):
+        super(DatabaseWrapper, self).__init__()
+        self.id = 0
+
+    @classmethod
+    def fromRow(cls, row):
+        new = cls()
+        new.row = row
+        new.id = row["id"]
+        return new
 
 
 class Category(object):
