@@ -1,31 +1,61 @@
 import sqlite3
-from DBWrappers import Category
-DBFILE = "shirt_db.db"
+from DBWrappers import Category, ClothingItem
+import DBWrappers
+import os
+import Vars
+
+
 
 class Database(object):
     """Our connection to the database"""
-    def __init__(self, dbname=DBFILE):
+    def __init__(self, dbname=Vars.DBFILE):
         super(Database, self).__init__()
         self.dbname = dbname
         self.conn = sqlite3.connect(self.dbname)
+        sqlite3.register_adapter(bool, int)
+        sqlite3.register_converter("BOOLEAN", lambda v: bool(int(v)))
         self.conn.row_factory = sqlite3.Row
-        self.cursor = self.conn.cursor()
+        self.obj_map = {"categories" : Category, "clothes" : ClothingItem}
 
-    def select(self, table, fields=[], condition=[], raw_values=False):
+    def convertRowToObject(self, row, ptype):
+        if isinstance(row, list):
+            arr = []
+            for r in row:
+                obj = ptype.fromRow(r)
+                arr.append(obj)
+            return arr
+        else:
+            return ptype(row)
+
+    def select(self, table, fields=[], condition={}, raw_values=False):
         #TODO: add fields and conditions
-        self.cursor.execute("SELECT * from "+table+"")
-        rows = self.cursor.fetchall()
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * from "+table+"")
+        rows = cursor.fetchall()
         if raw_values:
             return rows
-        if table == "categories":
-            cats = []
-            for row in rows:
-                cat = Category(row)
-                cats.append(cat)
-            return cats
+        if table in self.obj_map:
+            return self.convertRowToObject(rows, self.obj_map[table])
+
+    def createNewEntry(self, table, fields={}):
+        cursor = self.conn.cursor()
+        print("INSERT into "+table+" ("+",".join(fields.keys())+") VALUES ("+",".join(fields.values())+")")
+        cursor.execute("INSERT into "+table+" ("+",".join(fields.keys())+") VALUES ("+",".join(fields.values())+")")
+        self.conn.commit()
+        return cursor.lastrowid
+
+    def delete(self, table, id):
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE from "+table+" WHERE id=?", id)
+
+
+
+    def insert(self, table, values={}):
+        pass
 
 
 if __name__ == "__main__":
     DB = Database()
+    Vars.DB = DB
     for row in DB.select("categories", raw_values=True):
         print(row["fullname"])
