@@ -2,6 +2,7 @@ import DatabaseInterface
 import os, glob
 from PIL import Image
 import Vars
+from TextureCreators import TextureCreator
 
 class DatabaseWrapper(object):
     def __init__(self):
@@ -53,8 +54,9 @@ class ClothingItem(object):
         self.frontimage = False
         self.finaltexture = ""
         self.printedtexture = False
-        self.texture_creators = {"tshirt" : TShirtCreator}
+        self.texture_creators = {"tshirt" : TextureCreator}
         self.category_recognizers = {}
+
 
     @classmethod
     def fromRow(cls, row):
@@ -69,10 +71,17 @@ class ClothingItem(object):
         new.frontimage = bool(int(row["frontimage"]))
         new.printedtexture = bool(int(row["printedtexture"]))
         new.loadTextures()
+
         return new
 
     def getTexturePath(self, texture_path=Vars.TEXTURE_FOLDER):
-        return os.path.join(texture_path, self.category.name, "%04d" % (self.id,))
+        path = os.path.join(texture_path, self.category.name, "%04d" % (self.id,))
+        try:
+            os.makedirs(path)
+        except OSError:
+            if not os.path.isdir(self.category.getPath()):
+                raise
+        return path
 
     def loadTextures(self):
         path = self.getTexturePath()
@@ -91,12 +100,14 @@ class ClothingItem(object):
 
     def createFinalTexture(self):
         creator_cls = self.texture_creators[self.category.name]
+        self.loadTextures()
         printed_texture = None
         if self.printedtexture:
             path = self.getTexturePath()
             printed_texture = Image.open(os.path.join(path, "print"+".png"))
         creator = creator_cls(self.texturesamples, printed_texture)
         final_texture = creator.createTexture()
+        return final_texture
 
     def guessClothCategory(self):
         #Take front image if available
@@ -126,6 +137,8 @@ def loadCategories():
 def loadClothes():
     DB = DatabaseInterface.Database()
     clothes = DB.select("clothes")
+    texture = clothes[2].createFinalTexture()
+    texture.save("testing_texture.png")
 
 if __name__ == "__main__":
     loadCategories()
