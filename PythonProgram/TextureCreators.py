@@ -2,12 +2,13 @@ import noise
 import math
 from PIL import Image, ImageOps
 import time
+from Vars import LOG
 
 def timeit(func):
     def func_wrapper(*args, **kwargs):
         current_time = time.time()
         ret = func(*args, **kwargs)
-        print("[*] Time taken to execute function {0}: {1} s".format(str(func.__name__), float(time.time()-current_time)))
+        LOG.debug("Time taken to execute function {0}: {1} s".format(str(func.__name__), float(time.time()-current_time)))
         return ret
     return func_wrapper
 
@@ -21,6 +22,7 @@ class TextureCreator(object):
 
     def multiply(self, rgb, mask):
         if rgb.size != mask.size:
+            LOG.warning("Image mode or size not matching")
             return None
         new = Image.new(rgb.mode, rgb.size)
         w, h = new.size
@@ -34,6 +36,7 @@ class TextureCreator(object):
 
     def add(self, img, otherImage):
         if img.mode != otherImage.mode or img.size != otherImage.size:
+            LOG.warning("Image mode or size not matching")
             return None
         new = Image.new(img.mode, img.size)
         w, h = new.size
@@ -90,7 +93,7 @@ class BigTileCreator(TextureCreator):
     """docstring for BigTileCreator"""
     def createTexture(self):
         if len(self.samples) == 0:
-            print("Not enough samples")
+            LOG.warning("Not enough samples")
             return Image.new("RGBA", self.size)
         self.texture = Image.new("RGBA", self.size)
         for path in self.samples:
@@ -148,8 +151,6 @@ class TilingPrevention(TextureCreator):
                 N = (size[0])
                 value = math.sqrt((x-N/2)**2 + (y-N/2)**2) / (N/2)
                 mask.putpixel((x,y), (int(255*value),))
-
-        print("Hello")
         mask.save("testing_mask.png")
         return mask
 
@@ -159,4 +160,4 @@ class TilingPrevention(TextureCreator):
 if __name__ == "__main__":
     creator = TilingPrevention(["textures/tshirt/0012/back.png"], None)
     img = creator.createTexture()
-    img.show()
+    #img.show()
