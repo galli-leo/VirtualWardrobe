@@ -1,6 +1,15 @@
 import noise
 import math
 from PIL import Image, ImageOps
+import time
+
+def timeit(func):
+    def func_wrapper(*args, **kwargs):
+        current_time = time.time()
+        ret = func(*args, **kwargs)
+        print("[*] Time taken to execute function {0}: {1} s".format(str(func.__name__), float(time.time()-current_time)))
+        return ret
+    return func_wrapper
 
 class TextureCreator(object):
     """docstring for TextureCreator"""
@@ -10,11 +19,43 @@ class TextureCreator(object):
         printed_texture = printed_texture
         self.size = size
 
+    def multiply(self, rgb, mask):
+        if rgb.size != mask.size:
+            return None
+        new = Image.new(rgb.mode, rgb.size)
+        w, h = new.size
+        for x in range(0, w):
+            for y in range(0, h):
+                value = rgb.getpixel((x,y))
+                value = tuple(int(i * (mask.getpixel((x,y))/255.0)) for i in value)
+                new.putpixel((x,y), value)
+
+        return new
+
+    def add(self, img, otherImage):
+        if img.mode != otherImage.mode or img.size != otherImage.size:
+            return None
+        new = Image.new(img.mode, img.size)
+        w, h = new.size
+        for x in range(0, w):
+            for y in range(0, h):
+                value = img.getpixel((x,y))
+                otherValue = otherImage.getpixel((x,y))
+                newValue = [0]*len(value)
+                for i in range(0,len(value)):
+                    newValue[i] = value[i] + otherValue[i]
+
+                new.putpixel((x,y), tuple(newValue))
+
+        return new
+
+
+
     def createRandomTexture(self, size, algo=noise.snoise2):
         img = Image.new("L", size)
         h, w = size
-        for x in range(0,w-1):
-            for y in range(0,h-1):
+        for x in range(0,w):
+            for y in range(0,h):
                 n = algo(x*0.45, y*0.67)
                 r = abs(int(255*n))
                 value = (r)
@@ -23,13 +64,13 @@ class TextureCreator(object):
         return img
 
     def tileSmallerTexture(self, smaller, larger):
-        s_w, s_h = samller.size
+        s_w, s_h = smaller.size
         tiled = Image.new("RGBA", self.size)
         w, h = tiled.size
         for i in range(0, w, s_w):
             for j in range(0, h, s_h):
                 #paste the image at location i, j:
-                tiled.paste(s_image, (i, j))
+                tiled.paste(smaller, (i, j))
 
         larger.paste(tiled, (0,0))
         return tiled
@@ -66,6 +107,7 @@ class BigTileCreator(TextureCreator):
 
 class TilingPrevention(TextureCreator):
     """Borrowed from http://paulbourke.net/texture_colour/tiling/"""
+    @timeit
     def createTexture(self):
         self.texture = Image.new("RGBA", self.size)
         for path in self.samples:
@@ -75,8 +117,13 @@ class TilingPrevention(TextureCreator):
             mask_swapped = self.swapOppositeQuadrants(orig_mask)
             s_swapped = self.swapOppositeQuadrants(s_image)
             tile = Image.new("RGBA", s_image.size)
-            tile.paste(s_image, (0,0), orig_mask)
-            tile.paste(s_swapped, (0,0), mask_swapped)
+
+            s_swapped.save("testing_swapped.png")
+            mask_swapped.save("testing_mask_swapped.png")
+            tile.paste(s_swapped, (0,0), orig_mask)
+            tile.save("testing_masked_a.png")
+            tile.paste(s_image, (0,0), mask_swapped)
+            tile.save("testing_tile.png")
             self.tileSmallerTexture(tile, self.texture)
 
         return self.texture
@@ -91,6 +138,8 @@ class TilingPrevention(TextureCreator):
                 new_y = (y+N/2) % N
                 value = image.getpixel((new_x, new_y))
                 new.putpixel((x,y), value)
+
+        return new
 
     def createMaskForOrig(self, size):
         mask = Image.new("L", size)
@@ -108,8 +157,6 @@ class TilingPrevention(TextureCreator):
 
 
 if __name__ == "__main__":
-    creator = TextureCreator([], None)
-    img = creator.createRandomTexture(creator.size)
-    img.save("random.png")
-    invert = ImageOps.invert(img)
-    invert.save("random_invert.png")
+    creator = TilingPrevention(["textures/tshirt/0012/back.png"], None)
+    img = creator.createTexture()
+    img.show()
