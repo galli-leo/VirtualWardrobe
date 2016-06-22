@@ -23,6 +23,7 @@ class TextureCreator(object):
         printed_texture = printed_texture
         self.size = size
         self.prefix = prefix
+        self.num_per_processing = 1
 
     def save(self, image):
         """VERY HACKY, ONLY USE TO DEBUG!"""
@@ -104,13 +105,21 @@ class TextureCreator(object):
             LOG.warning("Not enough samples")
             return Image.new("RGBA", self.size)
         self.texture = Image.new("RGBA", self.size)
+        count = 0
+        images = []
         for sample in self.samples:
             img = None
             if isinstance(sample, Image.Image):
                 img = sample
             else:
                 img = Image.open(sample)
-            self.processSample(img)
+            count += 1
+            images.append(img)
+            if count >= self.num_per_processing:
+                count = 0
+                self.processSample(images)
+                images = []
+
 
         return self.texture
     def processSample(self, image):
@@ -118,7 +127,8 @@ class TextureCreator(object):
 
 class BigTileCreator(TextureCreator):
     """BigTileCreator. Only works for 1 sample!"""
-    def processSample(self, s_image):
+    def processSample(self, images):
+        s_image = images[0]
         self.texture = Image.new("RGBA", self.size)
         s_w, s_h = s_image.size
         big_tile = Image.new("RGBA", (s_w*2, s_h*2))
@@ -133,7 +143,8 @@ class BigTileCreator(TextureCreator):
 class TilableCreator(TextureCreator):
     """Borrowed from http://paulbourke.net/texture_colour/tiling/"""
     @timeit
-    def processSample(self, s_image):
+    def processSample(self, images):
+        s_image = images[0]
         s_w, s_h = s_image.size
         orig_mask = self.createMaskForOrig(s_image.size)
         mask_swapped = self.swapOppositeQuadrants(orig_mask)
@@ -176,20 +187,29 @@ class TilableCreator(TextureCreator):
 
 class NoiseCreator(TextureCreator):
     """docstring for NoiseCreator"""
+    def __init__(self, *args, **kwargs):
+        super(NoiseCreator, self).__init__(*args, **kwargs)
+        self.num_per_processing = 2
+
     @timeit
-    def processSample(self, s_image):
+    def processSample(self, images):
+        if len(images) != 2:
+            LOG.warning("Wrong number of samples. Maybe you have to little?")
+            return Image.new("RGBA", self.size)
+        sample1 = images[0]
+        sample2 = images[1]
         random = Image.open("random.png")
         rand_invert = Image.open("random_invert.png")
-        s_w, s_h = s_image.size
+        s_w, s_h = sample1.size
         t1 = Image.new("RGBA", self.size)
-        self.tileSmallerTexture(s_image, t1)
+        self.tileSmallerTexture(sample1, t1)
         t1 = ImageChops.multiply(t1, random.convert("RGBA"))#self.multiply(t1, random)
         t2 = Image.new("RGBA", self.size)
-        self.tileSmallerTexture(s_image.transpose(Image.FLIP_LEFT_RIGHT), t2)
+        self.tileSmallerTexture(sample2, t2)
         t2 = ImageChops.multiply(t2, rand_invert.convert("RGBA"))
         self.save(t1)
         self.save(t2)
-
+        self.texture = ImageChops.add(t1, t2)
         return self.texture
 
 
@@ -198,6 +218,8 @@ class NoiseCreator(TextureCreator):
 
 
 if __name__ == "__main__":
-    creator = TilableCreator(["textures/tests/pink.png"], None, prefix="pink")
-    img = creator.createTexture()
+    #creator = NoiseCreator(["textures/tests/pink.png", "textures/tests/pink2.png"], None, prefix="grey")
+    rand_creator = TextureCreator([], None)
+    #img = creator.createTexture()
+    img = rand_creator.createRandomTexture(rand_creator.size, noise.pnoise2)
     img.show()
