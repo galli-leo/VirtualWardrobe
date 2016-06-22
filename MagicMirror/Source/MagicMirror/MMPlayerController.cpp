@@ -45,7 +45,7 @@ FVector2D AMMPlayerController::GetObjectScreenSize(AActor* InActor)
 
 	/* Get Projected Screen Radius */
 	ScreenRadius = FMath::Atan(BoundingRadius / DistanceToObject);
-	ScreenRadius *= SRad / FMath::DegreesToRadians(CamFOV);
+	ScreenRadius *= SRad / FMath::DegreesToRadians(HFOV);
 	
 	return FVector2D(Width, ScreenRadius);
 }

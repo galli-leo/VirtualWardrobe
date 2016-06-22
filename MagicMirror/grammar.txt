@@ -1,0 +1,193 @@
+<!-- The grammar tag surrounds the entire CFG description
+       Specify the language of the grammar as
+       English-American ('409') -->
+<GRAMMAR LANGID="409">
+    <!-- Specify a set of easy-to-read strings to
+            represent specific values. Similar to
+            constants or #define in Visual Basic or
+            C/++ programming languages -->
+    <DEFINE>
+        <ID NAME="FROM" VAL="1"/>
+        <ID NAME="TO" VAL="2"/>
+        <ID NAME="SUIT" VAL="3"/>
+        <ID NAME="COLOR" VAL="4"/>
+        <ID NAME="RANK" VAL="5"/>
+        <ID NAME="ColorRed" VAL="11101"/>
+        <ID NAME="ColorBlack" VAL="10011"/>
+    </DEFINE>
+
+   <!-- Define a top-level rule for the new game
+           command, called 'newgame' -->
+   <!-- Make the rule 'active', by default, so
+           the rule is available as soon is speech
+           is activated in the application -->
+   <RULE NAME="newgame" TOPLEVEL="ACTIVE">
+      <!-- Require high confidence for the word,
+              game, to avoid accidental recognition
+              of this important rule -->
+      <!-- Make the last word, please, optional,
+              only require low-confidence to
+              make the command phrasing more
+              flexible -->
+      <P>new +game</P><O>-please</O>
+   </RULE>
+
+   <!-- Define another active top-level rule,
+          called 'playcard' which enables the user
+          to use voice commanding to play cards -->
+   <!-- Define the 'playcard' rule as exportable, so
+          we can create other solitaire or card game
+          grammars which can re-use the 'playcard'
+          rule functionality. -->
+   <RULE NAME="playcard" TOPLEVEL="ACTIVE" EXPORT="1">
+      <O>please</O>
+      <P>play the</P>
+         <!-- Allow for extraneous garbage words
+              from the user. The user could say
+              "play the little ace of spades" without
+              breaking the voice command -->
+      <O>...</O>
+         <!-- Use a rule reference to a card grammar
+                 which is defined elsewhere in the
+                 overall solitaire grammar. Using
+                 rule references is similar to
+                 reusable components in an object-
+                 oriented programming language or
+                 component model -->
+      <RULEREF NAME="card"/>
+      <O>please</O>
+   </RULE>
+
+   <!-- Define another top-level voice command for
+          moving one card to another location -->
+   <!-- Note that phrase structure allows for two
+           types of move-commands by making to_card
+           section optional. The grammar supports
+           both 'move from_card to to_card' and
+           simply 'move from_card'. The application
+           can select the from_card when the latter
+           voice command is recognized, or the
+           application can perform the full move
+           with the former voice command. -->
+   <RULE NAME="movecard" TOPLEVEL="ACTIVE">
+      <O>please</O>
+      <P>
+         <L>
+            <P>move</P>
+            <P>put</P>
+         </L>
+         <P>the</P>
+      </P>
+
+      <!-- Use a semantic tag/property, called 'FROM'
+              which represents the from_card, and
+              will contain the phrase structure
+              recognized in the rule reference. By
+              using semantic properties, the application
+              can abstract away the exact phrase text
+              and build application logic based on
+              the action (i.e., Action=move
+              FromCard=(Rank=Ace, Suit=Hearts) -->
+      <RULEREF PROPNAME="from" PROPID="FROM" NAME="card"/>
+      <O>
+         <L>
+            <P>on</P>
+            <P>to</P>
+         </L>
+         <P>the</P>
+         <!-- Use another semantic property for the
+                 ToCard information -->
+         <RULEREF PROPNAME="to" PROPID="TO" NAME="card"/>
+      </O>
+      <O>please</O>
+   </RULE>
+
+   <!-- Create a reusable card grammar, which contains
+           the structure of a card's descriptor (e.g.,
+           "red ace", "ace of hearts", or "heart").
+           Note: It is not a top-level rule, since
+              it is only used by other top-level
+              rules and is not directly recognizable -->
+   <RULE NAME="card">
+      <!-- Use a phrase list to allow the descriptor
+           to be one of three forms, including
+           a color and rank, or a rank and
+           suit, or only a suit. -->
+     <!-- The application can decode the
+             card by analyzing the semantic
+             property structure. For example,
+             the color and rank form will
+             include a property called 'color'
+             with a value either ColorRed or
+             ColorBlack (note that these values
+             are actually numeric defines).-->
+      <L>
+         <P><!-- color and rank form -->
+            <L PROPNAME="color" PROPID="COLOR">
+               <P VAL="ColorRed">red</P>
+               <P VAL="ColorBlack">black</P>
+            </L>
+            <RULEREF NAME="rank"/>
+         </P>
+         <P><!-- rank and suit form -->
+            <RULEREF NAME="rank"/>
+            <O>
+               <P>of</P>
+               <L PROPNAME="suit" PROPID="SUIT">
+                  <P VAL="0">clubs</P>
+                  <P VAL="1">hearts</P>
+                  <P VAL="2">diamonds</P>
+                  <P VAL="3">spades</P>
+               </L>
+            </O>
+         </P>
+         <!-- suit only form -->
+         <L PROPNAME="suit" PROPID="SUIT">
+            <P VAL="0">club</P>
+            <P VAL="1">heart</P>
+            <P VAL="2">diamond</P>
+            <P VAL="3">spade</P>
+         </L>
+      </L>
+   </RULE>
+   <!-- Create a reusable grammar component, called
+           'rank' which represents the numeric rank
+           of the various cards. Note that each card
+           has an associated value.
+        The application can use the semantic property
+           called 'rank' (specified by PROPNAME), and
+           the value (specified by VAL) to abstract
+           itself from the phrasing, and use only the
+           numeric rank values. Note that the words
+           'king' and 'emperor' both refer to the
+           value 13. The grammar author can change
+           or update the text without breaking the
+           application's semantically-dependent
+           logic -->
+   <RULE NAME="rank">
+      <!-- Specify the property name/id in the LIST
+              tag, which will be inherited by all
+              of the list tag's child phrase tags.
+           Specifying the name/id in the LIST tag avoids
+              having to specify it multiple times, once
+              for each P tag -->
+      <L PROPNAME="rank" PROPID="RANK">
+         <P VAL="1">ace</P>
+         <P VAL="2">two</P>
+         <P VAL="3">three</P>
+         <P VAL="4">four</P>
+         <P VAL="5">five</P>
+         <P VAL="6">six</P>
+         <P VAL="7">seven</P>
+         <P VAL="8">eight</P>
+         <P VAL="9">nine</P>
+         <P VAL="10">ten</P>
+         <P VAL="11">jack</P>
+         <P VAL="12">queen</P>
+         <P VAL="13">king</P>
+         <P VAL="12">lady</P>
+         <P VAL="13">emperor</P>
+      </L>
+   </RULE>
+<!-- End of Grammar definition -->
+</GRAMMAR>

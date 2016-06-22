@@ -1,0 +1,21 @@
+{
+	"FileVersion" : 3,
+	
+	"FriendlyName" : "SAPIPlugin",
+	"Version" : 1,
+	"VersionName" : "1.0",
+	"CreatedBy" : "unktomi",
+	"CreatedByURL" : "github.com/unktomi",
+	"EngineVersion" : "4.8",
+	"Description" : "Speech recognition with SAPI",
+	"Category" : "Speech Recognition",
+	"EnabledByDefault" : true,
+        "CanContainContent" : true,                   
+	"Modules" :
+	[
+		{
+			"Name" : "SAPIPlugin",
+			"Type" : "Runtime"
+		}
+	]
+}
