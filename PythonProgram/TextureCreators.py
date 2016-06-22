@@ -1,10 +1,13 @@
 import noise
 import math
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageChops
 import time
 from Vars import LOG
+import inspect
+import os
 
 def timeit(func):
+    """Times any function. Very useful for debugging slow algorithms."""
     def func_wrapper(*args, **kwargs):
         current_time = time.time()
         ret = func(*args, **kwargs)
@@ -14,22 +17,40 @@ def timeit(func):
 
 class TextureCreator(object):
     """docstring for TextureCreator"""
-    def __init__(self, samples, printed_texture, size = (2048, 2048)):
+    def __init__(self, samples, printed_texture, size = (2048, 2048), prefix="testing"):
         super(TextureCreator, self).__init__()
         self.samples = samples
         printed_texture = printed_texture
         self.size = size
+        self.prefix = prefix
 
+    def save(self, image):
+        """VERY HACKY, ONLY USE TO DEBUG!"""
+        LOG.warning("Using hacky save function for lazy debugging.")
+        try:
+            os.mkdir("image_testing/{0}/".format(self.prefix))
+        except Exception as e:
+            pass
+        frame = inspect.currentframe()
+        name = "image"
+        for k,v in frame.f_back.f_locals.iteritems():
+            if v is image:
+                name = k
+                break
+        image.save("image_testing/{0}/{1}.png".format(self.prefix, name))
+
+    @timeit
     def multiply(self, rgb, mask):
         if rgb.size != mask.size:
             LOG.warning("Image mode or size not matching")
             return None
         new = Image.new(rgb.mode, rgb.size)
+        m = mask.convert("L")
         w, h = new.size
         for x in range(0, w):
             for y in range(0, h):
                 value = rgb.getpixel((x,y))
-                value = tuple(int(i * (mask.getpixel((x,y))/255.0)) for i in value)
+                value = tuple(int(i * (m.getpixel((x,y))/255.0)) for i in value)
                 new.putpixel((x,y), value)
 
         return new
@@ -79,61 +100,60 @@ class TextureCreator(object):
         return tiled
 
     def createTexture(self):
-        self.texture = Image.new("RGBA", self.size)
-        for path in self.samples:
-            s_image = Image.open(path)
-            tiled = self.tileSmallerTexture(s_image, self.texture)
-            tiled.save("tiled.png")
-            tiled_flipped = tiled.transpose(Image.FLIP_LEFT_RIGHT)
-            tiled_flipped2 = tiled_flipped.transpose(Image.FLIP_TOP_BOTTOM)
-
-        return self.texture
-
-class BigTileCreator(TextureCreator):
-    """docstring for BigTileCreator"""
-    def createTexture(self):
         if len(self.samples) == 0:
             LOG.warning("Not enough samples")
             return Image.new("RGBA", self.size)
         self.texture = Image.new("RGBA", self.size)
-        for path in self.samples:
-            s_image = Image.open(path)
-            s_w, s_h = s_image.size
-            big_tile = Image.new("RGBA", (s_w*2, s_h*2))
-            big_tile.paste(s_image, (0,0))
-            big_tile.paste(s_image.transpose(Image.FLIP_LEFT_RIGHT), (s_w,0))
-            big_tile.paste(s_image.transpose(Image.FLIP_TOP_BOTTOM), (0,s_h))
-            big_tile.paste(s_image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.FLIP_LEFT_RIGHT), (s_w,s_h))
-            self.tileSmallerTexture(big_tile, self.texture)
+        for sample in self.samples:
+            img = None
+            if isinstance(sample, Image.Image):
+                img = sample
+            else:
+                img = Image.open(sample)
+            self.processSample(img)
+
+        return self.texture
+    def processSample(self, image):
+        pass
+
+class BigTileCreator(TextureCreator):
+    """BigTileCreator. Only works for 1 sample!"""
+    def processSample(self, s_image):
+        self.texture = Image.new("RGBA", self.size)
+        s_w, s_h = s_image.size
+        big_tile = Image.new("RGBA", (s_w*2, s_h*2))
+        big_tile.paste(s_image, (0,0))
+        big_tile.paste(s_image.transpose(Image.FLIP_LEFT_RIGHT), (s_w,0))
+        big_tile.paste(s_image.transpose(Image.FLIP_TOP_BOTTOM), (0,s_h))
+        big_tile.paste(s_image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.FLIP_LEFT_RIGHT), (s_w,s_h))
+        self.tileSmallerTexture(big_tile, self.texture)
 
         return self.texture
 
-class TilingPrevention(TextureCreator):
+class TilableCreator(TextureCreator):
     """Borrowed from http://paulbourke.net/texture_colour/tiling/"""
     @timeit
-    def createTexture(self):
-        self.texture = Image.new("RGBA", self.size)
-        for path in self.samples:
-            s_image = Image.open(path)
-            s_w, s_h = s_image.size
-            orig_mask = self.createMaskForOrig(s_image.size)
-            mask_swapped = self.swapOppositeQuadrants(orig_mask)
-            s_swapped = self.swapOppositeQuadrants(s_image)
-            tile = Image.new("RGBA", s_image.size)
-
-            s_swapped.save("testing_swapped.png")
-            mask_swapped.save("testing_mask_swapped.png")
-            tile.paste(s_swapped, (0,0), orig_mask)
-            tile.save("testing_masked_a.png")
-            tile.paste(s_image, (0,0), mask_swapped)
-            tile.save("testing_tile.png")
-            self.tileSmallerTexture(tile, self.texture)
+    def processSample(self, s_image):
+        s_w, s_h = s_image.size
+        orig_mask = self.createMaskForOrig(s_image.size)
+        mask_swapped = self.swapOppositeQuadrants(orig_mask)
+        s_swapped = self.swapOppositeQuadrants(s_image)
+        tile = Image.new("RGBA", s_image.size)
+        tile.paste(s_image, (0,0))
+        self.save(s_swapped)
+        self.save(mask_swapped)
+        tile.paste(s_swapped, (0,0), orig_mask)
+        self.save(tile)
+        tile.paste(s_image, (0,0), mask_swapped)
+        self.save(tile)
+        self.tileSmallerTexture(tile, self.texture)
 
         return self.texture
 
     def swapOppositeQuadrants(self, image):
         new = Image.new(image.mode, image.size)
         w, h = image.size
+        #LOG.debug("Image size {0}".format(image.size))
         for x in range(0, w):
             for y in range(0, h):
                 N = w
@@ -151,13 +171,33 @@ class TilingPrevention(TextureCreator):
                 N = (size[0])
                 value = math.sqrt((x-N/2)**2 + (y-N/2)**2) / (N/2)
                 mask.putpixel((x,y), (int(255*value),))
-        mask.save("testing_mask.png")
+        self.save(mask)
         return mask
+
+class NoiseCreator(TextureCreator):
+    """docstring for NoiseCreator"""
+    @timeit
+    def processSample(self, s_image):
+        random = Image.open("random.png")
+        rand_invert = Image.open("random_invert.png")
+        s_w, s_h = s_image.size
+        t1 = Image.new("RGBA", self.size)
+        self.tileSmallerTexture(s_image, t1)
+        t1 = ImageChops.multiply(t1, random.convert("RGBA"))#self.multiply(t1, random)
+        t2 = Image.new("RGBA", self.size)
+        self.tileSmallerTexture(s_image.transpose(Image.FLIP_LEFT_RIGHT), t2)
+        t2 = ImageChops.multiply(t2, rand_invert.convert("RGBA"))
+        self.save(t1)
+        self.save(t2)
+
+        return self.texture
+
+
 
 
 
 
 if __name__ == "__main__":
-    creator = TilingPrevention(["textures/tshirt/0012/back.png"], None)
+    creator = TilableCreator(["textures/tests/pink.png"], None, prefix="pink")
     img = creator.createTexture()
-    #img.show()
+    img.show()

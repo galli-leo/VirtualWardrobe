@@ -2,7 +2,7 @@ import DatabaseInterface
 import os, glob
 from PIL import Image
 import Vars
-from TextureCreators import TextureCreator, BigTileCreator, TilingPrevention
+from TextureCreators import TextureCreator, BigTileCreator, TilableCreator
 
 class DatabaseWrapper(object):
     def __init__(self):
@@ -54,7 +54,7 @@ class ClothingItem(object):
         self.frontimage = False
         self.finaltexture = ""
         self.printedtexture = False
-        self.texture_creators = {"tshirt" : TilingPrevention}
+        self.texture_creators = {"tshirt" : TilableCreator}
         self.category_recognizers = {}
 
 
