@@ -75,14 +75,17 @@ class TextureCreator(object):
         return new
 
 
-
-    def createRandomTexture(self, size, algo=noise.snoise2):
+    @timeit
+    def createRandomTexture(self, size, algo=noise.snoise2, octaves=64, freq=16.0, k=64):
         img = Image.new("L", size)
         h, w = size
         for x in range(0,w):
             for y in range(0,h):
-                n = algo(x*0.45, y*0.67)
-                r = abs(int(255*n))
+                n = algo(x/(freq*octaves), y/(freq*octaves), octaves)
+                n = abs(n*2)-1
+                r = int(127.0*n+128.0)
+                step = 256/k
+                #r = int(r/float(step))*step
                 value = (r)
                 img.putpixel((int(x),int(y)), value)
 
@@ -194,32 +197,44 @@ class NoiseCreator(TextureCreator):
     @timeit
     def processSample(self, images):
         if len(images) != 2:
-            LOG.warning("Wrong number of samples. Maybe you have to little?")
+            LOG.warning("Wrong number of samples. Maybe you have too little?")
             return Image.new("RGBA", self.size)
         sample1 = images[0]
+        #s1_creator = TilableCreator([sample1], None, size=sample1.size)
         sample2 = images[1]
+        #s2_creator = TilableCreator([sample2], None, size=sample2.size)
+        #sample1 = s1_creator.createTexture()
+        #sample2 = s2_creator.createTexture()
         random = Image.open("random.png")
         rand_invert = Image.open("random_invert.png")
         s_w, s_h = sample1.size
         t1 = Image.new("RGBA", self.size)
         self.tileSmallerTexture(sample1, t1)
-        t1 = ImageChops.multiply(t1, random.convert("RGBA"))#self.multiply(t1, random)
+        self.save(t1)
+        #t1 = ImageChops.multiply(t1, random.convert("RGBA"))#self.multiply(t1, random)
         t2 = Image.new("RGBA", self.size)
         self.tileSmallerTexture(sample2, t2)
-        t2 = ImageChops.multiply(t2, rand_invert.convert("RGBA"))
-        self.save(t1)
         self.save(t2)
-        self.texture = ImageChops.add(t1, t2)
+        #t2 = ImageChops.multiply(t2, rand_invert.convert("RGBA"))
+        #self.texture = ImageChops.add(t1, t2)
+        self.texture.paste(t1, (0,0), random)
+        self.texture.paste(t2, (0,0), rand_invert)
+        self.texture.save("result.png")
         return self.texture
 
 
 
+def regenerateRandomImages():
+    creator = TextureCreator([], None)
+    random = creator.createRandomTexture((2048, 2048))
+    random.save("random.png")
+    ImageOps.invert(random).save("random_invert.png")
 
-
+def runTest(creator=NoiseCreator):
+    creator = NoiseCreator(["textures/tests/pink.png", "textures/tests/pink2.png"], None, prefix="pink")
+    img = creator.createTexture()
+    img.show()
 
 if __name__ == "__main__":
-    #creator = NoiseCreator(["textures/tests/pink.png", "textures/tests/pink2.png"], None, prefix="grey")
-    rand_creator = TextureCreator([], None)
-    #img = creator.createTexture()
-    img = rand_creator.createRandomTexture(rand_creator.size, noise.pnoise2)
-    img.show()
+    runTest()
+    #regenerateRandomImages()
