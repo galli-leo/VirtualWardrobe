@@ -76,16 +76,18 @@ class TextureCreator(object):
 
 
     @timeit
-    def createRandomTexture(self, size, algo=noise.snoise2, octaves=64, freq=16.0, k=64):
+    def createRandomTexture(self, size, algo=noise.snoise2, octaves=16, freq=16.0, k=2):
         img = Image.new("L", size)
+        step = 256/k
         h, w = size
         for x in range(0,w):
             for y in range(0,h):
                 n = algo(x/(freq*octaves), y/(freq*octaves), octaves)
-                n = abs(n*2)-1
+                #n = abs(n*2)-1
+
                 r = int(127.0*n+128.0)
-                step = 256/k
-                #r = int(r/float(step))*step
+
+                r = int(r/float(step))*(step)*300
                 value = (r)
                 img.putpixel((int(x),int(y)), value)
 
@@ -200,11 +202,11 @@ class NoiseCreator(TextureCreator):
             LOG.warning("Wrong number of samples. Maybe you have too little?")
             return Image.new("RGBA", self.size)
         sample1 = images[0]
-        #s1_creator = TilableCreator([sample1], None, size=sample1.size)
+        s1_creator = TilableCreator([sample1], None, size=sample1.size)
         sample2 = images[1]
-        #s2_creator = TilableCreator([sample2], None, size=sample2.size)
-        #sample1 = s1_creator.createTexture()
-        #sample2 = s2_creator.createTexture()
+        s2_creator = TilableCreator([sample2], None, size=sample2.size)
+        sample1 = s1_creator.createTexture()
+        sample2 = s2_creator.createTexture()
         random = Image.open("random.png")
         rand_invert = Image.open("random_invert.png")
         s_w, s_h = sample1.size
@@ -231,10 +233,10 @@ def regenerateRandomImages():
     ImageOps.invert(random).save("random_invert.png")
 
 def runTest(creator=NoiseCreator):
-    creator = NoiseCreator(["textures/tests/pink.png", "textures/tests/pink2.png"], None, prefix="pink")
+    creator = NoiseCreator(["back.png", "back2.png"], None, prefix="grey")
     img = creator.createTexture()
     img.show()
 
 if __name__ == "__main__":
+    regenerateRandomImages()
     runTest()
-    #regenerateRandomImages()
