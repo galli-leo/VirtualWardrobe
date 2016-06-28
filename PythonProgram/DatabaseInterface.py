@@ -39,7 +39,6 @@ class Database(object):
 
     def createNewEntry(self, table, fields={}):
         cursor = self.conn.cursor()
-        print("INSERT into "+table+" ("+",".join(fields.keys())+") VALUES ("+",".join(fields.values())+")")
         cursor.execute("INSERT into "+table+" ("+",".join(fields.keys())+") VALUES ("+",".join(fields.values())+")")
         self.conn.commit()
         return cursor.lastrowid
@@ -48,7 +47,8 @@ class Database(object):
         cursor = self.conn.cursor()
         cursor.execute("DELETE from "+table+" WHERE id=?", id)
 
-
+    def update(self, table, values, conditions):
+        pass
 
     def insert(self, table, values={}):
         pass
@@ -58,4 +58,5 @@ if __name__ == "__main__":
     DB = Database()
     Vars.DB = DB
     for row in DB.select("categories", raw_values=True):
-        print(row["fullname"])
+        pass
+        #print(row["fullname"])
