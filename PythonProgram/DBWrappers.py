@@ -3,6 +3,8 @@ import os, glob
 from PIL import Image
 import Vars
 from TextureCreators import TextureCreator, BigTileCreator, TilableCreator
+from TextureRecognizers import TemplateRecgonizer, CategoryRecognizer
+from Vars import LOG
 
 class DatabaseWrapper(object):
     def __init__(self):
@@ -55,7 +57,6 @@ class ClothingItem(object):
         self.finaltexture = ""
         self.printedtexture = False
         self.texture_creators = {"tshirt" : TilableCreator}
-        self.category_recognizers = {}
 
 
     @classmethod
@@ -109,14 +110,18 @@ class ClothingItem(object):
         final_texture = creator.createTexture()
         return final_texture
 
-    def guessClothCategory(self):
+    def guessClothCategory(self, joints):
         #Take front image if available
         if not self.frontimage:
             return Vars.CATEGORIES[0]
         path = self.getTexturePath()
         front_image = os.path.join(path, "front"+".png")
         img = Image.open(front_image)
-        #TODO: iterate through every category recognizer and take the one with the highest confidence
+        (confidence, category) = CategoryRecognizer().recognizeCategory(self.frontimage, joints)
+        for cat in Vars.CATEGORIES:
+            if cat.name == category:
+                self.category = cat
+
 
 
 
@@ -134,11 +139,15 @@ def loadCategories():
                 raise
     loadClothes()
 
+def testingRecognizer(clothes):
+    template = TemplateRecgonizer()
+    match = template.findMatch("recog.png", clothes)
+    LOG.debug("Found Match with ID: {0}, confidence: {1}".format(match[1].id, match[0]))
+
 def loadClothes():
     DB = DatabaseInterface.Database()
     clothes = DB.select("clothes")
-    texture = clothes[2].createFinalTexture()
-    texture.save("testing_texture.png")
+    testingRecognizer(clothes)
 
 if __name__ == "__main__":
     loadCategories()
