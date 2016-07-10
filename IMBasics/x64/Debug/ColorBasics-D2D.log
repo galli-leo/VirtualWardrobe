@@ -1,0 +1,15 @@
+﻿Build started 10.07.2016 15:06:44.
+     1>Project "E:\Unreal Projects\IntelligentMirror\IMBasics\ColorBasics-D2D.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         E:\Applications\VS2013\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W1 /WX- /Od /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt ColorBasics.cpp
+         ColorBasics.cpp
+       Link:
+         E:\Applications\VS2013\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Debug\ColorBasics-D2D.exe" /INCREMENTAL /NOLOGO kinect20.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Debug\ColorBasics-D2D.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Debug\ColorBasics-D2D.lib" /MACHINE:X64 x64\Debug\ColorBasics.res
+         x64\Debug\ColorBasics.obj
+         x64\Debug\ImageRenderer.obj
+         ColorBasics-D2D.vcxproj -> E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Debug\ColorBasics-D2D.exe
+     1>Done Building Project "E:\Unreal Projects\IntelligentMirror\IMBasics\ColorBasics-D2D.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.66

@@ -1,5 +1,7 @@
 MIN_CONFIDENCE = 80
 import random
+import sys
+sys.path.append("E:\\Anaconda\\Lib\\site-packages\\")
 import cv2
 import numpy
 from PIL import Image

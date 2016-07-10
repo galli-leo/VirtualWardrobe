@@ -51,7 +51,21 @@ class TextureCreator(object):
         for x in range(0, w):
             for y in range(0, h):
                 value = rgb.getpixel((x,y))
+                if not isinstance(value, tuple):
+                    value = (value,)
                 value = tuple(int(i * (m.getpixel((x,y))/255.0)) for i in value)
+                new.putpixel((x,y), value)
+
+        return new
+
+    def m(self, img, otherImage):
+        new = Image.new(img.mode, img.size)
+        w, h = new.size
+        for x in range(0, w):
+            for y in range(0, h):
+                value = img.getpixel((x,y))
+                otherValue = otherImage.getpixel((x,y))
+                value = (otherValue*value)/255
                 new.putpixel((x,y), value)
 
         return new
@@ -71,6 +85,34 @@ class TextureCreator(object):
                     newValue[i] = value[i] + otherValue[i]
 
                 new.putpixel((x,y), tuple(newValue))
+
+        return new
+
+    def a(self, img, otherImage):
+        if img.mode != otherImage.mode or img.size != otherImage.size:
+            LOG.warning("Image mode or size not matching")
+            return None
+        new = Image.new(img.mode, img.size)
+        w, h = new.size
+        for x in range(0, w):
+            for y in range(0, h):
+                value = img.getpixel((x,y))
+                otherValue = otherImage.getpixel((x,y))
+                newValue = value + otherValue
+
+                new.putpixel((x,y), newValue)
+
+        return new
+
+    def m_c(self, img, c):
+        new = Image.new(img.mode, img.size)
+        w, h = new.size
+        for x in range(0, w):
+            for y in range(0, h):
+                value = img.getpixel((x,y))
+                newValue = value*c
+
+                new.putpixel((x,y), int(newValue))
 
         return new
 
@@ -156,13 +198,22 @@ class TilableCreator(TextureCreator):
         s_swapped = self.swapOppositeQuadrants(s_image)
         tile = Image.new("RGBA", s_image.size)
         tile.paste(s_image, (0,0))
+
         self.save(s_swapped)
+        mask_swapped2 = ImageOps.invert(orig_mask)
+        self.save(mask_swapped2)
+        shaded = self.m_c(mask_swapped, 0.4)
+        self.save(shaded)
+        mask_swapped = self.a(shaded, mask_swapped2)
         self.save(mask_swapped)
         tile.paste(s_swapped, (0,0), orig_mask)
-        self.save(tile)
         tile.paste(s_image, (0,0), mask_swapped)
         self.save(tile)
+
+
+        self.save(tile)
         self.tileSmallerTexture(tile, self.texture)
+        #self.tileSmallerTexture(s_swapped, self.texture)
 
         return self.texture
 
@@ -184,8 +235,9 @@ class TilableCreator(TextureCreator):
         mask = Image.new("L", size)
         for x in range(0, size[0]):
             for y in range(0, size[1]):
+                f = 2
                 N = (size[0])
-                value = math.sqrt((x-N/2)**2 + (y-N/2)**2) / (N/2)
+                value = math.sqrt((x-N/2)**f + (y-N/2)**f) / (N/2)
                 mask.putpixel((x,y), (int(255*value),))
         self.save(mask)
         return mask
@@ -202,9 +254,9 @@ class NoiseCreator(TextureCreator):
             LOG.warning("Wrong number of samples. Maybe you have too little?")
             return Image.new("RGBA", self.size)
         sample1 = images[0]
-        s1_creator = TilableCreator([sample1], None, size=sample1.size)
+        s1_creator = TilableCreator([sample1], None, prefix=self.prefix)
         sample2 = images[1]
-        s2_creator = TilableCreator([sample2], None, size=sample2.size)
+        s2_creator = TilableCreator([sample2], None, prefix=self.prefix)
         sample1 = s1_creator.createTexture()
         sample2 = s2_creator.createTexture()
         random = Image.open("random.png")
@@ -233,10 +285,10 @@ def regenerateRandomImages():
     ImageOps.invert(random).save("random_invert.png")
 
 def runTest(creator=NoiseCreator):
-    creator = NoiseCreator(["back.png", "back2.png"], None, prefix="grey")
+    creator = NoiseCreator(["back1.png", "back2.png"], None, prefix="grey")
     img = creator.createTexture()
     img.show()
 
 if __name__ == "__main__":
-    regenerateRandomImages()
+    #regenerateRandomImages()
     runTest()

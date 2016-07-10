@@ -2,7 +2,7 @@ import DatabaseInterface
 import os, glob
 from PIL import Image
 import Vars
-from TextureCreators import TextureCreator, BigTileCreator, TilableCreator
+from TextureCreators import TextureCreator, BigTileCreator, TilableCreator, NoiseCreator
 from TextureRecognizers import TemplateRecgonizer, CategoryRecognizer
 from Vars import LOG
 
@@ -56,7 +56,7 @@ class ClothingItem(object):
         self.frontimage = False
         self.finaltexture = ""
         self.printedtexture = False
-        self.texture_creators = {"tshirt" : TilableCreator}
+        self.texture_creators = {"tshirt" : NoiseCreator, "uncategorized" : NoiseCreator}
 
 
     @classmethod
@@ -144,10 +144,22 @@ def testingRecognizer(clothes):
     match = template.findMatch("recog.png", clothes)
     LOG.debug("Found Match with ID: {0}, confidence: {1}".format(match[1].id, match[0]))
 
+def createNewClothingItem():
+    textures = ["back1.png", "back2.png"]
+    clothing = ClothingItem()
+    count = 1
+    for text in textures:
+        img = Image.open(text)
+        clothing.addImage(img, "back{0}".format(count))
+        count += 1
+
 def loadClothes():
     DB = DatabaseInterface.Database()
     clothes = DB.select("clothes")
-    testingRecognizer(clothes)
+    text = clothes[len(clothes)-1].createFinalTexture()
+    text.show()
+    #createNewClothingItem()
+    #testingRecognizer(clothes)
 
 if __name__ == "__main__":
     loadCategories()
