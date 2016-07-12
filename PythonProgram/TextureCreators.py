@@ -203,11 +203,19 @@ class TilableCreator(TextureCreator):
         mask_swapped2 = ImageOps.invert(orig_mask)
         self.save(mask_swapped2)
         shaded = self.m_c(mask_swapped, 0.4)
+        orig_mask2 = ImageOps.invert(mask_swapped)
+        orig_mask2 = self.m_c(orig_mask2, 2.5)
+        self.save(orig_mask2)
+        orig_mask = self.m(orig_mask, orig_mask2)
+        self.save(orig_mask)
         self.save(shaded)
         mask_swapped = self.a(shaded, mask_swapped2)
+        #mask_swapped = Image.open("testing_mask_swapped.png")
         self.save(mask_swapped)
-        tile.paste(s_swapped, (0,0), orig_mask)
+        #orig_mask = ImageOps.invert(mask_swapped.convert("L"))
+
         tile.paste(s_image, (0,0), mask_swapped)
+        tile.paste(s_swapped, (0,0), orig_mask)
         self.save(tile)
 
 
@@ -284,8 +292,8 @@ def regenerateRandomImages():
     random.save("random.png")
     ImageOps.invert(random).save("random_invert.png")
 
-def runTest(creator=NoiseCreator):
-    creator = NoiseCreator(["back1.png", "back2.png"], None, prefix="grey")
+def runTest(klass=NoiseCreator):
+    creator = klass(["back.png", "back2.png"], None, prefix="grey")
     img = creator.createTexture()
     img.show()
 
