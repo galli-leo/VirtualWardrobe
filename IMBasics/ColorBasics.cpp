@@ -138,9 +138,9 @@ RGBQUAD* CutRectFromBuffer(RGBQUAD* pBuffer, int colorWidth, int colorHeight, in
 	long startTime = getMilliseconds();
 	RGBQUAD* finalBuffer = new RGBQUAD[width*height];
 	int index = 0;
-	for (int x = start_x; x < start_x + width; x++)
+	for (int y = start_y; y < start_y + height; y++)
 	{
-		for (int y = start_y; y < start_y + height; y++)
+		for (int x = start_x; x < start_x + width; x++)
 		{
 			finalBuffer[index].rgbRed = pBuffer[x + y*colorWidth].rgbRed;
 			finalBuffer[index].rgbGreen = pBuffer[x + y*colorWidth].rgbGreen;
@@ -358,7 +358,7 @@ void CColorBasics::CreateRectangleOnScreen(RGBQUAD* pBuffer, int width, int heig
 
 void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight)
 {
-	SetStatusMessage(L"Scanning for TShirt...", 500, true);
+	SetStatusMessage(L"Scanning for TShirt...", 500, false);
 	int rangeMin = 800;
 	int rangeMax = 950;
 	int minimumRectangleSize = 448;
@@ -389,18 +389,40 @@ void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16
 				SetStatusMessage(L"Please move the TShirt forth a bit.", 500, true);
 			}
 
-			//return;
+			return;
 		}
 
 		size = 512;
-		start_x = (width - size) / 2;
+		//Use old start_x
 		start_y = (height - size) / 2;
 		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, width, height, start_x, start_y, size, size);
 		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, size, size);
-		
+		Image edgeImage = Image(cutRectImage);
+		int maxEdgePixels = 5;
+		int currentEdgePixels = 0;
+
 		try {
-			cutRectImage.cannyEdge();
-			cutRectImage.write("test.png");
+			edgeImage.cannyEdge();
+			for (int y = 0; y < size; y++)
+			{
+				for (int x = 0; x < size; x++)
+				{
+					Color color = edgeImage.pixelColor(x, y);
+					if (color.quantumRed() == 255 && color.quantumGreen() == 255 && color.quantumBlue() == 255)
+					{
+						currentEdgePixels += 1;
+					}
+				}
+			}
+
+			if (currentEdgePixels <= maxEdgePixels)
+			{
+				SetStatusMessage(L"Found TShirt!", 1000, true);
+				edgeImage.write("edges.png");
+				cutRectImage.write("back.png");
+			}
+
+			edgeImage.write("test.png");
 		}
 		catch (Exception &error_)
 		{

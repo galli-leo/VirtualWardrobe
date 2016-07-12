@@ -145,7 +145,7 @@ def testingRecognizer(clothes):
     LOG.debug("Found Match with ID: {0}, confidence: {1}".format(match[1].id, match[0]))
 
 def createNewClothingItem():
-    textures = ["back1.png", "back2.png"]
+    textures = ["back.png", "back2.png"]
     clothing = ClothingItem()
     count = 1
     for text in textures:

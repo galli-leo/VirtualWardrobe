@@ -1,4 +1,4 @@
-﻿Build started 12.07.2016 12:44:12.
+﻿Build started 12.07.2016 13:26:15.
      1>Project "E:\Unreal Projects\IntelligentMirror\IMBasics\ColorBasics-D2D.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          E:\Applications\VS2013\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W1 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt ColorBasics.cpp
@@ -16,4 +16,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.20
+Time Elapsed 00:00:01.11
