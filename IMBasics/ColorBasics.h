@@ -8,6 +8,7 @@
 
 #include "resource.h"
 #include "ImageRenderer.h"
+#include <Magick++.h>
 
 class CColorBasics
 {
@@ -66,11 +67,23 @@ private:
 
     // Color reader
     IColorFrameReader*      m_pColorFrameReader;
+	// Frame reader
+	IMultiSourceFrameReader*m_pMultiSourceFrameReader;
+
+	// Tshirt scanning
+	long					scanInterval = 1 / 3;
+	long					lastScan = -1;
 
     // Direct2D
     ImageRenderer*          m_pDrawColor;
     ID2D1Factory*           m_pD2DFactory;
     RGBQUAD*                m_pColorRGBX;
+	DepthSpacePoint*		m_pDepthCoordinates;
+	ICoordinateMapper*		m_pCoordinateMapper;
+
+	void					ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16* pDepthBuffer, int nDepthHeight, int nDepthWidth);
+	void					CreateRectangleOnScreen(RGBQUAD* pBuffer, int width, int height, int thickness, int size, int red, int green, int blue);
+	Magick::Image					CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height);
 
     /// <summary>
     /// Main processing function
@@ -84,13 +97,16 @@ private:
     HRESULT                 InitializeDefaultSensor();
 
     /// <summary>
-    /// Handle new color data
+    /// Handle new frame data
     /// <param name="nTime">timestamp of frame</param>
     /// <param name="pBuffer">pointer to frame data</param>
     /// <param name="nWidth">width (in pixels) of input image data</param>
     /// <param name="nHeight">height (in pixels) of input image data</param>
     /// </summary>
-    void                    ProcessColor(INT64 nTime, RGBQUAD* pBuffer, int nWidth, int nHeight);
+	void                    ProcessFrame(INT64 nTime,
+		UINT16* pDepthBuffer, int nDepthHeight, int nDepthWidth,
+		RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight,
+		BYTE* pBodyIndexBuffer, int nBodyIndexWidth, int nBodyIndexHeight);
 
     /// <summary>
     /// Set the status bar message

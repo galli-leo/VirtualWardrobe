@@ -7,7 +7,13 @@
 #include "stdafx.h"
 #include <strsafe.h>
 #include "resource.h"
+#include <io.h>
+#include "Fcntl.h"
 #include "ColorBasics.h"
+#include <chrono>
+#include <Magick++.h>
+
+using namespace Magick;
 
 /// <summary>
 /// Entry point for the application
@@ -31,6 +37,144 @@ int APIENTRY wWinMain(
     application.Run(hInstance, nShowCmd);
 }
 
+long getMilliseconds()
+{
+	using namespace std::chrono;
+	milliseconds ms = duration_cast< milliseconds >(
+		system_clock::now().time_since_epoch()
+		);
+	return ms.count();
+}
+
+void SetStdOutToNewConsole()
+{
+	int hConHandle;
+	long lStdHandle;
+	FILE *fp;
+
+	// Allocate a console for this app
+	AllocConsole();
+
+	// Redirect unbuffered STDOUT to the console
+	lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
+	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	fp = _fdopen(hConHandle, "w");
+	*stdout = *fp;
+
+	setvbuf(stdout, NULL, _IONBF, 0);
+}
+
+
+/// <summary>
+/// Gets the average distance for a defined rect in the color image. Spots without a distance are not integrated into the calculation to minimize measuring errors.
+/// </summary>
+long GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight, DepthSpacePoint* pDepthPoints, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight, int start_x, int start_y, int width, int height)
+{
+	long sum = 0;
+	for (int x = start_x; x < start_x + width; x++)
+	{
+		for (int y = start_y; y < start_y + height; y++)
+		{
+			int colorIndex = x + y*nColorWidth;
+			DepthSpacePoint p = pDepthPoints[colorIndex];
+			if (p.X != -std::numeric_limits<float>::infinity() && p.Y != -std::numeric_limits<float>::infinity())
+			{
+				int depthX = static_cast<int>(p.X + 0.5f);
+				int depthY = static_cast<int>(p.Y + 0.5f);
+
+				if ((depthX >= 0 && depthX < nDepthWidth) && (depthY >= 0 && depthY < nDepthHeight))
+				{
+					long depthValue = pDepthBuffer[depthX + (depthY * nDepthWidth)];
+					sum += depthValue;
+				}
+			}
+		}
+	}
+	return float(sum) / (width*height);
+}
+
+
+/// <summary>
+/// Removes all pixels not within rangeMin and rangeMax or any pixels without depth information.
+/// </summary>
+void FilterOnlyObjectsInDistance(RGBQUAD* pBuffer, int width, int height, DepthSpacePoint* pDepthPoints, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight, int rangeMin, int rangeMax)
+{
+	for (int colorIndex = 0; colorIndex < (width*height); ++colorIndex)
+	{
+		DepthSpacePoint p = pDepthPoints[colorIndex];
+		if (p.X != -std::numeric_limits<float>::infinity() && p.Y != -std::numeric_limits<float>::infinity())
+		{
+			int depthX = static_cast<int>(p.X + 0.5f);
+			int depthY = static_cast<int>(p.Y + 0.5f);
+
+			if ((depthX >= 0 && depthX < nDepthWidth) && (depthY >= 0 && depthY < nDepthHeight))
+			{
+				long depthValue = pDepthBuffer[depthX + (depthY * nDepthWidth)];
+				if (!(depthValue > rangeMin && depthValue < rangeMax))
+				{
+					pBuffer[colorIndex].rgbBlue = 0;
+					pBuffer[colorIndex].rgbGreen = 0;
+					pBuffer[colorIndex].rgbRed = 0;
+				}
+			}
+			else
+			{
+				pBuffer[colorIndex].rgbBlue = 0;
+				pBuffer[colorIndex].rgbGreen = 0;
+				pBuffer[colorIndex].rgbRed = 0;
+			}
+		}
+		else
+		{
+			pBuffer[colorIndex].rgbBlue = 0;
+			pBuffer[colorIndex].rgbGreen = 0;
+			pBuffer[colorIndex].rgbRed = 0;
+		}
+	}
+}
+
+RGBQUAD* CutRectFromBuffer(RGBQUAD* pBuffer, int colorWidth, int colorHeight, int start_x, int start_y, int width, int height)
+{
+	long startTime = getMilliseconds();
+	RGBQUAD* finalBuffer = new RGBQUAD[width*height];
+	int index = 0;
+	for (int x = start_x; x < start_x + width; x++)
+	{
+		for (int y = start_y; y < start_y + height; y++)
+		{
+			finalBuffer[index].rgbRed = pBuffer[x + y*colorWidth].rgbRed;
+			finalBuffer[index].rgbGreen = pBuffer[x + y*colorWidth].rgbGreen;
+			finalBuffer[index].rgbBlue = pBuffer[x + y*colorWidth].rgbBlue;
+			index++;
+		}
+	}
+	long endTime = getMilliseconds();
+	printf("Final Buffer at 1200: %i", finalBuffer[1200].rgbRed);
+	if (endTime - startTime > 500)
+	{
+		printf("It took over 500 ms to execute CutRectFromBuffer!");
+	}
+	return finalBuffer;
+}
+
+Image CColorBasics::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height)
+{
+	Image img;
+	HRESULT hr = SaveBitmapToFile(reinterpret_cast<BYTE*>(pBuffer), width, height, sizeof(RGBQUAD) * 8, L"tmp.bmp");
+
+	if (SUCCEEDED(hr))
+	{
+		try {
+			img.read("tmp.bmp");
+		}
+		catch (Exception &error_)
+		{
+			printf(error_.what());
+		}
+	}
+
+	return img;
+}
 /// <summary>
 /// Constructor
 /// </summary>
@@ -44,6 +188,8 @@ CColorBasics::CColorBasics() :
     m_bSaveScreenshot(false),
     m_pKinectSensor(NULL),
     m_pColorFrameReader(NULL),
+	m_pMultiSourceFrameReader(NULL),
+	m_pDepthCoordinates(NULL),
     m_pD2DFactory(NULL),
     m_pDrawColor(NULL),
     m_pColorRGBX(NULL)
@@ -54,8 +200,14 @@ CColorBasics::CColorBasics() :
         m_fFreq = double(qpf.QuadPart);
     }
 
+	//HARDCODED!!
+	InitializeMagick("C:\Program Files\ImageMagick-7.0.2-Q16");
+
     // create heap storage for color pixel data in RGBX format
     m_pColorRGBX = new RGBQUAD[cColorWidth * cColorHeight];
+
+	// create heap storage for the coorinate mapping from color to depth
+	m_pDepthCoordinates = new DepthSpacePoint[cColorWidth * cColorHeight];
 }
   
 
@@ -77,11 +229,18 @@ CColorBasics::~CColorBasics()
         m_pColorRGBX = NULL;
     }
 
+	if (m_pDepthCoordinates)
+	{
+		delete[] m_pDepthCoordinates;
+		m_pDepthCoordinates = NULL;
+	}
+
     // clean up Direct2D
     SafeRelease(m_pD2DFactory);
 
     // done with color frame reader
     SafeRelease(m_pColorFrameReader);
+	SafeRelease(m_pMultiSourceFrameReader);
 
     // close the Kinect Sensor
     if (m_pKinectSensor)
@@ -115,6 +274,8 @@ int CColorBasics::Run(HINSTANCE hInstance, int nCmdShow)
     {
         return 0;
     }
+
+	SetStdOutToNewConsole();
 
     // Create main application window
     HWND hWndApp = CreateDialogParamW(
@@ -152,79 +313,291 @@ int CColorBasics::Run(HINSTANCE hInstance, int nCmdShow)
     return static_cast<int>(msg.wParam);
 }
 
+void CColorBasics::CreateRectangleOnScreen(RGBQUAD* pBuffer, int width, int height, int thickness=5, int size=556, int red=0, int green=255, int blue=0)
+{
+	int start_x = (width - size) / 2;
+	int start_y = (height - size) / 2;
+	for (int x = start_x; x < start_x + size; x++)
+	{
+		for (int real_y = start_y; real_y > (start_y - thickness); real_y--)
+		{
+			int array_pos = x + width*real_y;
+			pBuffer[array_pos].rgbGreen = green;
+			pBuffer[array_pos].rgbBlue = blue;
+			pBuffer[array_pos].rgbRed = red;
+		}
+
+		for (int real_y = start_y + size - 1; real_y < (start_y + size - 1 + thickness); real_y++)
+		{
+			int array_pos = x + width*real_y;
+			pBuffer[array_pos].rgbGreen = green;
+			pBuffer[array_pos].rgbBlue = blue;
+			pBuffer[array_pos].rgbRed = red;
+		}
+	}
+
+	for (int y = start_y; y < start_y + size; y++)
+	{
+		for (int x = start_x; x > start_x - thickness; x--)
+		{
+			int array_pos = x + width*y;
+			pBuffer[array_pos].rgbGreen = green;
+			pBuffer[array_pos].rgbBlue = blue;
+			pBuffer[array_pos].rgbRed = red;
+		}
+
+		for (int x = start_x + size; x < start_x + size - 1 + thickness; x++)
+		{
+			int array_pos = x + width*y;
+			pBuffer[array_pos].rgbGreen = green;
+			pBuffer[array_pos].rgbBlue = blue;
+			pBuffer[array_pos].rgbRed = red;
+		}
+	}
+}
+
+void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight)
+{
+	SetStatusMessage(L"Scanning for TShirt...", 500, true);
+	int rangeMin = 800;
+	int rangeMax = 950;
+	int minimumRectangleSize = 448;
+
+	HRESULT hr = m_pCoordinateMapper->MapColorFrameToDepthSpace(nDepthWidth * nDepthHeight, (UINT16*)pDepthBuffer, width * height, m_pDepthCoordinates);
+	if (SUCCEEDED(hr))
+	{
+		//FilterOnlyObjectsInDistance(pBuffer, width, height, m_pDepthCoordinates, pDepthBuffer, nDepthWidth, nDepthHeight, rangeMin, rangeMax);
+
+		int size = 556;
+		int start_x = (width - size) / 2;
+		int start_y = (height - size) / 2;
+		long averageValue = GetAverageDistanceForRect(pBuffer, width, height, m_pDepthCoordinates, pDepthBuffer, nDepthWidth, nDepthHeight, start_x, start_y, size, size);
+
+		if (averageValue > rangeMin && averageValue < rangeMax)
+		{
+			printf("Found good distance in center square!");
+		}
+		else
+		{
+			if (averageValue < rangeMin)
+			{
+				SetStatusMessage(L"Please move the TShirt back a bit.", 500, true);
+			}
+
+			if (averageValue > rangeMax)
+			{
+				SetStatusMessage(L"Please move the TShirt forth a bit.", 500, true);
+			}
+
+			//return;
+		}
+
+		size = 512;
+		start_x = (width - size) / 2;
+		start_y = (height - size) / 2;
+		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, width, height, start_x, start_y, size, size);
+		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, size, size);
+		
+		try {
+			cutRectImage.cannyEdge();
+			cutRectImage.write("test.png");
+		}
+		catch (Exception &error_)
+		{
+			printf(error_.what());
+		}
+		
+		
+
+
+		delete[]cutRect;
+	}
+
+	
+	//printf("Average Distance in center 512x512: %f", averageValue);
+
+}
+
 /// <summary>
 /// Main processing function
 /// </summary>
 void CColorBasics::Update()
 {
-    if (!m_pColorFrameReader)
+    if (!m_pMultiSourceFrameReader)
     {
         return;
     }
 
+	IMultiSourceFrame* pMultiSourceFrame = NULL;
     IColorFrame* pColorFrame = NULL;
+	IDepthFrame* pDepthFrame = NULL;
+	IBodyIndexFrame* pBodyIndexFrame = NULL;
 
-    HRESULT hr = m_pColorFrameReader->AcquireLatestFrame(&pColorFrame);
+    HRESULT hr = m_pMultiSourceFrameReader->AcquireLatestFrame(&pMultiSourceFrame);
+
+	if (SUCCEEDED(hr))
+	{
+		IDepthFrameReference* pDepthFrameReference = NULL;
+
+		hr = pMultiSourceFrame->get_DepthFrameReference(&pDepthFrameReference);
+		if (SUCCEEDED(hr))
+		{
+			hr = pDepthFrameReference->AcquireFrame(&pDepthFrame);
+		}
+
+		SafeRelease(pDepthFrameReference);
+	}
+
+	if (SUCCEEDED(hr))
+	{
+		IColorFrameReference* pColorFrameReference = NULL;
+
+		hr = pMultiSourceFrame->get_ColorFrameReference(&pColorFrameReference);
+		if (SUCCEEDED(hr))
+		{
+			hr = pColorFrameReference->AcquireFrame(&pColorFrame);
+		}
+
+		SafeRelease(pColorFrameReference);
+	}
+
+	if (SUCCEEDED(hr))
+	{
+		IBodyIndexFrameReference* pBodyIndexFrameReference = NULL;
+
+		hr = pMultiSourceFrame->get_BodyIndexFrameReference(&pBodyIndexFrameReference);
+		if (SUCCEEDED(hr))
+		{
+			hr = pBodyIndexFrameReference->AcquireFrame(&pBodyIndexFrame);
+		}
+
+		SafeRelease(pBodyIndexFrameReference);
+	}
 
     if (SUCCEEDED(hr))
     {
-        INT64 nTime = 0;
-        IFrameDescription* pFrameDescription = NULL;
-        int nWidth = 0;
-        int nHeight = 0;
-        ColorImageFormat imageFormat = ColorImageFormat_None;
-        UINT nBufferSize = 0;
-        RGBQUAD *pBuffer = NULL;
+		INT64 nDepthTime = 0;
+		IFrameDescription* pDepthFrameDescription = NULL;
+		int nDepthWidth = 0;
+		int nDepthHeight = 0;
+		UINT nDepthBufferSize = 0;
+		UINT16 *pDepthBuffer = NULL;
 
-        hr = pColorFrame->get_RelativeTime(&nTime);
+		IFrameDescription* pColorFrameDescription = NULL;
+		int nColorWidth = 0;
+		int nColorHeight = 0;
+		ColorImageFormat imageFormat = ColorImageFormat_None;
+		UINT nColorBufferSize = 0;
+		RGBQUAD *pColorBuffer = NULL;
+
+		IFrameDescription* pBodyIndexFrameDescription = NULL;
+		int nBodyIndexWidth = 0;
+		int nBodyIndexHeight = 0;
+		UINT nBodyIndexBufferSize = 0;
+		BYTE *pBodyIndexBuffer = NULL;
+
+		// get depth frame data
+
+		hr = pDepthFrame->get_RelativeTime(&nDepthTime);
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pDepthFrame->get_FrameDescription(&pDepthFrameDescription);
+		}
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pDepthFrameDescription->get_Width(&nDepthWidth);
+		}
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pDepthFrameDescription->get_Height(&nDepthHeight);
+		}
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pDepthFrame->AccessUnderlyingBuffer(&nDepthBufferSize, &pDepthBuffer);
+		}
+
+		//get color frame data
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pColorFrame->get_FrameDescription(&pColorFrameDescription);
+		}
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pColorFrameDescription->get_Width(&nColorWidth);
+		}
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pColorFrameDescription->get_Height(&nColorHeight);
+		}
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pColorFrame->get_RawColorImageFormat(&imageFormat);
+		}
 
         if (SUCCEEDED(hr))
         {
-            hr = pColorFrame->get_FrameDescription(&pFrameDescription);
+			if (imageFormat == ColorImageFormat_Bgra)
+			{
+				hr = pColorFrame->AccessRawUnderlyingBuffer(&nColorBufferSize, reinterpret_cast<BYTE**>(&pColorBuffer));
+			}
+			else if (m_pColorRGBX)
+			{
+				pColorBuffer = m_pColorRGBX;
+				nColorBufferSize = cColorWidth * cColorHeight * sizeof(RGBQUAD);
+				hr = pColorFrame->CopyConvertedFrameDataToArray(nColorBufferSize, reinterpret_cast<BYTE*>(pColorBuffer), ColorImageFormat_Bgra);
+			}
+			else
+			{
+				hr = E_FAIL;
+			}
         }
+
+		// get body index frame data
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pBodyIndexFrame->get_FrameDescription(&pBodyIndexFrameDescription);
+		}
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pBodyIndexFrameDescription->get_Width(&nBodyIndexWidth);
+		}
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pBodyIndexFrameDescription->get_Height(&nBodyIndexHeight);
+		}
+
+		if (SUCCEEDED(hr))
+		{
+			hr = pBodyIndexFrame->AccessUnderlyingBuffer(&nBodyIndexBufferSize, &pBodyIndexBuffer);
+		}
 
         if (SUCCEEDED(hr))
         {
-            hr = pFrameDescription->get_Width(&nWidth);
+			ProcessFrame(nDepthTime, pDepthBuffer, nDepthWidth, nDepthHeight,
+				pColorBuffer, nColorWidth, nColorHeight,
+				pBodyIndexBuffer, nBodyIndexWidth, nBodyIndexHeight);
         }
 
-        if (SUCCEEDED(hr))
-        {
-            hr = pFrameDescription->get_Height(&nHeight);
-        }
-
-        if (SUCCEEDED(hr))
-        {
-            hr = pColorFrame->get_RawColorImageFormat(&imageFormat);
-        }
-
-        if (SUCCEEDED(hr))
-        {
-            if (imageFormat == ColorImageFormat_Bgra)
-            {
-                hr = pColorFrame->AccessRawUnderlyingBuffer(&nBufferSize, reinterpret_cast<BYTE**>(&pBuffer));
-            }
-            else if (m_pColorRGBX)
-            {
-                pBuffer = m_pColorRGBX;
-                nBufferSize = cColorWidth * cColorHeight * sizeof(RGBQUAD);
-                hr = pColorFrame->CopyConvertedFrameDataToArray(nBufferSize, reinterpret_cast<BYTE*>(pBuffer), ColorImageFormat_Bgra);            
-            }
-            else
-            {
-                hr = E_FAIL;
-            }
-        }
-
-        if (SUCCEEDED(hr))
-        {
-            ProcessColor(nTime, pBuffer, nWidth, nHeight);
-        }
-
-        SafeRelease(pFrameDescription);
+		SafeRelease(pDepthFrameDescription);
+		SafeRelease(pColorFrameDescription);
+		SafeRelease(pBodyIndexFrameDescription);
     }
 
-    SafeRelease(pColorFrame);
+	SafeRelease(pDepthFrame);
+	SafeRelease(pColorFrame);
+	SafeRelease(pBodyIndexFrame);
+	SafeRelease(pMultiSourceFrame);
 }
 
 /// <summary>
@@ -334,21 +707,19 @@ HRESULT CColorBasics::InitializeDefaultSensor()
     if (m_pKinectSensor)
     {
         // Initialize the Kinect and get the color reader
-        IColorFrameSource* pColorFrameSource = NULL;
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pKinectSensor->get_CoordinateMapper(&m_pCoordinateMapper);
+		}
 
         hr = m_pKinectSensor->Open();
 
         if (SUCCEEDED(hr))
         {
-            hr = m_pKinectSensor->get_ColorFrameSource(&pColorFrameSource);
+			hr = m_pKinectSensor->OpenMultiSourceFrameReader(
+				FrameSourceTypes::FrameSourceTypes_Depth | FrameSourceTypes::FrameSourceTypes_Color | FrameSourceTypes::FrameSourceTypes_BodyIndex,
+				&m_pMultiSourceFrameReader);
         }
-
-        if (SUCCEEDED(hr))
-        {
-            hr = pColorFrameSource->OpenReader(&m_pColorFrameReader);
-        }
-
-        SafeRelease(pColorFrameSource);
     }
 
     if (!m_pKinectSensor || FAILED(hr))
@@ -361,13 +732,16 @@ HRESULT CColorBasics::InitializeDefaultSensor()
 }
 
 /// <summary>
-/// Handle new color data
+/// Handle new frame data
 /// <param name="nTime">timestamp of frame</param>
 /// <param name="pBuffer">pointer to frame data</param>
 /// <param name="nWidth">width (in pixels) of input image data</param>
 /// <param name="nHeight">height (in pixels) of input image data</param>
 /// </summary>
-void CColorBasics::ProcessColor(INT64 nTime, RGBQUAD* pBuffer, int nWidth, int nHeight) 
+void CColorBasics::ProcessFrame(INT64 nTime,
+	UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight,
+	RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight,
+	BYTE* pBodyIndexBuffer, int nBodyIndexWidth, int nBodyIndexHeight)
 {
     if (m_hWnd)
     {
@@ -402,10 +776,28 @@ void CColorBasics::ProcessColor(INT64 nTime, RGBQUAD* pBuffer, int nWidth, int n
     }
 
     // Make sure we've received valid data
-    if (pBuffer && (nWidth == cColorWidth) && (nHeight == cColorHeight))
-    {
-        // Draw the data with Direct2D
-        m_pDrawColor->Draw(reinterpret_cast<BYTE*>(pBuffer), cColorWidth * cColorHeight * sizeof(RGBQUAD));
+    if (pColorBuffer && (nColorWidth == cColorWidth) && (nColorHeight == cColorHeight))
+	{
+		long currentTime = getMilliseconds();
+		long secondsDiff = (currentTime - lastScan) / 1000;
+
+		if (this->lastScan == -1 || secondsDiff > this->scanInterval)
+		{
+			this->lastScan = currentTime;
+			
+		}
+		this->ScanForTshirt(pColorBuffer, cColorWidth, cColorHeight, pDepthBuffer, nDepthWidth, nDepthHeight);
+
+		//Create Rectangle where optimal tshirt placement is
+		this->CreateRectangleOnScreen(pColorBuffer, cColorWidth, cColorHeight, 5);
+
+		int size = 512;
+		int start_x = (cColorWidth - size) / 2;
+		int start_y = (cColorHeight - size) / 2;
+		RGBQUAD* cutRect = CutRectFromBuffer(pColorBuffer, cColorWidth, cColorHeight, start_x, start_y, size, size);
+		// Draw the data with Direct2D
+		m_pDrawColor->Draw(reinterpret_cast<BYTE*>(pColorBuffer), cColorWidth * cColorHeight * sizeof(RGBQUAD));
+		//m_pDrawColor->Draw(reinterpret_cast<BYTE*>(cutRect), size * size * sizeof(RGBQUAD));
 
         if (m_bSaveScreenshot)
         {
@@ -415,7 +807,7 @@ void CColorBasics::ProcessColor(INT64 nTime, RGBQUAD* pBuffer, int nWidth, int n
             GetScreenshotFileName(szScreenshotPath, _countof(szScreenshotPath));
 
             // Write out the bitmap to disk
-            HRESULT hr = SaveBitmapToFile(reinterpret_cast<BYTE*>(pBuffer), nWidth, nHeight, sizeof(RGBQUAD) * 8, szScreenshotPath);
+            HRESULT hr = SaveBitmapToFile(reinterpret_cast<BYTE*>(pColorBuffer), nColorWidth, nColorHeight, sizeof(RGBQUAD) * 8, szScreenshotPath);
 
             WCHAR szStatusMessage[64 + MAX_PATH];
             if (SUCCEEDED(hr))
