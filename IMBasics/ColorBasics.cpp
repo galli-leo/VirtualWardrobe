@@ -12,8 +12,11 @@
 #include "ColorBasics.h"
 #include <chrono>
 #include <Magick++.h>
+#include "easylogging++.h"
 
 using namespace Magick;
+
+INITIALIZE_EASYLOGGINGPP
 
 /// <summary>
 /// Entry point for the application
@@ -70,6 +73,7 @@ void SetStdOutToNewConsole()
 /// </summary>
 long GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight, DepthSpacePoint* pDepthPoints, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight, int start_x, int start_y, int width, int height)
 {
+	long startTime = getMilliseconds();
 	long sum = 0;
 	for (int x = start_x; x < start_x + width; x++)
 	{
@@ -89,6 +93,11 @@ long GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nColorWidth, int nColo
 				}
 			}
 		}
+	}
+	long endTime = getMilliseconds();
+	if (endTime - startTime > 25)
+	{
+		LOG(WARNING) << "It took over 25 ms to execute CutRectFromBuffer!: " << endTime-startTime;
 	}
 	return float(sum) / (width*height);
 }
@@ -149,17 +158,22 @@ RGBQUAD* CutRectFromBuffer(RGBQUAD* pBuffer, int colorWidth, int colorHeight, in
 		}
 	}
 	long endTime = getMilliseconds();
-	printf("Final Buffer at 1200: %i", finalBuffer[1200].rgbRed);
-	if (endTime - startTime > 500)
+	if (endTime - startTime > 25)
 	{
-		printf("It took over 500 ms to execute CutRectFromBuffer!");
+		LOG(WARNING) << "It took over 25 ms to execute CutRectFromBuffer!: " << endTime - startTime;
 	}
 	return finalBuffer;
+}
+
+int convertCoordFromBiggerRect(int biggerSize, int smallerSize, int coord)
+{
+	return coord - (biggerSize - smallerSize) / 2;
 }
 
 Image CColorBasics::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height)
 {
 	Image img;
+	TIMED_FUNC();
 	HRESULT hr = SaveBitmapToFile(reinterpret_cast<BYTE*>(pBuffer), width, height, sizeof(RGBQUAD) * 8, L"tmp.bmp");
 
 	if (SUCCEEDED(hr))
@@ -356,11 +370,46 @@ void CColorBasics::CreateRectangleOnScreen(RGBQUAD* pBuffer, int width, int heig
 	}
 }
 
+bool CColorBasics::HasFlatSurface(Image edgeImage, int start_x, int start_y, int width, int height)
+{
+	int maxEdgePixels = 2;
+	int currentEdgePixels = 0;
+
+	try {
+		edgeImage.edge();
+		Quantum* quant = edgeImage.getPixels(0, 0, width, height);
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				Quantum realQuant = quant[x + y*width];
+				if (realQuant >= 65535)
+				{
+					currentEdgePixels += 1;
+				}
+			}
+		}
+
+		if (currentEdgePixels <= maxEdgePixels)
+		{
+			SetStatusMessage(L"Found TShirt!", 1000, true);
+			return true;
+		}
+
+	}
+	catch (Exception &error_)
+	{
+		LOG(ERROR) << error_.what();
+	}
+
+	return false;
+}
+
 void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight)
 {
 	SetStatusMessage(L"Scanning for TShirt...", 500, false);
-	int rangeMin = 800;
-	int rangeMax = 950;
+	int rangeMin = 750;
+	int rangeMax = 900;
 	int minimumRectangleSize = 448;
 
 	HRESULT hr = m_pCoordinateMapper->MapColorFrameToDepthSpace(nDepthWidth * nDepthHeight, (UINT16*)pDepthBuffer, width * height, m_pDepthCoordinates);
@@ -368,14 +417,14 @@ void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16
 	{
 		//FilterOnlyObjectsInDistance(pBuffer, width, height, m_pDepthCoordinates, pDepthBuffer, nDepthWidth, nDepthHeight, rangeMin, rangeMax);
 
-		int size = 556;
-		int start_x = (width - size) / 2;
-		int start_y = (height - size) / 2;
-		long averageValue = GetAverageDistanceForRect(pBuffer, width, height, m_pDepthCoordinates, pDepthBuffer, nDepthWidth, nDepthHeight, start_x, start_y, size, size);
+		int distanceSize = 556;
+		int start_x = (width - distanceSize) / 2;
+		int start_y = (height - distanceSize) / 2;
+		long averageValue = GetAverageDistanceForRect(pBuffer, width, height, m_pDepthCoordinates, pDepthBuffer, nDepthWidth, nDepthHeight, start_x, start_y, distanceSize, distanceSize);
 
 		if (averageValue > rangeMin && averageValue < rangeMax)
 		{
-			printf("Found good distance in center square!");
+			LOG(INFO) << ("Found good distance in center square!");
 		}
 		else
 		{
@@ -392,44 +441,58 @@ void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16
 			return;
 		}
 
-		size = 512;
-		//Use old start_x
-		start_y = (height - size) / 2;
-		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, width, height, start_x, start_y, size, size);
-		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, size, size);
+		int size = 512;
+		//Use old start_x and y. start_x and y are relative to the full color image (1920x1080).
+		//Therefore they need to be converted.
+		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, width, height, start_x, start_y, distanceSize, distanceSize);
+		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, distanceSize, distanceSize);
 		Image edgeImage = Image(cutRectImage);
-		int maxEdgePixels = 5;
-		int currentEdgePixels = 0;
 
-		try {
-			edgeImage.cannyEdge();
-			for (int y = 0; y < size; y++)
-			{
-				for (int x = 0; x < size; x++)
-				{
-					Color color = edgeImage.pixelColor(x, y);
-					if (color.quantumRed() == 255 && color.quantumGreen() == 255 && color.quantumBlue() == 255)
-					{
-						currentEdgePixels += 1;
-					}
-				}
-			}
-
-			if (currentEdgePixels <= maxEdgePixels)
-			{
-				SetStatusMessage(L"Found TShirt!", 1000, true);
-				edgeImage.write("edges.png");
-				cutRectImage.write("back.png");
-			}
-
-			edgeImage.write("test.png");
-		}
-		catch (Exception &error_)
+		if (!this->hasFirstScan)
 		{
-			printf(error_.what());
+			start_y = (height - size) / 2;
+			int realStart_y = convertCoordFromBiggerRect(width, distanceSize, start_y);
+			int realStart_x = convertCoordFromBiggerRect(width, distanceSize, start_x);
+			if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
+			{
+				edgeImage.write("edges1.png");
+				Image finalImg = Image(cutRectImage);
+				finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
+				finalImg.write("back1.png");
+			}
+			else
+			{
+				SetStatusMessage(L"Please move the TShirt to the left a bit.", 1000, true);
+			}
+			this->hasFirstScan = true;
 		}
 		
-		
+		if (!this->hasSecondScan && this->hasFirstScan)
+		{
+			start_y = (height - size) / 2;
+			start_x = start_x + distanceSize - size;
+			int realStart_y = convertCoordFromBiggerRect(width, distanceSize, start_y);
+			int realStart_x = convertCoordFromBiggerRect(width, distanceSize, start_x);
+			if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
+			{
+				edgeImage.write("edges2.png");
+				Image finalImg = Image(cutRectImage);
+				finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
+				finalImg.write("back2.png");
+				this->hasSecondScan = true;
+				this->timeSinceSecondScan = getMilliseconds();
+			}
+			else
+			{
+				SetStatusMessage(L"Please move the TShirt to the right a bit.", 1000, true);
+			}
+		}
+
+		if (this->hasFirstScan && this->hasSecondScan)
+		{
+			//TODO: Communicate with Python CInterface!
+		}
+
 
 
 		delete[]cutRect;
@@ -863,6 +926,7 @@ bool CColorBasics::SetStatusMessage(_In_z_ WCHAR* szMessage, DWORD nShowTimeMsec
     if (m_hWnd && (bForce || (m_nNextStatusTime <= now)))
     {
         SetDlgItemText(m_hWnd, IDC_STATUS, szMessage);
+		//LOG(INFO) << "Status update: " << szMessage;
         m_nNextStatusTime = now + nShowTimeMsec;
 
         return true;

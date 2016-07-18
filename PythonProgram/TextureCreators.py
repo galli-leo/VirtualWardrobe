@@ -116,6 +116,19 @@ class TextureCreator(object):
 
         return new
 
+    def a_c(self, img, c):
+        new = Image.new(img.mode, img.size)
+        w, h = new.size
+        for x in range(0, w):
+            for y in range(0, h):
+                value = img.getpixel((x,y))
+                newValue = value+c
+
+                new.putpixel((x,y), int(newValue))
+
+        return new
+
+
 
     @timeit
     def createRandomTexture(self, size, algo=noise.snoise2, octaves=16, freq=16.0, k=2):
@@ -202,19 +215,22 @@ class TilableCreator(TextureCreator):
         self.save(s_swapped)
         mask_swapped2 = ImageOps.invert(orig_mask)
         self.save(mask_swapped2)
+        self.save(mask_swapped)
         shaded = self.m_c(mask_swapped, 0.4)
+        arch = self.m_c(self.a_c(self.m_c(mask_swapped, 1.5), -128), 2)
+        self.save(arch)
         orig_mask2 = ImageOps.invert(mask_swapped)
-        orig_mask2 = self.m_c(orig_mask2, 2.5)
+        orig_mask2 = self.m_c(orig_mask2, 2)
         self.save(orig_mask2)
         orig_mask = self.m(orig_mask, orig_mask2)
         self.save(orig_mask)
         self.save(shaded)
-        mask_swapped = self.a(shaded, mask_swapped2)
+        mask_swapped3 = self.a(shaded, mask_swapped2)
         #mask_swapped = Image.open("testing_mask_swapped.png")
-        self.save(mask_swapped)
+        self.save(mask_swapped3)
         #orig_mask = ImageOps.invert(mask_swapped.convert("L"))
 
-        tile.paste(s_image, (0,0), mask_swapped)
+        tile.paste(s_image, (0,0), mask_swapped3)
         tile.paste(s_swapped, (0,0), orig_mask)
         self.save(tile)
 
@@ -295,7 +311,7 @@ def regenerateRandomImages():
 def runTest(klass=NoiseCreator):
     creator = klass(["back.png", "back2.png"], None, prefix="grey")
     img = creator.createTexture()
-    img.show()
+    #img.show()
 
 if __name__ == "__main__":
     #regenerateRandomImages()

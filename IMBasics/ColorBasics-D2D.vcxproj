@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorBasics.h" />
+    <ClInclude Include="easylogging++.h" />
     <ClInclude Include="ImageRenderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
