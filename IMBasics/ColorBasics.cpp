@@ -376,7 +376,6 @@ bool CColorBasics::HasFlatSurface(Image edgeImage, int start_x, int start_y, int
 	int currentEdgePixels = 0;
 
 	try {
-		edgeImage.edge();
 		Quantum* quant = edgeImage.getPixels(0, 0, width, height);
 		for (int y = 0; y < height; y++)
 		{
@@ -410,7 +409,6 @@ void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16
 	SetStatusMessage(L"Scanning for TShirt...", 500, false);
 	int rangeMin = 750;
 	int rangeMax = 900;
-	int minimumRectangleSize = 448;
 
 	HRESULT hr = m_pCoordinateMapper->MapColorFrameToDepthSpace(nDepthWidth * nDepthHeight, (UINT16*)pDepthBuffer, width * height, m_pDepthCoordinates);
 	if (SUCCEEDED(hr))
@@ -447,55 +445,65 @@ void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16
 		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, width, height, start_x, start_y, distanceSize, distanceSize);
 		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, distanceSize, distanceSize);
 		Image edgeImage = Image(cutRectImage);
+		try{
+			edgeImage.edge();
 
-		if (!this->hasFirstScan)
-		{
-			start_y = (height - size) / 2;
-			int realStart_y = convertCoordFromBiggerRect(width, distanceSize, start_y);
-			int realStart_x = convertCoordFromBiggerRect(width, distanceSize, start_x);
-			if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
+			if (!this->hasFirstScan)
 			{
-				edgeImage.write("edges1.png");
-				Image finalImg = Image(cutRectImage);
-				finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
-				finalImg.write("back1.png");
+				start_y = (height - size) / 2;
+				int realStart_y = convertCoordFromBiggerRect(height, distanceSize, start_y);
+				int realStart_x = convertCoordFromBiggerRect(width, distanceSize, start_x);
+				if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
+				{
+					edgeImage.write("edges1.png");
+					Image finalImg = Image(cutRectImage);
+					LOG(INFO) << realStart_x << " " << realStart_y << " " << size;
+					finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
+					finalImg.write("back1.png");
+					this->hasFirstScan = true;
+				}
+				else
+				{
+					SetStatusMessage(L"Please move the TShirt to the left a bit.", 1000, true);
+				}
+
 			}
-			else
+
+			if (!this->hasSecondScan && this->hasFirstScan)
 			{
-				SetStatusMessage(L"Please move the TShirt to the left a bit.", 1000, true);
+				start_y = (height - size) / 2;
+				start_x = start_x + distanceSize - size;
+				int realStart_y = convertCoordFromBiggerRect(height, distanceSize, start_y);
+				int realStart_x = convertCoordFromBiggerRect(width, distanceSize, start_x);
+				if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
+				{
+					edgeImage.write("edges2.png");
+					Image finalImg = Image(cutRectImage);
+					finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
+					finalImg.write("back2.png");
+					this->hasSecondScan = true;
+					this->timeSinceSecondScan = getMilliseconds();
+				}
+				else
+				{
+					SetStatusMessage(L"Please move the TShirt to the right a bit.", 1000, true);
+				}
 			}
-			this->hasFirstScan = true;
+
+			if (this->hasFirstScan && this->hasSecondScan)
+			{
+				//TODO: Communicate with Python CInterface!
+				SetStatusMessage(L"Scanned TShirt! Prepare the next one!", 2000, true);
+			}
+			delete[]cutRect;
 		}
+		catch (Exception &error_)
+		{
+			LOG(ERROR) << error_.what();
+			delete[]cutRect;
+		}
+
 		
-		if (!this->hasSecondScan && this->hasFirstScan)
-		{
-			start_y = (height - size) / 2;
-			start_x = start_x + distanceSize - size;
-			int realStart_y = convertCoordFromBiggerRect(width, distanceSize, start_y);
-			int realStart_x = convertCoordFromBiggerRect(width, distanceSize, start_x);
-			if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
-			{
-				edgeImage.write("edges2.png");
-				Image finalImg = Image(cutRectImage);
-				finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
-				finalImg.write("back2.png");
-				this->hasSecondScan = true;
-				this->timeSinceSecondScan = getMilliseconds();
-			}
-			else
-			{
-				SetStatusMessage(L"Please move the TShirt to the right a bit.", 1000, true);
-			}
-		}
-
-		if (this->hasFirstScan && this->hasSecondScan)
-		{
-			//TODO: Communicate with Python CInterface!
-		}
-
-
-
-		delete[]cutRect;
 	}
 
 	
@@ -869,9 +877,16 @@ void CColorBasics::ProcessFrame(INT64 nTime,
 		if (this->lastScan == -1 || secondsDiff > this->scanInterval)
 		{
 			this->lastScan = currentTime;
+			//Did 2 seconds pass since the last scan or do we not have a scan at all?
+			if ((this->hasSecondScan && (currentTime - this->timeSinceSecondScan > 4000)) || !(this->hasFirstScan && this->hasSecondScan))
+			{
+				this->hasFirstScan = false;
+				this->hasSecondScan = false;
+				this->ScanForTshirt(pColorBuffer, cColorWidth, cColorHeight, pDepthBuffer, nDepthWidth, nDepthHeight);
+			}
 			
 		}
-		this->ScanForTshirt(pColorBuffer, cColorWidth, cColorHeight, pDepthBuffer, nDepthWidth, nDepthHeight);
+		
 
 		//Create Rectangle where optimal tshirt placement is
 		this->CreateRectangleOnScreen(pColorBuffer, cColorWidth, cColorHeight, 5);

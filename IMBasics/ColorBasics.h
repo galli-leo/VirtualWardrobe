@@ -87,7 +87,7 @@ private:
 	void					ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16* pDepthBuffer, int nDepthHeight, int nDepthWidth);
 	void					CreateRectangleOnScreen(RGBQUAD* pBuffer, int width, int height, int thickness, int size, int red, int green, int blue);
 	Magick::Image			CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height);
-	bool					HasFlatSurface(Image img, int start_x, int start_y, int width, int height);
+	bool					HasFlatSurface(Magick::Image img, int start_x, int start_y, int width, int height);
 
     /// <summary>
     /// Main processing function

@@ -1,11 +1,11 @@
-﻿Build started 18.07.2016 14:28:14.
+﻿Build started 18.07.2016 15:37:11.
      1>Project "E:\Unreal Projects\IntelligentMirror\IMBasics\ColorBasics-D2D.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          E:\Applications\VS2013\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W1 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt ColorBasics.cpp
          ColorBasics.cpp
-     1>ColorBasics.cpp(171): warning C4003: not enough actual parameters for macro 'TIMED_FUNC'
-     1>ColorBasics.cpp(213): warning C4129: 'P' : unrecognized character escape sequence
-     1>ColorBasics.cpp(213): warning C4129: 'I' : unrecognized character escape sequence
+     1>ColorBasics.cpp(176): warning C4003: not enough actual parameters for macro 'TIMED_FUNC'
+     1>ColorBasics.cpp(218): warning C4129: 'P' : unrecognized character escape sequence
+     1>ColorBasics.cpp(218): warning C4129: 'I' : unrecognized character escape sequence
        Link:
          E:\Applications\VS2013\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release\ColorBasics-D2D.exe" /INCREMENTAL:NO /NOLOGO kinect20.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib CORE_RL_Magick++_.lib CORE_RL_MagickCore_.lib CORE_RL_MagickWand_.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release\ColorBasics-D2D.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release\ColorBasics-D2D.lib" /MACHINE:X64 x64\Release\ColorBasics.res
          x64\Release\ColorBasics.obj
@@ -17,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.04
+Time Elapsed 00:00:03.52

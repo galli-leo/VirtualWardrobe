@@ -36089,3 +36089,73 @@
 2016-07-18 14:59:08,071 WARN  [default] It took over 25 ms to execute CutRectFromBuffer!: 46
 2016-07-18 14:59:08,513 WARN  [default] It took over 25 ms to execute CutRectFromBuffer!: 42
 2016-07-18 14:59:11,257 WARN  [default] It took over 25 ms to execute CutRectFromBuffer!: 65
+2016-07-18 14:59:15,822 WARN  [default] It took over 25 ms to execute CutRectFromBuffer!: 97
+2016-07-18 14:59:20,934 WARN  [default] It took over 25 ms to execute CutRectFromBuffer!: 107
+2016-07-18 14:59:21,584 WARN  [default] It took over 25 ms to execute CutRectFromBuffer!: 113
+2016-07-18 14:59:26,346 WARN  [default] It took over 25 ms to execute CutRectFromBuffer!: 120
+2016-07-18 15:22:23,927 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:23,939 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:24,927 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:24,931 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:25,926 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:25,931 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:26,926 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:26,931 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:27,959 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:27,963 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:28,958 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:28,961 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:29,959 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:29,963 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:30,960 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:30,964 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:32,026 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:32,030 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:33,027 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:33,031 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:34,027 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:34,032 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:38,092 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:38,096 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:39,093 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:39,098 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:42,128 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:42,132 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:43,159 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:43,164 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:22:44,194 INFO  [default] Found good distance in center square!
+2016-07-18 15:22:44,197 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:28:58,860 INFO  [default] Found good distance in center square!
+2016-07-18 15:28:58,872 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:28:59,859 INFO  [default] Found good distance in center square!
+2016-07-18 15:28:59,863 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:29:02,863 INFO  [default] Found good distance in center square!
+2016-07-18 15:29:02,866 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:29:03,860 INFO  [default] Found good distance in center square!
+2016-07-18 15:29:03,864 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:29:04,861 INFO  [default] Found good distance in center square!
+2016-07-18 15:29:04,865 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:32:50,893 INFO  [default] Found good distance in center square!
+2016-07-18 15:32:50,906 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:32:51,893 INFO  [default] Found good distance in center square!
+2016-07-18 15:32:51,898 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:32:52,923 INFO  [default] Found good distance in center square!
+2016-07-18 15:32:52,927 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:32:53,927 INFO  [default] Found good distance in center square!
+2016-07-18 15:32:53,931 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:32:54,927 INFO  [default] Found good distance in center square!
+2016-07-18 15:32:54,930 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:32:55,961 INFO  [default] Found good distance in center square!
+2016-07-18 15:32:55,964 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:35:24,591 INFO  [default] Found good distance in center square!
+2016-07-18 15:35:24,607 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:35:25,591 INFO  [default] Found good distance in center square!
+2016-07-18 15:35:25,595 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:35:45,026 INFO  [default] Found good distance in center square!
+2016-07-18 15:35:45,030 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:35:46,026 INFO  [default] Found good distance in center square!
+2016-07-18 15:35:46,029 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:35:46,174 INFO  [default] 0 -398 512
+2016-07-18 15:37:19,660 INFO  [default] Found good distance in center square!
+2016-07-18 15:37:19,674 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-07-18 15:37:19,865 INFO  [default] 0 22 512

@@ -309,7 +309,7 @@ def regenerateRandomImages():
     ImageOps.invert(random).save("random_invert.png")
 
 def runTest(klass=NoiseCreator):
-    creator = klass(["back.png", "back2.png"], None, prefix="grey")
+    creator = klass(["back1.png", "back2.png"], None, prefix="grey")
     img = creator.createTexture()
     #img.show()
 
