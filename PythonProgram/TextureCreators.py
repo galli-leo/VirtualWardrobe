@@ -200,6 +200,39 @@ class BigTileCreator(TextureCreator):
 
         return self.texture
 
+class CircleCreator(TextureCreator):
+    @timeit
+    def processSample(self, images):
+        s_image = images[0]
+        self.texture = Image.new("RGBA", self.size)
+        s_w, s_h = s_image.size
+        orig_mask = Image.open("mask.png").convert("L")
+        #self.save(orig_mask)
+        tile = Image.new("RGBA", s_image.size)
+        tile.paste(s_image, (0,0), orig_mask)
+        w, h = self.size
+        for i in range(0, w+s_w, s_w):
+            for j in range(0, h+s_h, s_h):
+                self.texture.paste(s_image, (i, j), orig_mask)
+                self.texture.paste(s_image, (i-s_w/2, j-s_h/2), orig_mask)
+                self.texture.paste(s_image, (i, j-s_h/2), orig_mask)
+                self.texture.paste(s_image, (i-s_w/2, j), orig_mask)
+        self.save(tile)
+        return self.texture
+
+    def createMaskForOrig(self, size):
+        mask = Image.new("L", size)
+        for x in range(0, size[0]):
+            for y in range(0, size[1]):
+                f = 2
+                N = (size[0])
+                value = 1-math.sqrt((x-N/2)**f + (y-N/2)**f) / (N/2) * 0.5
+                if value < 0:
+                    value = 0
+                mask.putpixel((x,y), (int(255*value),))
+        self.save(mask)
+        return mask
+
 class TilableCreator(TextureCreator):
     """Borrowed from http://paulbourke.net/texture_colour/tiling/"""
     @timeit
@@ -217,24 +250,15 @@ class TilableCreator(TextureCreator):
         self.save(mask_swapped2)
         self.save(mask_swapped)
         shaded = self.m_c(mask_swapped, 0.4)
-        arch = self.m_c(self.a_c(self.m_c(mask_swapped, 1.5), -128), 2)
-        self.save(arch)
-        orig_mask2 = ImageOps.invert(mask_swapped)
-        orig_mask2 = self.m_c(orig_mask2, 2)
-        self.save(orig_mask2)
-        orig_mask = self.m(orig_mask, orig_mask2)
-        self.save(orig_mask)
-        self.save(shaded)
+        #arch = self.m_c(self.a_c(self.m_c(mask_swapped, 1.5), -128), 2)
+
         mask_swapped3 = self.a(shaded, mask_swapped2)
         #mask_swapped = Image.open("testing_mask_swapped.png")
         self.save(mask_swapped3)
-        #orig_mask = ImageOps.invert(mask_swapped.convert("L"))
+        orig_mask = Image.open("orig_mask.png").convert("L")
 
         tile.paste(s_image, (0,0), mask_swapped3)
         tile.paste(s_swapped, (0,0), orig_mask)
-        self.save(tile)
-
-
         self.save(tile)
         self.tileSmallerTexture(tile, self.texture)
         #self.tileSmallerTexture(s_swapped, self.texture)
@@ -278,26 +302,17 @@ class NoiseCreator(TextureCreator):
             LOG.warning("Wrong number of samples. Maybe you have too little?")
             return Image.new("RGBA", self.size)
         sample1 = images[0]
-        s1_creator = TilableCreator([sample1], None, prefix=self.prefix)
+        s1_creator = CircleCreator([sample1], None, prefix=self.prefix)
         sample2 = images[1]
-        s2_creator = TilableCreator([sample2], None, prefix=self.prefix)
+        s2_creator = CircleCreator([sample2], None, prefix=self.prefix)
         sample1 = s1_creator.createTexture()
         sample2 = s2_creator.createTexture()
         random = Image.open("random.png")
         rand_invert = Image.open("random_invert.png")
         s_w, s_h = sample1.size
-        t1 = Image.new("RGBA", self.size)
-        self.tileSmallerTexture(sample1, t1)
-        self.save(t1)
-        t1 = ImageChops.multiply(t1, random.convert("RGBA"))#self.multiply(t1, random)
-        t2 = Image.new("RGBA", self.size)
-        self.tileSmallerTexture(sample2, t2)
-        self.save(t2)
-        t2 = ImageChops.multiply(t2, rand_invert.convert("RGBA"))
+        t1 = ImageChops.multiply(sample1, random.convert("RGBA"))
+        t2 = ImageChops.multiply(sample2, rand_invert.convert("RGBA"))
         self.texture = ImageChops.add(t1, t2)
-        #self.texture.paste(t1, (0,0), random)
-        #self.texture.paste(t2, (0,0), rand_invert)
-        self.texture.save("result.png")
         return self.texture
 
 
@@ -311,7 +326,7 @@ def regenerateRandomImages():
 def runTest(klass=NoiseCreator):
     creator = klass(["back1.png", "back2.png"], None, prefix="grey")
     img = creator.createTexture()
-    #img.show()
+    img.show()
 
 if __name__ == "__main__":
     #regenerateRandomImages()
