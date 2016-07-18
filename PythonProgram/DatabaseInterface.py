@@ -1,5 +1,5 @@
 import sqlite3
-from DBWrappers import Category, ClothingItem
+#from DBWrappers import Category, ClothingItem
 import DBWrappers
 import os
 import Vars
