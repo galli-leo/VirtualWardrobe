@@ -36159,3 +36159,70 @@
 2016-07-18 15:37:19,660 INFO  [default] Found good distance in center square!
 2016-07-18 15:37:19,674 INFO  Executed [class Magick::Image __cdecl CColorBasics::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
 2016-07-18 15:37:19,865 INFO  [default] 0 22 512
+2016-07-18 21:23:29,970 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:23:29,970 WARN  [default] Aborting application. Reason: Fatal log at [e:\unreal projects\intelligentmirror\imbasics\easylogging++.h:5627]
+2016-07-18 21:24:08,429 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:24:08,429 WARN  [default] Aborting application. Reason: Fatal log at [e:\unreal projects\intelligentmirror\imbasics\easylogging++.h:5627]
+2016-07-18 21:24:28,596 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:24:28,596 WARN  [default] Aborting application. Reason: Fatal log at [e:\unreal projects\intelligentmirror\imbasics\easylogging++.h:5627]
+2016-07-18 21:25:03,534 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:25:03,534 WARN  [default] Aborting application. Reason: Fatal log at [e:\unreal projects\intelligentmirror\imbasics\easylogging++.h:5627]
+2016-07-18 21:25:38,376 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:25:38,376 WARN  [default] Aborting application. Reason: Fatal log at [e:\unreal projects\intelligentmirror\imbasics\easylogging++.h:5627]
+2016-07-18 21:25:55,189 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:25:55,189 WARN  [default] Aborting application. Reason: Fatal log at [e:\unreal projects\intelligentmirror\imbasics\easylogging++.h:5627]
+2016-07-18 21:29:42,081 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:31:03,877 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:32:17,335 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:33:14,639 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:33:51,169 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:44:12,005 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics/PythonProgram/
+2016-07-18 21:44:12,010 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:44:38,173 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics/PythonProgram/
+2016-07-18 21:44:38,181 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:44:55,286 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasicsPythonProgram\
+2016-07-18 21:44:55,291 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:45:12,099 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 21:45:12,105 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:48:39,538 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 21:48:39,578 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:49:26,331 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 21:49:26,336 INFO  [default] List insert result: 0
+2016-07-18 21:49:26,351 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:50:42,803 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 21:50:42,807 INFO  [default] List insert result: 0
+2016-07-18 21:50:42,823 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:56:10,758 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 21:56:10,762 INFO  [default] List insert result: 0°–E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\E:\Anaconda27_64\python27.zipE:\Anaconda27_64\LibE:\Anaconda27_64\DLLsE:\Unreal Projects\IntelligentMirror\IMBasicsE:\Unreal Projects\IntelligentMirror\IMBasics\x64\ReleaseE:\Anaconda27_64E:\Anaconda27_64\lib\site-packagesE:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.eggE:\Anaconda27_64\lib\site-packages\win32E:\Anaconda27_64\lib\site-packages\win32\libE:\Anaconda27_64\lib\site-packages\PythonwinE:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 21:56:10,793 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 21:59:20,774 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 21:59:20,778 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 21:59:20,804 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 22:02:12,927 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:02:12,931 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 22:02:12,964 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 22:03:41,019 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:05:00,946 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:05:00,949 INFO  [default] List insert result: 0,ÓÈ;þ
+2016-07-18 22:05:00,967 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 22:05:38,435 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:05:38,439 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 22:05:38,471 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 22:06:46,041 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:06:46,045 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 22:10:40,708 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:10:40,711 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 22:10:40,741 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 22:10:51,128 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:10:51,133 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 22:11:00,686 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-07-18 22:13:14,041 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:13:14,045 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 22:13:18,075 INFO  [default] Executed python function: helloFromPython
+2016-07-18 22:13:18,077 INFO  [default] Python says: Hello Leo from python
+2016-07-18 22:20:25,471 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:20:25,475 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 22:20:38,071 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-07-18 22:20:38,076 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-07-18 22:20:44,034 INFO  [default] Executed python function: helloFromPython
+2016-07-18 22:20:44,036 INFO  [default] Python says: Hello Leo from Python!

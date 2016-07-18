@@ -13,6 +13,8 @@
 #include <chrono>
 #include <Magick++.h>
 #include "easylogging++.h"
+#include <Python.h>
+#include <direct.h>
 
 using namespace Magick;
 
@@ -65,6 +67,69 @@ void SetStdOutToNewConsole()
 	*stdout = *fp;
 
 	setvbuf(stdout, NULL, _IONBF, 0);
+}
+
+char* convertPyListToString(PyObject* list)
+{
+	char buffer[6000];
+	strcat(buffer, "[");
+	if (PyList_Check(list))
+	{
+		int count = PyList_Size(list);
+		for (int i = 0; i < count; i++)
+		{
+			PyObject* item = PyList_GetItem(list, i);
+			if (PyString_Check(item))
+			{
+				strcat(buffer, PyString_AsString(item));
+			}
+			if (i < count - 1)
+			{
+				strcat(buffer, ", ");
+			}
+		}
+	}
+
+	strcat(buffer, "]");
+
+	return buffer;
+}
+
+PyObject* callPythonFunction(const char* function, PyObject* args, const char* module = "CInterface")
+{
+	PyObject* pModule = PyImport_ImportModule(module);
+	PyErr_Print();
+	PyObject* pDict = PyModule_GetDict(pModule);
+	// pFunc is also a borrowed reference 
+	PyObject* pFunc = PyDict_GetItemString(pDict, function);
+	PyErr_Print();
+	PyObject* pRet = PyEval_CallObject(pFunc, args);
+
+	PyErr_Print();
+
+	Py_DECREF(pFunc);
+	Py_DECREF(pModule);
+	Py_DECREF(args);
+	LOG(INFO) << "Executed python function: " << function;
+
+	return pRet;
+}
+
+void reloadImportantPyModules()
+{
+	PyObject* pRet = callPythonFunction("reloadImportantModules", NULL);
+}
+
+int createNewItemWithTextures(char* backPath1, char* backPath2)
+{
+	PyObject* args = Py_BuildValue("(s, s)", backPath1, backPath2);
+	PyObject* pRet = callPythonFunction("createNewItemWithTextures", args);
+	if (PyNumber_Check(pRet))
+	{
+		return PyNumber_AsSsize_t(pRet, nullptr);
+	}
+
+	return -1;
 }
 
 
@@ -214,8 +279,26 @@ CColorBasics::CColorBasics() :
         m_fFreq = double(qpf.QuadPart);
     }
 
+	SetStdOutToNewConsole();
+
 	//HARDCODED!!
 	InitializeMagick("C:\Program Files\ImageMagick-7.0.2-Q16");
+
+	el::Loggers::addFlag(el::LoggingFlag::DisableApplicationAbortOnFatalLog);
+
+	Py_Initialize();
+
+	char * dir = "\\PythonProgram\\";
+	char cCurrentPath[FILENAME_MAX + sizeof(dir)];
+	_getcwd(cCurrentPath, sizeof(cCurrentPath));
+	strcat(cCurrentPath, dir);
+	LOG(INFO) << "Python Program path: " << cCurrentPath;
+
+	PyObject *sysPath = PySys_GetObject("path");
+	PyObject *path = PyString_FromString(cCurrentPath);
+	int result = PyList_Insert(sysPath, 0, path);
+	PySys_SetObject("path", sysPath);
+	LOG(INFO) << "List insert result: " << result << convertPyListToString(sysPath);
 
     // create heap storage for color pixel data in RGBX format
     m_pColorRGBX = new RGBQUAD[cColorWidth * cColorHeight];
@@ -263,6 +346,8 @@ CColorBasics::~CColorBasics()
     }
 
     SafeRelease(m_pKinectSensor);
+
+	Py_Finalize();
 }
 
 /// <summary>
@@ -289,7 +374,7 @@ int CColorBasics::Run(HINSTANCE hInstance, int nCmdShow)
         return 0;
     }
 
-	SetStdOutToNewConsole();
+	
 
     // Create main application window
     HWND hWndApp = CreateDialogParamW(
