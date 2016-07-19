@@ -461,18 +461,26 @@ bool CColorBasics::HasFlatSurface(Image edgeImage, int start_x, int start_y, int
 	int currentEdgePixels = 0;
 
 	try {
-		Quantum* quant = edgeImage.getPixels(0, 0, width, height);
-		for (int y = 0; y < height; y++)
+		Quantum* quant = edgeImage.getPixels(start_x, start_y, width, height);
+		for (int y = start_y; y < height+start_y; y++)
 		{
-			for (int x = 0; x < width; x++)
+			for (int x = start_x; x < width+start_x; x++)
 			{
 				Quantum realQuant = quant[x + y*width];
 				if (realQuant >= 65535)
 				{
 					currentEdgePixels += 1;
 				}
+
+				if (x >= 555)
+				{
+					//LOG(INFO) << "X Is at the max: " << x;
+				}
+				
 			}
 		}
+
+		LOG(INFO) << "Current Edge Pixels: " << currentEdgePixels;
 
 		if (currentEdgePixels <= maxEdgePixels)
 		{
@@ -563,6 +571,7 @@ void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16
 				if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
 				{
 					edgeImage.write("edges2.png");
+					LOG(INFO) << realStart_x << " " << realStart_y << " " << size;
 					Image finalImg = Image(cutRectImage);
 					finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
 					finalImg.write("back2.png");
@@ -579,6 +588,8 @@ void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16
 			{
 				//TODO: Communicate with Python CInterface!
 				SetStatusMessage(L"Scanned TShirt! Prepare the next one!", 2000, true);
+				int newItemID = createNewItemWithTextures("back1.png", "back2.png");
+				LOG(INFO) << "Created new Clothing Item with ID: " << newItemID;
 			}
 			delete[]cutRect;
 		}
@@ -963,10 +974,14 @@ void CColorBasics::ProcessFrame(INT64 nTime,
 		{
 			this->lastScan = currentTime;
 			//Did 2 seconds pass since the last scan or do we not have a scan at all?
-			if ((this->hasSecondScan && (currentTime - this->timeSinceSecondScan > 4000)) || !(this->hasFirstScan && this->hasSecondScan))
+			if ((this->hasSecondScan && (currentTime - this->timeSinceSecondScan > 4000)))
 			{
 				this->hasFirstScan = false;
 				this->hasSecondScan = false;
+				this->ScanForTshirt(pColorBuffer, cColorWidth, cColorHeight, pDepthBuffer, nDepthWidth, nDepthHeight);
+			}
+			else if (!(this->hasFirstScan && this->hasSecondScan))
+			{
 				this->ScanForTshirt(pColorBuffer, cColorWidth, cColorHeight, pDepthBuffer, nDepthWidth, nDepthHeight);
 			}
 			

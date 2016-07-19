@@ -43,7 +43,9 @@ class Category(object):
         return new
 
 
-    def getPath(self, texture_path=Vars.TEXTURE_FOLDER):
+    def getPath(self, texture_path=None):
+        if texture_path is None:
+            texture_path = Vars.TEXTURE_FOLDER
         return os.path.join(texture_path, self.name)
 
 class ClothingItem(object):
@@ -52,7 +54,7 @@ class ClothingItem(object):
         super(ClothingItem, self).__init__()
         if createNewID:
             self.id = Vars.DB.createNewEntry("clothes", fields={"category":"0", "finaltexture":"NULL", "printedtexture":"0"})
-        self.category = Vars.CATEGORIES[0]
+        self.category = Vars.CATEGORIES[1]
         self.frontimage = False
         self.finaltexture = ""
         self.printedtexture = False
@@ -75,7 +77,9 @@ class ClothingItem(object):
 
         return new
 
-    def getTexturePath(self, texture_path=Vars.TEXTURE_FOLDER):
+    def getTexturePath(self, texture_path=None):
+        if texture_path is None:
+            texture_path = Vars.TEXTURE_FOLDER
         path = os.path.join(texture_path, self.category.name, "%04d" % (self.id,))
         try:
             os.makedirs(path)
@@ -108,6 +112,7 @@ class ClothingItem(object):
             printed_texture = Image.open(os.path.join(path, "print"+".png"))
         creator = creator_cls(self.texturesamples, printed_texture)
         final_texture = creator.createTexture()
+        final_texture.save(os.path.join(self.getTexturePath(), "final_texture.png"))
         return final_texture
 
     def guessClothCategory(self, joints):
@@ -137,7 +142,7 @@ def loadCategories():
         except OSError:
             if not os.path.isdir(cat.getPath()):
                 raise
-    loadClothes()
+    return loadClothes()
 
 def testingRecognizer(clothes):
     template = TemplateRecgonizer()
@@ -156,8 +161,9 @@ def createNewClothingItem():
 def loadClothes():
     DB = DatabaseInterface.Database()
     clothes = DB.select("clothes")
-    text = clothes[len(clothes)-1].createFinalTexture()
-    text.show()
+    #text = clothes[len(clothes)-1].createFinalTexture()
+    #text.show()
+    return clothes
     #createNewClothingItem()
     #testingRecognizer(clothes)
 

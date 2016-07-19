@@ -38,7 +38,7 @@ def caller_name(skip=1):
 
 class Logger(object):
     """docstring for Logger"""
-    def __init__(self, folder="Logs/", log_level=1, include_timestamp=False):
+    def __init__(self, folder="logs", log_level=1, include_timestamp=False):
         super(Logger, self).__init__()
         if folder is None:
             self.folder = ""

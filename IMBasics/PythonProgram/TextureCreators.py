@@ -3,6 +3,7 @@ import math
 from PIL import Image, ImageOps, ImageChops
 import time
 from Vars import LOG
+import Vars
 import inspect
 import os
 
@@ -29,7 +30,7 @@ class TextureCreator(object):
         """VERY HACKY, ONLY USE TO DEBUG!"""
         LOG.warning("Using hacky save function for lazy debugging.")
         try:
-            os.mkdir("image_testing/{0}/".format(self.prefix))
+            os.mkdir(os.path.join(Vars.REALPATH, "image_testing",format(self.prefix)))
         except Exception as e:
             pass
         frame = inspect.currentframe()
@@ -38,7 +39,7 @@ class TextureCreator(object):
             if v is image:
                 name = k
                 break
-        image.save("image_testing/{0}/{1}.png".format(self.prefix, name))
+        image.save(os.path.join(Vars.REALPATH, "image_testing",format(self.prefix), name+".png"))
 
     @timeit
     def multiply(self, rgb, mask):
@@ -206,7 +207,7 @@ class CircleCreator(TextureCreator):
         s_image = images[0]
         self.texture = Image.new("RGBA", self.size)
         s_w, s_h = s_image.size
-        orig_mask = Image.open("mask.png").convert("L")
+        orig_mask = Image.open(os.path.join(Vars.REALPATH, "mask.png")).convert("L")
         #self.save(orig_mask)
         tile = Image.new("RGBA", s_image.size)
         tile.paste(s_image, (0,0), orig_mask)
@@ -307,8 +308,8 @@ class NoiseCreator(TextureCreator):
         s2_creator = CircleCreator([sample2], None, prefix=self.prefix)
         sample1 = s1_creator.createTexture()
         sample2 = s2_creator.createTexture()
-        random = Image.open("random.png")
-        rand_invert = Image.open("random_invert.png")
+        random = Image.open(os.path.join(Vars.REALPATH, "random.png"))
+        rand_invert = Image.open(os.path.join(Vars.REALPATH, "random_invert.png"))
         s_w, s_h = sample1.size
         t1 = ImageChops.multiply(sample1, random.convert("RGBA"))
         t2 = ImageChops.multiply(sample2, rand_invert.convert("RGBA"))
@@ -329,5 +330,5 @@ def runTest(klass=NoiseCreator):
     img.show()
 
 if __name__ == "__main__":
-    regenerateRandomImages()
+    #regenerateRandomImages()
     runTest()

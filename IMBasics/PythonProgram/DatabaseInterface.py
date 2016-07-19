@@ -8,14 +8,16 @@ import Vars
 
 class Database(object):
     """Our connection to the database"""
-    def __init__(self, dbname=Vars.DBFILE):
+    def __init__(self, dbname=None):
         super(Database, self).__init__()
         self.dbname = dbname
+        if self.dbname is None:
+            self.dbname = Vars.DBFILE
         self.conn = sqlite3.connect(self.dbname)
         sqlite3.register_adapter(bool, int)
         sqlite3.register_converter("BOOLEAN", lambda v: bool(int(v)))
         self.conn.row_factory = sqlite3.Row
-        self.obj_map = {"categories" : Category, "clothes" : ClothingItem}
+        self.obj_map = {"categories" : DBWrappers.Category, "clothes" : DBWrappers.ClothingItem}
 
     def convertRowToObject(self, row, ptype):
         if isinstance(row, list):
