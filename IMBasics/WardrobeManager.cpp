@@ -9,11 +9,12 @@
 #include "resource.h"
 #include <io.h>
 #include "Fcntl.h"
-#include "ColorBasics.h"
+#include "WardrobeManager.h"
 #include <chrono>
 #include <Magick++.h>
 #include "easylogging++.h"
 #include <Python.h>
+#include "WardrobeUtils.h"
 #include <direct.h>
 
 using namespace Magick;
@@ -38,99 +39,10 @@ int APIENTRY wWinMain(
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    CColorBasics application;
+    WardrobeManager application;
     application.Run(hInstance, nShowCmd);
 }
 
-long getMilliseconds()
-{
-	using namespace std::chrono;
-	milliseconds ms = duration_cast< milliseconds >(
-		system_clock::now().time_since_epoch()
-		);
-	return ms.count();
-}
-
-void SetStdOutToNewConsole()
-{
-	int hConHandle;
-	long lStdHandle;
-	FILE *fp;
-
-	// Allocate a console for this app
-	AllocConsole();
-
-	// Redirect unbuffered STDOUT to the console
-	lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-	fp = _fdopen(hConHandle, "w");
-	*stdout = *fp;
-
-	setvbuf(stdout, NULL, _IONBF, 0);
-}
-
-char* convertPyListToString(PyObject* list)
-{
-	char buffer[6000];
-	strcat(buffer, "[");
-	if (PyList_Check(list))
-	{
-		int count = PyList_Size(list);
-		for (int i = 0; i < count; i++)
-		{
-			PyObject* item = PyList_GetItem(list, i);
-			if (PyString_Check(item))
-			{
-				strcat(buffer, PyString_AsString(item));
-			}
-			if (i < count - 1)
-			{
-				strcat(buffer, ", ");
-			}
-		}
-	}
-
-	strcat(buffer, "]");
-
-	return buffer;
-}
-
-PyObject* callPythonFunction(const char* function, PyObject* args, const char* module = "CInterface")
-{
-	PyObject* pModule = PyImport_ImportModule(module);
-	PyErr_Print();
-	PyObject* pDict = PyModule_GetDict(pModule);
-	// pFunc is also a borrowed reference 
-	PyObject* pFunc = PyDict_GetItemString(pDict, function);
-	PyErr_Print();
-	PyObject* pRet = PyEval_CallObject(pFunc, args);
-
-	PyErr_Print();
-
-	Py_DECREF(pFunc);
-	Py_DECREF(pModule);
-	Py_DECREF(args);
-	LOG(INFO) << "Executed python function: " << function;
-
-	return pRet;
-}
-
-void reloadImportantPyModules()
-{
-	PyObject* pRet = callPythonFunction("reloadImportantModules", NULL);
-}
-
-int createNewItemWithTextures(char* backPath1, char* backPath2)
-{
-	PyObject* args = Py_BuildValue("(s, s)", backPath1, backPath2);
-	PyObject* pRet = callPythonFunction("createNewItemWithTextures", args);
-	if (PyNumber_Check(pRet))
-	{
-		return PyNumber_AsSsize_t(pRet, nullptr);
-	}
-
-	return -1;
-}
 
 
 /// <summary>
@@ -235,7 +147,7 @@ int convertCoordFromBiggerRect(int biggerSize, int smallerSize, int coord)
 	return coord - (biggerSize - smallerSize) / 2;
 }
 
-Image CColorBasics::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height)
+Image WardrobeManager::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height)
 {
 	Image img;
 	TIMED_FUNC();
@@ -257,7 +169,7 @@ Image CColorBasics::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int
 /// <summary>
 /// Constructor
 /// </summary>
-CColorBasics::CColorBasics() :
+WardrobeManager::WardrobeManager() :
     m_hWnd(NULL),
     m_nStartTime(0),
     m_nLastCounter(0),
@@ -311,7 +223,7 @@ CColorBasics::CColorBasics() :
 /// <summary>
 /// Destructor
 /// </summary>
-CColorBasics::~CColorBasics()
+WardrobeManager::~WardrobeManager()
 {
     // clean up Direct2D renderer
     if (m_pDrawColor)
@@ -355,7 +267,7 @@ CColorBasics::~CColorBasics()
 /// </summary>
 /// <param name="hInstance">handle to the application instance</param>
 /// <param name="nCmdShow">whether to display minimized, maximized, or normally</param>
-int CColorBasics::Run(HINSTANCE hInstance, int nCmdShow)
+int WardrobeManager::Run(HINSTANCE hInstance, int nCmdShow)
 {
     MSG       msg = {0};
     WNDCLASS  wc;
@@ -381,7 +293,7 @@ int CColorBasics::Run(HINSTANCE hInstance, int nCmdShow)
         NULL,
         MAKEINTRESOURCE(IDD_APP),
         NULL,
-        (DLGPROC)CColorBasics::MessageRouter, 
+        (DLGPROC)WardrobeManager::MessageRouter, 
         reinterpret_cast<LPARAM>(this));
 
     // Show window
@@ -412,7 +324,7 @@ int CColorBasics::Run(HINSTANCE hInstance, int nCmdShow)
     return static_cast<int>(msg.wParam);
 }
 
-void CColorBasics::CreateRectangleOnScreen(RGBQUAD* pBuffer, int width, int height, int thickness=5, int size=556, int red=0, int green=255, int blue=0)
+void WardrobeManager::CreateRectangleOnScreen(RGBQUAD* pBuffer, int width, int height, int thickness=5, int size=556, int red=0, int green=255, int blue=0)
 {
 	int start_x = (width - size) / 2;
 	int start_y = (height - size) / 2;
@@ -455,7 +367,7 @@ void CColorBasics::CreateRectangleOnScreen(RGBQUAD* pBuffer, int width, int heig
 	}
 }
 
-bool CColorBasics::HasFlatSurface(Image edgeImage, int start_x, int start_y, int width, int height)
+bool WardrobeManager::HasFlatSurface(Image edgeImage, int start_x, int start_y, int width, int height)
 {
 	int maxEdgePixels = 2;
 	int currentEdgePixels = 0;
@@ -497,7 +409,7 @@ bool CColorBasics::HasFlatSurface(Image edgeImage, int start_x, int start_y, int
 	return false;
 }
 
-void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight)
+void WardrobeManager::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight)
 {
 	SetStatusMessage(L"Scanning for TShirt...", 500, false);
 	int rangeMin = 750;
@@ -610,7 +522,7 @@ void CColorBasics::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16
 /// <summary>
 /// Main processing function
 /// </summary>
-void CColorBasics::Update()
+void WardrobeManager::Update()
 {
     if (!m_pMultiSourceFrameReader)
     {
@@ -797,18 +709,18 @@ void CColorBasics::Update()
 /// <param name="wParam">message data</param>
 /// <param name="lParam">additional message data</param>
 /// <returns>result of message processing</returns>
-LRESULT CALLBACK CColorBasics::MessageRouter(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WardrobeManager::MessageRouter(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    CColorBasics* pThis = NULL;
+    WardrobeManager* pThis = NULL;
     
     if (WM_INITDIALOG == uMsg)
     {
-        pThis = reinterpret_cast<CColorBasics*>(lParam);
+        pThis = reinterpret_cast<WardrobeManager*>(lParam);
         SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
     }
     else
     {
-        pThis = reinterpret_cast<CColorBasics*>(::GetWindowLongPtr(hWnd, GWLP_USERDATA));
+        pThis = reinterpret_cast<WardrobeManager*>(::GetWindowLongPtr(hWnd, GWLP_USERDATA));
     }
 
     if (pThis)
@@ -827,7 +739,7 @@ LRESULT CALLBACK CColorBasics::MessageRouter(HWND hWnd, UINT uMsg, WPARAM wParam
 /// <param name="wParam">message data</param>
 /// <param name="lParam">additional message data</param>
 /// <returns>result of message processing</returns>
-LRESULT CALLBACK CColorBasics::DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WardrobeManager::DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(wParam);
     UNREFERENCED_PARAMETER(lParam);
@@ -883,7 +795,7 @@ LRESULT CALLBACK CColorBasics::DlgProc(HWND hWnd, UINT message, WPARAM wParam, L
 /// Initializes the default Kinect sensor
 /// </summary>
 /// <returns>indicates success or failure</returns>
-HRESULT CColorBasics::InitializeDefaultSensor()
+HRESULT WardrobeManager::InitializeDefaultSensor()
 {
     HRESULT hr;
 
@@ -927,7 +839,7 @@ HRESULT CColorBasics::InitializeDefaultSensor()
 /// <param name="nWidth">width (in pixels) of input image data</param>
 /// <param name="nHeight">height (in pixels) of input image data</param>
 /// </summary>
-void CColorBasics::ProcessFrame(INT64 nTime,
+void WardrobeManager::ProcessFrame(INT64 nTime,
 	UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight,
 	RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight,
 	BYTE* pBodyIndexBuffer, int nBodyIndexWidth, int nBodyIndexHeight)
@@ -1034,7 +946,7 @@ void CColorBasics::ProcessFrame(INT64 nTime,
 /// <param name="szMessage">message to display</param>
 /// <param name="showTimeMsec">time in milliseconds to ignore future status messages</param>
 /// <param name="bForce">force status update</param>
-bool CColorBasics::SetStatusMessage(_In_z_ WCHAR* szMessage, DWORD nShowTimeMsec, bool bForce)
+bool WardrobeManager::SetStatusMessage(_In_z_ WCHAR* szMessage, DWORD nShowTimeMsec, bool bForce)
 {
     INT64 now = GetTickCount64();
 
@@ -1058,7 +970,7 @@ bool CColorBasics::SetStatusMessage(_In_z_ WCHAR* szMessage, DWORD nShowTimeMsec
 /// <returns>
 /// S_OK on success, otherwise failure code.
 /// </returns>
-HRESULT CColorBasics::GetScreenshotFileName(_Out_writes_z_(nFilePathSize) LPWSTR lpszFilePath, UINT nFilePathSize)
+HRESULT WardrobeManager::GetScreenshotFileName(_Out_writes_z_(nFilePathSize) LPWSTR lpszFilePath, UINT nFilePathSize)
 {
     WCHAR* pszKnownPath = NULL;
     HRESULT hr = SHGetKnownFolderPath(FOLDERID_Pictures, 0, NULL, &pszKnownPath);
@@ -1090,7 +1002,7 @@ HRESULT CColorBasics::GetScreenshotFileName(_Out_writes_z_(nFilePathSize) LPWSTR
 /// <param name="wBitsPerPixel">bits per pixel of image data</param>
 /// <param name="lpszFilePath">full file path to output bitmap to</param>
 /// <returns>indicates success or failure</returns>
-HRESULT CColorBasics::SaveBitmapToFile(BYTE* pBitmapBits, LONG lWidth, LONG lHeight, WORD wBitsPerPixel, LPCWSTR lpszFilePath)
+HRESULT WardrobeManager::SaveBitmapToFile(BYTE* pBitmapBits, LONG lWidth, LONG lHeight, WORD wBitsPerPixel, LPCWSTR lpszFilePath)
 {
     DWORD dwByteCount = lWidth * lHeight * (wBitsPerPixel / 8);
 

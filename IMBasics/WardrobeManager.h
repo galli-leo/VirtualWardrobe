@@ -10,7 +10,7 @@
 #include "ImageRenderer.h"
 #include <Magick++.h>
 
-class CColorBasics
+class WardrobeManager
 {
     static const int        cColorWidth  = 1920;
     static const int        cColorHeight = 1080;
@@ -19,12 +19,12 @@ public:
     /// <summary>
     /// Constructor
     /// </summary>
-    CColorBasics();
+    WardrobeManager();
 
     /// <summary>
     /// Destructor
     /// </summary>
-    ~CColorBasics();
+    ~WardrobeManager();
 
     /// <summary>
     /// Handles window messages, passes most to the class instance to handle
@@ -76,6 +76,8 @@ private:
 	bool					hasFirstScan = false;
 	bool					hasSecondScan = false;
 	long					timeSinceSecondScan = -1;
+
+	WardrobeMode			mode;
 
     // Direct2D
     ImageRenderer*          m_pDrawColor;

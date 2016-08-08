@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ColorBasics.cpp" />
+    <ClCompile Include="WardrobeManager.cpp" />
     <ClCompile Include="ImageRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -29,11 +29,12 @@
     <ResourceCompile Include="ColorBasics.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ColorBasics.h" />
+    <ClInclude Include="WardrobeManager.h" />
     <ClInclude Include="easylogging++.h" />
     <ClInclude Include="ImageRenderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="WardrobeUtils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{25D068F1-4D71-4EC2-BA78-8F6C694101A5}</ProjectGuid>

@@ -41524,3 +41524,5 @@
 2016-07-19 13:11:15,811 INFO  [default] Executed python function: createNewItemWithTextures
 2016-07-19 13:11:15,814 INFO  [default] Created new Clothing Item with ID: 32
 2016-07-19 13:11:45,587 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-08-08 14:49:14,117 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-08 14:49:14,122 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
