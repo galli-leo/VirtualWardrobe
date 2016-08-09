@@ -12,6 +12,9 @@
 
 #include "COMPointer.h"
 
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParams(FNewKinectRawColorFrame, RGBQUAD*, pBuffer)
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParams(FNewKinectRawDepthFrame, uint16*, pDepthBuffer)
+
 /**********************************************************************************************//**
  * A kinect sensor.
  *
@@ -361,6 +364,10 @@ private:
 	uint16*                 m_usRawDepthBuffer;
 
 	TArray<FVector2D>		DepthSpacePointArray;
+
+	/*FNewKinectRawColorFrame newRawColorFrame;
+
+	FNewKinectRawDepthFrame newRawDepthFrame;*/
 
 };
 

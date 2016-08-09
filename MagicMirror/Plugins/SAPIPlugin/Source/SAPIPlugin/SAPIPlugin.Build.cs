@@ -33,6 +33,7 @@ namespace UnrealBuildTool.Rules
 				new string[]
 				{
                     "CoreUObject",
+                    "Engine",
 					// ... add private dependencies that you statically link with here ...
 				}
 				);

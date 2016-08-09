@@ -41,6 +41,7 @@ public class Blu : ModuleRules
 			"UMG",
 			"Json"
 		});
+        PrivateDependencyModuleNames.AddRange(new string[] { "Engine" });
 
 		PrivateIncludePaths.AddRange(
 			new string[] {

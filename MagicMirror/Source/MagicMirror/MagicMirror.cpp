@@ -4,4 +4,4 @@
 
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, MagicMirror, "MagicMirror" );
- 
+DEFINE_LOG_CATEGORY(MMLog);

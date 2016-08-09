@@ -557,6 +557,7 @@ void FKinectSensor::ProcessColorFrame(IColorFrameArrivedEventArgs*pArgs)
 			{
 				FScopeLock lock(&mColorCriticalSection);
 				hr = pColorFrame->CopyConvertedFrameDataToArray(nColorBufferSize, reinterpret_cast<BYTE*>(pColorBuffer), ColorImageFormat_Bgra);
+				//newRawColorFrame.Broadcast(pColorBuffer);
 				m_bNewColorFrame = true;
 			}
 		}
@@ -642,7 +643,7 @@ void FKinectSensor::ProcessDepthFrame(IDepthFrameArrivedEventArgs*pArgs)
 				FScopeLock lock(&mDepthCriticalSection);
 				if (SUCCEEDED(pDepthFrame->CopyFrameDataToArray(nBufferSize, m_usRawDepthBuffer))){
 					ConvertDepthData(m_usRawDepthBuffer, m_pDepthFrameRGBX, nDepthMinReliableDistance, nDepthMaxReliableDistance);
-
+					//newRawDepthFrame.Broadcast(m_usRawDepthBuffer);
 					m_bNewDepthFrame = true;
 				}
 			}

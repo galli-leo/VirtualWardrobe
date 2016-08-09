@@ -81,3 +81,17 @@ void UMMBlueprintFunctions::CropTexture(UTexture2D* texture, FVector2D topLeft, 
 	texture->UpdateResourceW();
 	return;
 }
+
+UWardrobeManager* UMMBlueprintFunctions::StartWardrobeManager(EWardrobeMode startingMode, FString dbFile)
+{
+	UWardrobeManager* wardrobeManager = NewObject<UWardrobeManager>();
+	wardrobeManager->StartWardrobeManager(startingMode, dbFile);
+
+	return wardrobeManager;
+}
+
+/*
+void UMMBlueprintFunctions::TickWardrobeManager(float deltaTime)
+{
+	this->wardrobeManager->Tick(deltaTime);
+}*/

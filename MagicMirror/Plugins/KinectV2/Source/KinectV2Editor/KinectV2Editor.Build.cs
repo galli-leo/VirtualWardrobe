@@ -24,6 +24,7 @@ public class KinectV2Editor : ModuleRules
         PrivateDependencyModuleNames.AddRange(
             new string[] {
 				"SlateCore",
+                "Engine",
 				//"UnrealEd",
                 //"GraphEditor",
 			}
