@@ -7,6 +7,7 @@
 #include "IKinectV2PluginPCH.h"
 #include "ImageUtils.h"
 #include "KinectSensor.h"
+#include "KinectFunctionLibrary.h"
 #include "AllowWindowsPlatformTypes.h"
 
 #define BODY_WAIT_OBJECT WAIT_OBJECT_0
@@ -41,15 +42,23 @@ static const uint32 BodyColorLUT[] = {
 	0xFF808000,
 };
 
-/*
-FKinectSensor& FKinectSensor::Get(){
+//***********************************************************
+//Thread Worker Starts as NULL, prior to being instanced
+//		This line is essential! Compiler error without it
+FKinectSensor* FKinectSensor::Runnable = NULL;
+//***********************************************************
 
-static FKinectSensor Kinect;
 
-return Kinect;
+FKinectSensor* FKinectSensor::Get()
+{
+	if (!Runnable)
+	{
+		Runnable = new FKinectSensor();
+	}
 
+	return Runnable;
 }
-*/
+
 //#include "AllowWindowsPlatformTypes.h"
 
 static uint32 ThreadNameWorkaround = 0;
@@ -557,7 +566,9 @@ void FKinectSensor::ProcessColorFrame(IColorFrameArrivedEventArgs*pArgs)
 			{
 				FScopeLock lock(&mColorCriticalSection);
 				hr = pColorFrame->CopyConvertedFrameDataToArray(nColorBufferSize, reinterpret_cast<BYTE*>(pColorBuffer), ColorImageFormat_Bgra);
-				//newRawColorFrame.Broadcast(pColorBuffer);
+				UKinectFunctionLibrary::pBuffer = pColorBuffer;
+				UKinectFunctionLibrary::coordinateMapper = this->m_pCoordinateMapper;
+				UKinectFunctionLibrary::newRawColorFrame.Broadcast();
 				m_bNewColorFrame = true;
 			}
 		}
@@ -643,7 +654,8 @@ void FKinectSensor::ProcessDepthFrame(IDepthFrameArrivedEventArgs*pArgs)
 				FScopeLock lock(&mDepthCriticalSection);
 				if (SUCCEEDED(pDepthFrame->CopyFrameDataToArray(nBufferSize, m_usRawDepthBuffer))){
 					ConvertDepthData(m_usRawDepthBuffer, m_pDepthFrameRGBX, nDepthMinReliableDistance, nDepthMaxReliableDistance);
-					//newRawDepthFrame.Broadcast(m_usRawDepthBuffer);
+					UKinectFunctionLibrary::pDepthBuffer = m_usRawDepthBuffer;
+					UKinectFunctionLibrary::newRawDepthFrame.Broadcast();
 					m_bNewDepthFrame = true;
 				}
 			}

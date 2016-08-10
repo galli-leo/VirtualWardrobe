@@ -122,7 +122,7 @@ FKinectV2InputDevice::FKinectV2InputDevice(const TSharedRef< FGenericApplication
 		BodyIndexFrame->UpdateResource();
 	}
 
-	KinectSensor = TSharedPtr<FKinectSensor>(new FKinectSensor());
+	KinectSensor = MakeShareable(FKinectSensor::Get());
 
 	UKinectFunctionLibrary::StartSensorEvent.BindRaw(KinectSensor.Get(), &FKinectSensor::StartSensor);
 	UKinectFunctionLibrary::ShutdownSensorEvent.BindRaw(KinectSensor.Get(), &FKinectSensor::ShutDownSensor);

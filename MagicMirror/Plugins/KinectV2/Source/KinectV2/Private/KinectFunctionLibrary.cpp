@@ -323,6 +323,13 @@ FKinectBone& FKinectBone::operator=(const FKinectBone& Other)
 
 #pragma  endregion 
 
+RGBQUAD* UKinectFunctionLibrary::pBuffer = NULL;
+ICoordinateMapper* UKinectFunctionLibrary::coordinateMapper = NULL;
+uint16* UKinectFunctionLibrary::pDepthBuffer = NULL;
+
+FNewKinectRawColorFrame UKinectFunctionLibrary::newRawColorFrame = FNewKinectRawColorFrame();
+FNewKinectRawDepthFrame UKinectFunctionLibrary::newRawDepthFrame = FNewKinectRawDepthFrame();
+
 FRotator UKinectFunctionLibrary::Vec4QuatToRotator(const FVector4& TheVec){
 
 	return FRotator(FQuat(TheVec.X, TheVec.Y, TheVec.Z, TheVec.W));

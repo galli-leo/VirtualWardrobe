@@ -268,6 +268,10 @@ DECLARE_DELEGATE(FShutdownSensorEvent);
 
 DECLARE_DELEGATE_OneParam(FMapColorFrameToDepthSpace, TArray<FVector2D>&);
 
+DECLARE_MULTICAST_DELEGATE(FNewKinectRawColorFrame);
+
+DECLARE_MULTICAST_DELEGATE(FNewKinectRawDepthFrame);
+
 #pragma endregion
 
 
@@ -284,6 +288,15 @@ public:
 	friend struct FBodyFrame;
 	friend class UVisualGestureImporterFactory;
 
+	static FNewKinectRawColorFrame newRawColorFrame;
+
+	static FNewKinectRawDepthFrame newRawDepthFrame;
+
+	static RGBQUAD* pBuffer;
+
+	static ICoordinateMapper* coordinateMapper;
+
+	static uint16* pDepthBuffer;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Kinect|Math", meta = (NativeMakeFunc))
 
@@ -717,6 +730,8 @@ private:
 	static FStartSensorEvent StartSensorEvent;
 
 	static FShutdownSensorEvent ShutdownSensorEvent;
+
+
 
 	static FMapColorFrameToDepthSpace MapColorFrameToDepthSpaceEvent;
 

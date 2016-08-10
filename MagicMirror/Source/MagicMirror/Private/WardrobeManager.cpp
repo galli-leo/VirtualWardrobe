@@ -2,6 +2,10 @@
 
 #include "MagicMirror.h"
 #include "WardrobeManager.h"
+#include "KinectFunctionLibrary.h"
+#include "AllowWindowsPlatformTypes.h"
+#include "PythonUtils.h"
+
 
 
 // Safe release for interfaces
@@ -21,7 +25,11 @@ void UWardrobeManager::Tick(float deltaTime)
 
 	this->currentTime += deltaTime;
 
-	bool result = this->UpdateFrames();
+	
+
+	//bool result = this->UpdateFrames();
+
+	bool result = true;
 
 	if (!result)
 	{
@@ -48,12 +56,42 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 {
 	this->mode = mode;
 	this->databaseFile = databaseFile;
-	HRESULT hr;
+
 
 	pBuffer = new RGBQUAD[colorWidth * colorHeight];
 	pDepthBuffer = new uint16[depthWidth * depthHeight];
 	colorFrame = UTexture2D::CreateTransient(colorWidth, colorHeight);
 	m_pDepthCoordinates = new DepthSpacePoint[colorWidth * colorHeight];
+
+	printd("Starting Wardrobe Manager");
+
+	FString GameDir = FPaths::ConvertRelativePathToFull(FPaths::GameDir());
+
+	InitPython(GameDir);
+
+	//UKinectFunctionLibrary::newRawColorFrame.Broadcast();
+	UKinectFunctionLibrary::newRawColorFrame.AddUObject(this, &UWardrobeManager::OnNewRawColorFrameReceived);
+
+	UKinectFunctionLibrary::newRawDepthFrame.AddUObject(this, &UWardrobeManager::OnNewRawDepthFrameReceived);
+	//UKinectFunctionLibrary::newRawColorFrame.
+	//UKinectFunctionLibrary::newRawColorFrame.BindRaw();
+	//InitSensor();
+}
+
+uint8 UWardrobeManager::TestPython()
+{
+	uint8 result = createNewItemWithTextures("../IMBasics/back1.png", "../IMBasics/back2.png");
+	return result;
+}
+
+FString UWardrobeManager::GetCurrentPathAsSeenByPython()
+{
+	return getCurrentPath();
+}
+
+void UWardrobeManager::InitSensor()
+{
+	HRESULT hr;
 
 	hr = GetDefaultKinectSensor(&m_pKinectSensor);
 
@@ -79,16 +117,17 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	}
 }
 
-/*
-void UWardrobeManager::OnNewRawColorFrameReceived(RGBQUAD* pBuffer)
+
+void UWardrobeManager::OnNewRawColorFrameReceived()
 {
-	this->pBuffer = pBuffer;
+	this->pBuffer = UKinectFunctionLibrary::pBuffer;
+	this->m_pCoordinateMapper = UKinectFunctionLibrary::coordinateMapper;
 }
 
-void UWardrobeManager::OnNewRawDepthFrameReceived(uint16* pDepthBuffer)
+void UWardrobeManager::OnNewRawDepthFrameReceived()
 {
-	this->pDepthBuffer = pDepthBuffer;
-}*/
+	this->pDepthBuffer = UKinectFunctionLibrary::pDepthBuffer;
+}
 
 long UWardrobeManager::GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight, DepthSpacePoint* pDepthPoints, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight, int start_x, int start_y, int width, int height)
 {
@@ -106,6 +145,8 @@ long UWardrobeManager::GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nCol
 			{
 				return 0;
 			}
+
+			//printd("Color Index: X:%i, Y:%i", x,y);
 
 			DepthSpacePoint p = pDepthPoints[colorIndex];
 			if (FMath::IsFinite(p.X) && FMath::IsFinite(p.Y))
@@ -126,7 +167,7 @@ long UWardrobeManager::GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nCol
 
 UWardrobeManager::~UWardrobeManager()
 {
-	if (pBuffer != nullptr)
+	/*if (pBuffer != NULL)
 	{
 		delete[] pBuffer;
 	}
@@ -134,14 +175,14 @@ UWardrobeManager::~UWardrobeManager()
 	if (pDepthBuffer != NULL)
 	{
 		//delete[] pDepthBuffer;
-	}
+	}*/
 
 	if (m_pDepthCoordinates != NULL)
 	{
 		delete[] m_pDepthCoordinates;
 	}
 
-	if (m_pCoordinateMapper != NULL)
+	/*if (m_pCoordinateMapper != NULL)
 	{
 		m_pCoordinateMapper->Release();
 	}
@@ -149,7 +190,7 @@ UWardrobeManager::~UWardrobeManager()
 	if (m_pMultiSourceFrameReader != NULL)
 	{
 		m_pMultiSourceFrameReader->Release();
-	}
+	}*/
 	
 }
 
@@ -158,7 +199,7 @@ void UWardrobeManager::ScanForTShirt()
 	int rangeMin = 750;
 	int rangeMax = 900;
 
-	if (m_pKinectSensor == NULL || m_pCoordinateMapper == NULL)
+	if (m_pCoordinateMapper == NULL || pBuffer == NULL)
 	{
 		return;
 	}
@@ -175,27 +216,27 @@ void UWardrobeManager::ScanForTShirt()
 	{
 		int distanceSize = 556;
 		int start_x = (colorWidth - distanceSize) / 2;
-		int start_y = (colorWidth - distanceSize) / 2;
-		/*long averageValue = GetAverageDistanceForRect(pBuffer, colorWidth, colorHeight, m_pDepthCoordinates, pDepthBuffer, depthWidth, depthHeight, start_x, start_y, distanceSize, distanceSize);
+		int start_y = (colorHeight - distanceSize) / 2;
+		long averageValue = GetAverageDistanceForRect(pBuffer, colorWidth, colorHeight, m_pDepthCoordinates, pDepthBuffer, depthWidth, depthHeight, start_x, start_y, distanceSize, distanceSize);
 
 		if (averageValue > rangeMin && averageValue < rangeMax)
 		{
-			printd("Found good distance in center square!");
+			printd("Found good distance in center square!: %fcm", (averageValue/10.0));
 		}
-		/*else
+		else
 		{
-		if (averageValue < rangeMin)
-		{
-		SetStatusMessage(L"Please move the TShirt back a bit.", 500, true);
-		}
+			if (averageValue < rangeMin)
+			{
+				printw("Please move the TShirt back a bit.");
+			}
 
-		if (averageValue > rangeMax)
-		{
-		SetStatusMessage(L"Please move the TShirt forth a bit.", 500, true);
-		}
+			if (averageValue > rangeMax)
+			{
+				printw("Please move the TShirt forth a bit.");
+			}
 
-		return;
-		}*/
+			return;
+		}
 
 		/*int size = 512;
 		//Use old start_x and y. start_x and y are relative to the full color image (1920x1080).
@@ -415,7 +456,7 @@ bool UWardrobeManager::UpdateFrames(){
 
 				Texture->UpdateResource();
 
-				newColorFrame.Broadcast(colorFrame);
+				//newColorFrame.Broadcast(colorFrame);
 			}
 			else
 			{

@@ -5,15 +5,13 @@
 //------------------------------------------------------------------------------
 #pragma once
 #include "Core.h"
-#include "KinectFunctionLibrary.h"
 #include "AllowWindowsPlatformTypes.h"
 #include "Kinect.h"
 #include "Kinect.Face.h"
 
 #include "COMPointer.h"
 
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParams(FNewKinectRawColorFrame, RGBQUAD*, pBuffer)
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParams(FNewKinectRawDepthFrame, uint16*, pDepthBuffer)
+
 
 /**********************************************************************************************//**
  * A kinect sensor.
@@ -44,7 +42,9 @@ public:
 	 * @return	A KinectSensor&amp;
 	 **************************************************************************************************/
 
-	//static FKinectSensor& Get();
+	static FKinectSensor* Get();
+
+	static FKinectSensor* Runnable;
 
 
 	/**********************************************************************************************//**
@@ -365,9 +365,7 @@ private:
 
 	TArray<FVector2D>		DepthSpacePointArray;
 
-	/*FNewKinectRawColorFrame newRawColorFrame;
 
-	FNewKinectRawDepthFrame newRawDepthFrame;*/
 
 };
 

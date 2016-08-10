@@ -34,6 +34,9 @@ def reloadImportantModules():
 def helloFromPython(name):
     return "Hello {0} from Python!".format(name)
 
+def getCurrentPath():
+    return os.getcwd()
+
 def createNewItemWithTextures(back1, back2):
     clothing = ClothingItem()
     LOG.debug("Created new clothing item: {0}".format(clothing.id))
@@ -54,7 +57,7 @@ Vars.TEXTURE_FOLDER = os.path.join("PythonProgram", "textures")
 Vars.DBFILE = os.path.join("PythonProgram", "shirt_db.db")
 Vars.REALPATH = "PythonProgram"
 print(Vars.DBFILE)
-clothes = DBWrappers.loadCategories()
+#clothes = DBWrappers.loadCategories()
 
 def test():
     createNewItemWithTextures("back1.png", "back2.png")

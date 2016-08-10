@@ -4,7 +4,10 @@
 
 #include "Object.h"
 #include "AllowWindowsPlatformTypes.h"
+
 #include "Kinect.h"
+#include "HideWindowsPlatformTypes.h"
+
 #include "Tickable.h"
 #include "WardrobeManager.generated.h"
 
@@ -18,7 +21,7 @@ enum class EWardrobeMode : uint8
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtScannedDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtCategorizedDelegate);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectColorFrameEvent, const class UTexture2D*, ColorFrameTexture);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectColorFrameEvent, const class UTexture2D*, ColorFrameTexture);
 
 /**
  * 
@@ -43,6 +46,12 @@ public:
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 		void Tick(float deltaTime);
 
+		UFUNCTION(BlueprintCallable, Category = "Test")
+		uint8 TestPython();
+
+		UFUNCTION(BlueprintCallable, Category = "Python")
+			FString GetCurrentPathAsSeenByPython();
+
 		~UWardrobeManager();
 
 private:
@@ -62,8 +71,9 @@ private:
 	long GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight, DepthSpacePoint* pDepthPoints, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight, int start_x, int start_y, int width, int height);
 	void ScanForTShirt();
 	bool UpdateFrames();
+	void InitSensor();
 
-	long scanInterval = 1 / 3;
+	long scanInterval = 5;
 	long lastAction = -1;
 
 	UTexture2D* colorFrame;
@@ -71,18 +81,18 @@ private:
 	UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
 	FTshirtScannedDelegate tshirtScanned;
 
-	UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
-	FNewKinectColorFrameEvent newColorFrame;
+	/*UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
+	FNewKinectColorFrameEvent newColorFrame;*/
 
 	IKinectSensor* m_pKinectSensor;
 	ICoordinateMapper* m_pCoordinateMapper;
 	// Frame reader
 	IMultiSourceFrameReader*m_pMultiSourceFrameReader;
 	
-	/*UFUNCTION()
-	void OnNewRawColorFrameReceived(RGBQUAD* pBuffer);
+	UFUNCTION()
+	void OnNewRawColorFrameReceived();
 
 	UFUNCTION()
-	void OnNewRawDepthFrameReceived(uint16* pDepthBuffer);*/
+	void OnNewRawDepthFrameReceived();
 	
 };
