@@ -7,6 +7,7 @@
 
 #include "Kinect.h"
 #include "HideWindowsPlatformTypes.h"
+#include <Magick++.h>
 
 #include "Tickable.h"
 #include "WardrobeManager.generated.h"
@@ -19,7 +20,7 @@ enum class EWardrobeMode : uint8
 	MM_Categorizing	UMETA(DisplayName = "Categorizing")
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtScannedDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTshirtScannedDelegate, UTexture2D*, texture);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtCategorizedDelegate);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectColorFrameEvent, const class UTexture2D*, ColorFrameTexture);
 
@@ -33,7 +34,7 @@ class MAGICMIRROR_API UWardrobeManager : public UObject
 
 public:
 
-		UPROPERTY(BlueprintReadOnly)
+		UPROPERTY(BlueprintReadWrite)
 		EWardrobeMode mode;
 
 		UPROPERTY(BlueprintReadWrite)
@@ -68,13 +69,23 @@ private:
 	static const uint32 depthWidth = 512;
 	static const uint32 depthHeight = 424;
 
+	FString texturePath = FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
+
+	UTexture2D* LoadImageFromFile(FString file);
+
 	long GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight, DepthSpacePoint* pDepthPoints, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight, int start_x, int start_y, int width, int height);
 	void ScanForTShirt();
+	Magick::Image			CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height);
+	bool					HasFlatSurface(Magick::Image img, int start_x, int start_y, int width, int height);
 	bool UpdateFrames();
+	RGBQUAD* CutRectFromBuffer(RGBQUAD* pBuffer, int colorWidth, int colorHeight, int start_x, int start_y, int width, int height);
 	void InitSensor();
 
-	long scanInterval = 5;
-	long lastAction = -1;
+	bool hasFirstScan = false;
+	bool hasSecondScan = false;
+	float scanInterval = 1 / 3;
+	float timeSinceSecondScan = -1;
+	float lastAction = -1;
 
 	UTexture2D* colorFrame;
 

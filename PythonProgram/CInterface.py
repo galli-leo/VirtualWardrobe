@@ -53,11 +53,20 @@ def categorize(id, front_image):
     print CategoryRecognizer().recognizeCategory(None, None)
     pass
 
-Vars.TEXTURE_FOLDER = os.path.join("PythonProgram", "textures")
-Vars.DBFILE = os.path.join("PythonProgram", "shirt_db.db")
-Vars.REALPATH = "PythonProgram"
-print(Vars.DBFILE)
-#clothes = DBWrappers.loadCategories()
+def initWithPath(path):
+    global clothes
+    print(path)
+    Vars.setRealPath(path)
+    print(Vars.DBFILE)
+    clothes = DBWrappers.loadCategories()
+    return Vars.DBFILE
+
+#Vars.TEXTURE_FOLDER = os.path.join("PythonProgram", "textures")
+#Vars.DBFILE = os.path.join("PythonProgram", "shirt_db.db")
+#Vars.REALPATH = "PythonProgram"
+#print(Vars.DBFILE)
+#
+clothes = None
 
 def test():
     createNewItemWithTextures("back1.png", "back2.png")

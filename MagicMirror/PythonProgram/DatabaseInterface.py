@@ -13,6 +13,7 @@ class Database(object):
         self.dbname = dbname
         if self.dbname is None:
             self.dbname = Vars.DBFILE
+        print(self.dbname)
         self.conn = sqlite3.connect(self.dbname)
         sqlite3.register_adapter(bool, int)
         sqlite3.register_converter("BOOLEAN", lambda v: bool(int(v)))

@@ -21,6 +21,8 @@ using namespace Magick;
 
 INITIALIZE_EASYLOGGINGPP
 
+
+
 /// <summary>
 /// Entry point for the application
 /// </summary>
@@ -286,6 +288,10 @@ int WardrobeManager::Run(HINSTANCE hInstance, int nCmdShow)
         return 0;
     }
 
+
+	Image image("E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\tmp.bmp");
+	image.cannyEdge();
+	image.write("wtf.png");
 	
 
     // Create main application window
@@ -381,7 +387,36 @@ bool WardrobeManager::HasFlatSurface(Image edgeImage, int start_x, int start_y, 
 				Quantum realQuant = quant[x + y*width];
 				if (realQuant >= 65535)
 				{
-					currentEdgePixels += 1;
+					//currentEdgePixels += 1;
+					int count = 0;
+					for (int newY = y - 10; newY < y + 10; newY++)
+					{
+						if (newY > start_y, newY < start_y+height)
+						{
+							Quantum q = quant[x + newY*width];
+							if (q >=65535)
+							{
+								count += 1;
+							}
+						}
+					}
+
+					for (int newX = x - 10; newX < x + 10; newX++)
+					{
+						if (newX > start_x, newX < start_x + width)
+						{
+							Quantum q = quant[newX + y*width];
+							if (q >= 65535)
+							{
+								count += 1;
+							}
+						}
+					}
+
+					if (count > 3)
+					{
+						currentEdgePixels += 1;
+					}
 				}
 
 				if (x >= 555)
@@ -412,7 +447,7 @@ bool WardrobeManager::HasFlatSurface(Image edgeImage, int start_x, int start_y, 
 void WardrobeManager::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight)
 {
 	SetStatusMessage(L"Scanning for TShirt...", 500, false);
-	int rangeMin = 750;
+	int rangeMin = 700;
 	int rangeMax = 900;
 
 	HRESULT hr = m_pCoordinateMapper->MapColorFrameToDepthSpace(nDepthWidth * nDepthHeight, (UINT16*)pDepthBuffer, width * height, m_pDepthCoordinates);
@@ -452,6 +487,7 @@ void WardrobeManager::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UIN
 		Image edgeImage = Image(cutRectImage);
 		try{
 			edgeImage.edge();
+			edgeImage.write("testing.png");
 
 			if (!this->hasFirstScan)
 			{

@@ -77,7 +77,7 @@ private:
 	bool					hasSecondScan = false;
 	long					timeSinceSecondScan = -1;
 
-	WardrobeMode			mode;
+	//WardrobeMode			mode;
 
     // Direct2D
     ImageRenderer*          m_pDrawColor;

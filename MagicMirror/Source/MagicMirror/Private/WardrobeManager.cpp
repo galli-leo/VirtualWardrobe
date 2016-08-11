@@ -3,9 +3,12 @@
 #include "MagicMirror.h"
 #include "WardrobeManager.h"
 #include "KinectFunctionLibrary.h"
+#include "Developer/ImageWrapper/Public/Interfaces/IImageWrapper.h"
+#include "Developer/ImageWrapper/Public/Interfaces/IImageWrapperModule.h"
 #include "AllowWindowsPlatformTypes.h"
 #include "PythonUtils.h"
 
+using namespace Magick;
 
 
 // Safe release for interfaces
@@ -36,20 +39,38 @@ void UWardrobeManager::Tick(float deltaTime)
 		return;
 	}
 
+	float secondsDiff = (currentTime - this->lastAction);
+
 	switch (this->mode)
 	{
 	case EWardrobeMode::MM_Categorizing:
 		break;
 	case EWardrobeMode::MM_Scanning:
-		if (this->currentTime - this->lastAction > this->scanInterval)
+		
+
+		if (this->lastAction == -1 || secondsDiff > this->scanInterval)
 		{
-			this->lastAction = this->currentTime;
-			this->ScanForTShirt();
+			
+			//Did 2 seconds pass since the last scan or do we not have a scan at all?
+			if ((this->hasSecondScan && (currentTime - this->timeSinceSecondScan > 4)))
+			{
+				this->hasFirstScan = false;
+				this->hasSecondScan = false;
+				this->ScanForTShirt();
+			}
+			else if (!(this->hasFirstScan && this->hasSecondScan))
+			{
+				this->ScanForTShirt();
+			}
+
 		}
+
 		break;
 	case EWardrobeMode::MM_Outfitting:
 		break;
 	}
+
+	this->lastAction = currentTime;
 }
 
 void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::MM_Scanning, FString databaseFile = "Fuck all")
@@ -57,6 +78,8 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	this->mode = mode;
 	this->databaseFile = databaseFile;
 
+	//HARDCODED!!
+	InitializeMagick("C:\\Program Files\\ImageMagick-7.0.2-Q16");
 
 	pBuffer = new RGBQUAD[colorWidth * colorHeight];
 	pDepthBuffer = new uint16[depthWidth * depthHeight];
@@ -80,7 +103,7 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 
 uint8 UWardrobeManager::TestPython()
 {
-	uint8 result = createNewItemWithTextures("../IMBasics/back1.png", "../IMBasics/back2.png");
+	uint8 result = createNewItemWithTextures((const char*)"E:/Unreal Projects/IntelligentMirror/IMBasics/back1.png", (const char*)"E:/Unreal Projects/IntelligentMirror/IMBasics/back2.png");
 	return result;
 }
 
@@ -192,11 +215,157 @@ UWardrobeManager::~UWardrobeManager()
 		m_pMultiSourceFrameReader->Release();
 	}*/
 	
+	//Py_Finalize();
+}
+
+Image UWardrobeManager::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height)
+{
+	Image img;
+	HRESULT hr = SaveBitmapToFile(reinterpret_cast<BYTE*>(pBuffer), width, height, sizeof(RGBQUAD) * 8, L"tmp.bmp");
+
+	if (SUCCEEDED(hr))
+	{
+		try {
+			img.read("tmp.bmp");
+		}
+		catch (Exception &error_)
+		{
+			printe("Error: %s", *SFC(error_.what()));
+		}
+	}
+
+	return img;
+}
+
+RGBQUAD* UWardrobeManager::CutRectFromBuffer(RGBQUAD* pBuffer, int colorWidth, int colorHeight, int start_x, int start_y, int width, int height)
+{
+	RGBQUAD* finalBuffer = new RGBQUAD[width*height];
+	int index = 0;
+	for (int y = start_y; y < start_y + height; y++)
+	{
+		for (int x = start_x; x < start_x + width; x++)
+		{
+			finalBuffer[index].rgbRed = pBuffer[x + y*colorWidth].rgbRed;
+			finalBuffer[index].rgbGreen = pBuffer[x + y*colorWidth].rgbGreen;
+			finalBuffer[index].rgbBlue = pBuffer[x + y*colorWidth].rgbBlue;
+			index++;
+		}
+	}
+
+	return finalBuffer;
+}
+
+bool UWardrobeManager::HasFlatSurface(Image edgeImage, int start_x, int start_y, int width, int height)
+{
+	int maxEdgePixels = 2;
+	int currentEdgePixels = 0;
+	int edgePixels = 0;
+
+	try {
+		Quantum* quant = edgeImage.getPixels(start_x, start_y, width, height);
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				Quantum realQuant = quant[x + y*width];
+				if (realQuant >= 65535)
+				{
+					edgePixels += 1;
+					int count = 0;
+					for (int newY = y - 10; newY < y + 10; newY++)
+					{
+						if (newY > 0 && newY < height)
+						{
+							Quantum q = quant[x + newY*width];
+							if (q >= 65535)
+							{
+								count += 1;
+							}
+						}
+					}
+
+					for (int newX = x - 10; newX < x + 10; newX++)
+					{
+						if (newX > 0 && newX < width)
+						{
+							Quantum q = quant[newX + y*width];
+							if (q >= 65535)
+							{
+								count += 1;
+							}
+						}
+					}
+
+					if (count > 3)
+					{
+						currentEdgePixels += 1;
+					}
+				}
+
+				if (x >= 555)
+				{
+					//LOG(INFO) << "X Is at the max: " << x;
+				}
+
+			}
+		}
+
+		//printd << "Current Edge Pixels: " << currentEdgePixels;
+
+		if (currentEdgePixels <= maxEdgePixels)
+		{
+			printw("Found TShirt!: %i", edgePixels);
+			return true;
+		}
+		else
+		{
+			printd("To many edge pixels: %i, %i", currentEdgePixels, edgePixels);
+		}
+
+	}
+	catch (Exception &error_)
+	{
+		printe("Error %s",  *SFC(error_.what()));
+	}
+
+	return false;
+}
+
+UTexture2D* UWardrobeManager::LoadImageFromFile(FString file)
+{
+	IImageWrapperModule& ImageWrapperModule = FModuleManager::LoadModuleChecked<IImageWrapperModule>(FName("ImageWrapper"));
+	// Note: PNG format.  Other formats are supported
+	IImageWrapperPtr ImageWrapper = ImageWrapperModule.CreateImageWrapper(EImageFormat::PNG);
+
+	TArray<uint8> RawFileData;
+
+	if (FFileHelper::LoadFileToArray(RawFileData, *file))
+	{
+		if (ImageWrapper.IsValid() && ImageWrapper->SetCompressed(RawFileData.GetData(), RawFileData.Num()))
+		{
+			const TArray<uint8>* UncompressedBGRA = NULL;
+			if (ImageWrapper->GetRaw(ERGBFormat::BGRA, 8, UncompressedBGRA))
+			{
+				UTexture2D* mytex = UTexture2D::CreateTransient(ImageWrapper->GetWidth(), ImageWrapper->GetHeight(), PF_B8G8R8A8);
+
+				void* TextureData = mytex->PlatformData->Mips[0].BulkData.Lock(LOCK_READ_WRITE);
+				FMemory::Memcpy(TextureData, UncompressedBGRA->GetTypedData(), UncompressedBGRA->Num());
+				mytex->PlatformData->Mips[0].BulkData.Unlock();
+
+				// Update the rendering resource from data.
+				mytex->UpdateResource();
+
+				return mytex;
+			}
+		}
+	}
+
+	return UTexture2D::CreateTransient(512, 512);
 }
 
 void UWardrobeManager::ScanForTShirt()
 {
-	int rangeMin = 750;
+	int rangeMin = 700;
 	int rangeMax = 900;
 
 	if (m_pCoordinateMapper == NULL || pBuffer == NULL)
@@ -227,83 +396,89 @@ void UWardrobeManager::ScanForTShirt()
 		{
 			if (averageValue < rangeMin)
 			{
-				printw("Please move the TShirt back a bit.");
+				//printw("Please move the TShirt back a bit.");
 			}
 
 			if (averageValue > rangeMax)
 			{
-				printw("Please move the TShirt forth a bit.");
+				//printw("Please move the TShirt forth a bit.");
 			}
 
 			return;
 		}
 
-		/*int size = 512;
+		int size = 512;
 		//Use old start_x and y. start_x and y are relative to the full color image (1920x1080).
 		//Therefore they need to be converted.
-		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, width, height, start_x, start_y, distanceSize, distanceSize);
+		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, colorWidth, colorHeight, start_x, start_y, distanceSize, distanceSize);
 		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, distanceSize, distanceSize);
 		Image edgeImage = Image(cutRectImage);
 		try{
-		edgeImage.edge();
+			edgeImage.cannyEdge();
+			//cutRectImage.write("testing2.png");
+			//edgeImage.write("testing.png");
 
-		if (!this->hasFirstScan)
-		{
-		start_y = (height - size) / 2;
-		int realStart_y = convertCoordFromBiggerRect(height, distanceSize, start_y);
-		int realStart_x = convertCoordFromBiggerRect(width, distanceSize, start_x);
-		if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
-		{
-		edgeImage.write("edges1.png");
-		Image finalImg = Image(cutRectImage);
-		LOG(INFO) << realStart_x << " " << realStart_y << " " << size;
-		finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
-		finalImg.write("back1.png");
-		this->hasFirstScan = true;
-		}
-		else
-		{
-		SetStatusMessage(L"Please move the TShirt to the left a bit.", 1000, true);
-		}
+			if (!this->hasFirstScan)
+			{
+				start_y = (colorHeight - size) / 2;
+				int realStart_y = ConvertCoordFromBiggerRect(colorHeight, distanceSize, start_y);
+				int realStart_x = ConvertCoordFromBiggerRect(colorWidth, distanceSize, start_x);
+				if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
+				{
+					edgeImage.write("edges1.png");
+					Image finalImg = Image(cutRectImage);
+					//LOG(INFO) << realStart_x << " " << realStart_y << " " << size;
+					printw("First Scan succeeded!");
+					finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
+					finalImg.write("back1.png");
+					this->hasFirstScan = true;
+				}
+				else
+				{
+					//SetStatusMessage(L"Please move the TShirt to the left a bit.", 1000, true);
+				}
 
-		}
+			}
 
-		if (!this->hasSecondScan && this->hasFirstScan)
-		{
-		start_y = (height - size) / 2;
-		start_x = start_x + distanceSize - size;
-		int realStart_y = convertCoordFromBiggerRect(height, distanceSize, start_y);
-		int realStart_x = convertCoordFromBiggerRect(width, distanceSize, start_x);
-		if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
-		{
-		edgeImage.write("edges2.png");
-		LOG(INFO) << realStart_x << " " << realStart_y << " " << size;
-		Image finalImg = Image(cutRectImage);
-		finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
-		finalImg.write("back2.png");
-		this->hasSecondScan = true;
-		this->timeSinceSecondScan = getMilliseconds();
-		}
-		else
-		{
-		SetStatusMessage(L"Please move the TShirt to the right a bit.", 1000, true);
-		}
-		}
+			if (!this->hasSecondScan && this->hasFirstScan)
+			{
+				start_y = (colorHeight - size) / 2;
+				start_x = start_x + distanceSize - size;
+				int realStart_y = ConvertCoordFromBiggerRect(colorHeight, distanceSize, start_y);
+				int realStart_x = ConvertCoordFromBiggerRect(colorWidth, distanceSize, start_x);
+				if (HasFlatSurface(edgeImage, realStart_x, realStart_y, size, size))
+				{
+					edgeImage.write("edges2.png");
+					//LOG(INFO) << realStart_x << " " << realStart_y << " " << size;
+					Image finalImg = Image(cutRectImage);
+					finalImg.crop(Geometry(size, size, realStart_x, realStart_y));
+					finalImg.write("back2.png");
+					this->hasSecondScan = true;
+					this->timeSinceSecondScan = this->currentTime;
+				}
+				else
+				{
+					//SetStatusMessage(L"Please move the TShirt to the right a bit.", 1000, true);
+				}
+			}
 
-		if (this->hasFirstScan && this->hasSecondScan)
-		{
-		//TODO: Communicate with Python CInterface!
-		SetStatusMessage(L"Scanned TShirt! Prepare the next one!", 2000, true);
-		int newItemID = createNewItemWithTextures("back1.png", "back2.png");
-		LOG(INFO) << "Created new Clothing Item with ID: " << newItemID;
-		}
-		delete[]cutRect;
+			if (this->hasFirstScan && this->hasSecondScan)
+			{
+				//TODO: Communicate with Python CInterface!
+				//SetStatusMessage(L"Scanned TShirt! Prepare the next one!", 2000, true);
+				int newItemID = createNewItemWithTextures("back1.png", "back2.png");
+				//LOG(INFO) << "Created new Clothing Item with ID: " << newItemID;
+				FString finalTexturePath = FString::Printf(TEXT("%stshirt/%04d/final_texture.png"), *texturePath, newItemID);
+				UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
+				this->tshirtScanned.Broadcast(finalTexture);
+			}
+			delete[]cutRect;
 		}
 		catch (Exception &error_)
 		{
-		LOG(ERROR) << error_.what();
-		delete[]cutRect;
-		}*/
+			printe("Error: %s", *SFC(error_.what()));
+			delete[]cutRect;
+		}
 	}
 }
 

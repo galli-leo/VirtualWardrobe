@@ -41526,3 +41526,803 @@
 2016-07-19 13:11:45,587 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
 2016-08-08 14:49:14,117 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
 2016-08-08 14:49:14,122 INFO  [default] List insert result: 0[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 15:41:44,208 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 15:41:44,211 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 15:41:51,980 WARN  [default] It took over 25 ms to execute CutRectFromBuffer!: 7611
+2016-08-11 15:42:14,331 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:14,356 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:14,490 INFO  [default] Current Edge Pixels: 339
+2016-08-11 15:42:21,466 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:21,469 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:21,510 INFO  [default] Current Edge Pixels: 362
+2016-08-11 15:42:22,529 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:22,533 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:22,589 INFO  [default] Current Edge Pixels: 209
+2016-08-11 15:42:23,599 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:23,603 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:23,643 INFO  [default] Current Edge Pixels: 131
+2016-08-11 15:42:24,662 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:24,666 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:24,708 INFO  [default] Current Edge Pixels: 337
+2016-08-11 15:42:25,667 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:25,672 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:25,717 INFO  [default] Current Edge Pixels: 109
+2016-08-11 15:42:26,732 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:26,736 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:26,791 INFO  [default] Current Edge Pixels: 107
+2016-08-11 15:42:27,732 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:27,736 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:27,796 INFO  [default] Current Edge Pixels: 524
+2016-08-11 15:42:28,734 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:28,738 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:28,797 INFO  [default] Current Edge Pixels: 129
+2016-08-11 15:42:29,731 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:29,735 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:29,789 INFO  [default] Current Edge Pixels: 85
+2016-08-11 15:42:30,796 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:30,800 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:30,858 INFO  [default] Current Edge Pixels: 737
+2016-08-11 15:42:31,865 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:31,868 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:31,928 INFO  [default] Current Edge Pixels: 26
+2016-08-11 15:42:32,866 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:32,869 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:32,927 INFO  [default] Current Edge Pixels: 674
+2016-08-11 15:42:37,931 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:37,935 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:37,977 INFO  [default] Current Edge Pixels: 91
+2016-08-11 15:42:38,998 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:39,002 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:39,044 INFO  [default] Current Edge Pixels: 75
+2016-08-11 15:42:39,999 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:40,002 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:40,065 INFO  [default] Current Edge Pixels: 47
+2016-08-11 15:42:40,999 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:41,004 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:41,043 INFO  [default] Current Edge Pixels: 48
+2016-08-11 15:42:43,063 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:43,066 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:43,108 INFO  [default] Current Edge Pixels: 14
+2016-08-11 15:42:44,131 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:44,135 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:44,195 INFO  [default] Current Edge Pixels: 20
+2016-08-11 15:42:45,131 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:45,135 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:45,177 INFO  [default] Current Edge Pixels: 14
+2016-08-11 15:42:46,194 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:46,198 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:46,248 INFO  [default] Current Edge Pixels: 177
+2016-08-11 15:42:47,264 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:47,267 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:47,327 INFO  [default] Current Edge Pixels: 530
+2016-08-11 15:42:53,330 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:53,334 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:53,391 INFO  [default] Current Edge Pixels: 39
+2016-08-11 15:42:54,333 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:54,337 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:54,392 INFO  [default] Current Edge Pixels: 134
+2016-08-11 15:42:55,398 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:55,402 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:55,459 INFO  [default] Current Edge Pixels: 220
+2016-08-11 15:42:56,397 INFO  [default] Found good distance in center square!
+2016-08-11 15:42:56,400 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:42:56,455 INFO  [default] Current Edge Pixels: 98
+2016-08-11 15:43:24,378 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 15:43:24,381 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 15:43:25,530 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:25,539 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:25,655 INFO  [default] Current Edge Pixels: 430
+2016-08-11 15:43:26,528 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:26,532 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:26,590 INFO  [default] Current Edge Pixels: 184
+2016-08-11 15:43:27,531 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:27,534 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:27,589 INFO  [default] Current Edge Pixels: 27
+2016-08-11 15:43:28,597 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:28,600 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:28,650 INFO  [default] Current Edge Pixels: 43
+2016-08-11 15:43:29,597 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:29,601 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:29,655 INFO  [default] Current Edge Pixels: 69
+2016-08-11 15:43:30,600 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:30,602 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:30,659 INFO  [default] Current Edge Pixels: 144
+2016-08-11 15:43:31,665 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:31,668 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:31,720 INFO  [default] Current Edge Pixels: 116
+2016-08-11 15:43:32,665 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:32,669 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:32,725 INFO  [default] Current Edge Pixels: 143
+2016-08-11 15:43:33,730 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:33,734 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:33,777 INFO  [default] Current Edge Pixels: 132
+2016-08-11 15:43:34,730 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:34,734 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:34,776 INFO  [default] Current Edge Pixels: 103
+2016-08-11 15:43:35,798 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:35,801 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:35,858 INFO  [default] Current Edge Pixels: 136
+2016-08-11 15:43:36,800 INFO  [default] Found good distance in center square!
+2016-08-11 15:43:36,803 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:43:36,860 INFO  [default] Current Edge Pixels: 113
+2016-08-11 15:44:36,595 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:36,601 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:36,662 INFO  [default] Current Edge Pixels: 480
+2016-08-11 15:44:37,597 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:37,600 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:37,661 INFO  [default] Current Edge Pixels: 221
+2016-08-11 15:44:38,627 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:38,630 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:38,690 INFO  [default] Current Edge Pixels: 415
+2016-08-11 15:44:39,629 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:39,632 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:39,692 INFO  [default] Current Edge Pixels: 475
+2016-08-11 15:44:40,632 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:40,635 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:40,686 INFO  [default] Current Edge Pixels: 472
+2016-08-11 15:44:41,665 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:41,669 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:41,729 INFO  [default] Current Edge Pixels: 549
+2016-08-11 15:44:42,666 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:42,669 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:42,728 INFO  [default] Current Edge Pixels: 30
+2016-08-11 15:44:43,662 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:43,665 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:43,725 INFO  [default] Current Edge Pixels: 403
+2016-08-11 15:44:44,663 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:44,667 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:44,727 INFO  [default] Current Edge Pixels: 408
+2016-08-11 15:44:45,663 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:45,666 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:45,726 INFO  [default] Current Edge Pixels: 512
+2016-08-11 15:44:50,727 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:50,731 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:50,791 INFO  [default] Current Edge Pixels: 526
+2016-08-11 15:44:51,765 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:51,768 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:51,877 INFO  [default] Current Edge Pixels: 477
+2016-08-11 15:44:52,766 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:52,770 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:52,822 INFO  [default] Current Edge Pixels: 443
+2016-08-11 15:44:53,766 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:53,769 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:53,823 INFO  [default] Current Edge Pixels: 496
+2016-08-11 15:44:54,796 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:54,800 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:54,851 INFO  [default] Current Edge Pixels: 399
+2016-08-11 15:44:55,832 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:55,836 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:55,898 INFO  [default] Current Edge Pixels: 465
+2016-08-11 15:44:56,865 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:56,869 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:56,932 INFO  [default] Current Edge Pixels: 440
+2016-08-11 15:44:57,897 INFO  [default] Found good distance in center square!
+2016-08-11 15:44:57,900 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:44:57,961 INFO  [default] Current Edge Pixels: 442
+2016-08-11 15:45:38,486 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 15:45:38,490 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 15:45:44,964 INFO  [default] Found good distance in center square!
+2016-08-11 15:45:44,982 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:45:45,238 INFO  [default] Current Edge Pixels: 207
+2016-08-11 15:45:45,962 INFO  [default] Found good distance in center square!
+2016-08-11 15:45:45,966 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:45:46,108 INFO  [default] Current Edge Pixels: 231
+2016-08-11 15:45:46,995 INFO  [default] Found good distance in center square!
+2016-08-11 15:45:46,999 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:45:47,136 INFO  [default] Current Edge Pixels: 257
+2016-08-11 15:45:47,996 INFO  [default] Found good distance in center square!
+2016-08-11 15:45:47,999 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:45:48,153 INFO  [default] Current Edge Pixels: 267
+2016-08-11 15:45:49,032 INFO  [default] Found good distance in center square!
+2016-08-11 15:45:49,036 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:45:49,192 INFO  [default] Current Edge Pixels: 0
+2016-08-11 15:45:49,283 INFO  [default] 0 22 512
+2016-08-11 15:45:49,469 INFO  [default] Current Edge Pixels: 0
+2016-08-11 15:45:49,564 INFO  [default] 44 22 512
+2016-08-11 15:45:49,950 INFO  [default] Executed python function: createNewItemWithTextures
+2016-08-11 15:45:49,953 INFO  [default] Created new Clothing Item with ID: -1
+2016-08-11 15:47:01,996 INFO  [default] Found good distance in center square!
+2016-08-11 15:47:02,000 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:47:02,167 INFO  [default] Current Edge Pixels: 2757
+2016-08-11 15:47:31,396 INFO  [default] Found good distance in center square!
+2016-08-11 15:47:31,400 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:47:31,545 INFO  [default] Current Edge Pixels: 150
+2016-08-11 15:47:32,400 INFO  [default] Found good distance in center square!
+2016-08-11 15:47:32,404 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:47:32,566 INFO  [default] Current Edge Pixels: 52
+2016-08-11 15:47:33,396 INFO  [default] Found good distance in center square!
+2016-08-11 15:47:33,400 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:47:33,559 INFO  [default] Current Edge Pixels: 179
+2016-08-11 15:47:34,399 INFO  [default] Found good distance in center square!
+2016-08-11 15:47:34,402 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:47:34,567 INFO  [default] Current Edge Pixels: 238
+2016-08-11 15:47:35,397 INFO  [default] Found good distance in center square!
+2016-08-11 15:47:35,401 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:47:35,556 INFO  [default] Current Edge Pixels: 269
+2016-08-11 15:47:36,395 INFO  [default] Found good distance in center square!
+2016-08-11 15:47:36,399 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:47:36,540 INFO  [default] Current Edge Pixels: 215
+2016-08-11 15:47:37,401 INFO  [default] Found good distance in center square!
+2016-08-11 15:47:37,404 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:47:37,549 INFO  [default] Current Edge Pixels: 261
+2016-08-11 15:47:55,628 INFO  [default] Found good distance in center square!
+2016-08-11 15:47:55,632 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:47:55,797 INFO  [default] Current Edge Pixels: 7
+2016-08-11 15:48:20,962 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:20,965 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:21,103 INFO  [default] Current Edge Pixels: 316
+2016-08-11 15:48:21,962 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:21,965 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:22,119 INFO  [default] Current Edge Pixels: 45
+2016-08-11 15:48:22,964 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:22,967 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:23,127 INFO  [default] Current Edge Pixels: 122
+2016-08-11 15:48:24,030 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:24,034 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:24,188 INFO  [default] Current Edge Pixels: 33
+2016-08-11 15:48:25,034 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:25,037 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:25,212 INFO  [default] Current Edge Pixels: 0
+2016-08-11 15:48:25,305 INFO  [default] 0 22 512
+2016-08-11 15:48:25,506 INFO  [default] Current Edge Pixels: 316
+2016-08-11 15:48:26,096 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:26,101 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:26,241 INFO  [default] Current Edge Pixels: 56
+2016-08-11 15:48:28,097 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:28,100 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:28,240 INFO  [default] Current Edge Pixels: 293
+2016-08-11 15:48:29,097 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:29,100 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:29,255 INFO  [default] Current Edge Pixels: 349
+2016-08-11 15:48:30,099 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:30,102 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:30,245 INFO  [default] Current Edge Pixels: 228
+2016-08-11 15:48:31,162 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:31,165 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:31,300 INFO  [default] Current Edge Pixels: 128
+2016-08-11 15:48:32,162 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:32,165 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:32,325 INFO  [default] Current Edge Pixels: 41
+2016-08-11 15:48:33,230 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:33,234 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:33,401 INFO  [default] Current Edge Pixels: 110
+2016-08-11 15:48:34,299 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:34,301 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:34,463 INFO  [default] Current Edge Pixels: 1055
+2016-08-11 15:48:35,297 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:35,300 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:35,441 INFO  [default] Current Edge Pixels: 168
+2016-08-11 15:48:36,297 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:36,300 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:36,455 INFO  [default] Current Edge Pixels: 194
+2016-08-11 15:48:37,300 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:37,304 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:37,455 INFO  [default] Current Edge Pixels: 74
+2016-08-11 15:48:39,430 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:39,433 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:39,588 INFO  [default] Current Edge Pixels: 429
+2016-08-11 15:48:40,431 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:40,434 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:40,585 INFO  [default] Current Edge Pixels: 408
+2016-08-11 15:48:46,631 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:46,634 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:46,786 INFO  [default] Current Edge Pixels: 175
+2016-08-11 15:48:51,663 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:51,667 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:51,814 INFO  [default] Current Edge Pixels: 256
+2016-08-11 15:48:52,700 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:52,703 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:52,866 INFO  [default] Current Edge Pixels: 283
+2016-08-11 15:48:53,729 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:53,733 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:53,890 INFO  [default] Current Edge Pixels: 260
+2016-08-11 15:48:54,767 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:54,771 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:54,929 INFO  [default] Current Edge Pixels: 315
+2016-08-11 15:48:55,764 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:55,767 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:55,919 INFO  [default] Current Edge Pixels: 258
+2016-08-11 15:48:56,767 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:56,770 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:56,913 INFO  [default] Current Edge Pixels: 260
+2016-08-11 15:48:57,765 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:57,769 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:57,920 INFO  [default] Current Edge Pixels: 194
+2016-08-11 15:48:58,796 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:58,799 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:58,952 INFO  [default] Current Edge Pixels: 893
+2016-08-11 15:48:59,795 INFO  [default] Found good distance in center square!
+2016-08-11 15:48:59,799 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:48:59,978 INFO  [default] Current Edge Pixels: 1330
+2016-08-11 15:49:00,829 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:00,833 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:01,002 INFO  [default] Current Edge Pixels: 53
+2016-08-11 15:49:01,829 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:01,832 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:02,005 INFO  [default] Current Edge Pixels: 55
+2016-08-11 15:49:02,865 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:02,869 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:03,031 INFO  [default] Current Edge Pixels: 30
+2016-08-11 15:49:03,864 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:03,867 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:04,049 INFO  [default] Current Edge Pixels: 190
+2016-08-11 15:49:04,866 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:04,869 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:05,024 INFO  [default] Current Edge Pixels: 223
+2016-08-11 15:49:05,863 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:05,868 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:06,023 INFO  [default] Current Edge Pixels: 186
+2016-08-11 15:49:06,866 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:06,868 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:07,028 INFO  [default] Current Edge Pixels: 136
+2016-08-11 15:49:14,898 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:14,901 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:15,054 INFO  [default] Current Edge Pixels: 108
+2016-08-11 15:49:15,901 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:15,905 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:16,063 INFO  [default] Current Edge Pixels: 492
+2016-08-11 15:49:16,933 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:16,936 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:17,090 INFO  [default] Current Edge Pixels: 129
+2016-08-11 15:49:17,963 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:17,966 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:18,110 INFO  [default] Current Edge Pixels: 62
+2016-08-11 15:49:18,963 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:18,966 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:19,108 INFO  [default] Current Edge Pixels: 36
+2016-08-11 15:49:20,964 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:20,967 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:21,134 INFO  [default] Current Edge Pixels: 23
+2016-08-11 15:49:21,962 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:21,964 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:22,110 INFO  [default] Current Edge Pixels: 39
+2016-08-11 15:49:23,996 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:24,000 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:24,150 INFO  [default] Current Edge Pixels: 45
+2016-08-11 15:49:25,032 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:25,036 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:25,185 INFO  [default] Current Edge Pixels: 47
+2016-08-11 15:49:27,030 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:27,033 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:27,191 INFO  [default] Current Edge Pixels: 55
+2016-08-11 15:49:28,032 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:28,035 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:28,182 INFO  [default] Current Edge Pixels: 38
+2016-08-11 15:49:29,031 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:29,034 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:29,196 INFO  [default] Current Edge Pixels: 35
+2016-08-11 15:49:30,654 WARN  [default] It took over 25 ms to execute CutRectFromBuffer!: 65
+2016-08-11 15:49:36,131 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:36,136 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:36,298 INFO  [default] Current Edge Pixels: 6
+2016-08-11 15:49:39,132 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:39,135 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:39,283 INFO  [default] Current Edge Pixels: 19
+2016-08-11 15:49:40,164 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:40,167 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:40,327 INFO  [default] Current Edge Pixels: 16
+2016-08-11 15:49:41,165 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:41,168 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:41,329 INFO  [default] Current Edge Pixels: 9
+2016-08-11 15:49:42,163 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:42,165 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:42,309 INFO  [default] Current Edge Pixels: 6
+2016-08-11 15:49:43,164 INFO  [default] Found good distance in center square!
+2016-08-11 15:49:43,168 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:49:43,314 INFO  [default] Current Edge Pixels: 2
+2016-08-11 15:49:43,400 INFO  [default] 44 22 512
+2016-08-11 15:49:43,590 INFO  [default] Executed python function: createNewItemWithTextures
+2016-08-11 15:49:43,593 INFO  [default] Created new Clothing Item with ID: -1
+2016-08-11 15:50:04,566 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:04,574 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:04,738 INFO  [default] Current Edge Pixels: 3
+2016-08-11 15:50:13,697 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:13,700 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:13,859 INFO  [default] Current Edge Pixels: 26
+2016-08-11 15:50:14,698 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:14,701 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:14,858 INFO  [default] Current Edge Pixels: 36
+2016-08-11 15:50:15,698 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:15,701 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:15,864 INFO  [default] Current Edge Pixels: 9
+2016-08-11 15:50:16,733 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:16,737 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:16,901 INFO  [default] Current Edge Pixels: 13
+2016-08-11 15:50:17,729 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:17,733 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:17,885 INFO  [default] Current Edge Pixels: 13
+2016-08-11 15:50:18,763 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:18,767 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:20,284 INFO  [default] Current Edge Pixels: 0
+2016-08-11 15:50:20,389 INFO  [default] 0 22 512
+2016-08-11 15:50:20,584 INFO  [default] Current Edge Pixels: 417
+2016-08-11 15:50:20,607 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:20,610 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:20,772 INFO  [default] Current Edge Pixels: 9
+2016-08-11 15:50:21,631 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:21,634 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:21,789 INFO  [default] Current Edge Pixels: 17
+2016-08-11 15:50:22,665 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:22,668 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:22,819 INFO  [default] Current Edge Pixels: 7
+2016-08-11 15:50:23,696 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:23,699 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:23,861 INFO  [default] Current Edge Pixels: 22
+2016-08-11 15:50:25,697 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:25,700 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:25,855 INFO  [default] Current Edge Pixels: 4
+2016-08-11 15:50:26,732 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:26,736 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:26,903 INFO  [default] Current Edge Pixels: 9
+2016-08-11 15:50:27,764 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:27,768 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:27,942 INFO  [default] Current Edge Pixels: 3
+2016-08-11 15:50:28,762 INFO  [default] Found good distance in center square!
+2016-08-11 15:50:28,766 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:50:28,931 INFO  [default] Current Edge Pixels: 0
+2016-08-11 15:50:29,033 INFO  [default] 44 22 512
+2016-08-11 15:50:29,228 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-08-11 15:56:54,245 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 15:56:54,250 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 15:57:17,730 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:17,748 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:17,974 INFO  [default] Current Edge Pixels: 63
+2016-08-11 15:57:22,865 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:22,868 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:23,030 INFO  [default] Current Edge Pixels: 165
+2016-08-11 15:57:23,931 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:23,934 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:24,093 INFO  [default] Current Edge Pixels: 36
+2016-08-11 15:57:24,930 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:24,933 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:25,097 INFO  [default] Current Edge Pixels: 626
+2016-08-11 15:57:25,929 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:25,932 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:26,102 INFO  [default] Current Edge Pixels: 556
+2016-08-11 15:57:26,930 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:26,935 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:27,090 INFO  [default] Current Edge Pixels: 454
+2016-08-11 15:57:27,931 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:27,935 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:28,099 INFO  [default] Current Edge Pixels: 550
+2016-08-11 15:57:28,997 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:29,000 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:29,159 INFO  [default] Current Edge Pixels: 435
+2016-08-11 15:57:29,998 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:30,002 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:30,169 INFO  [default] Current Edge Pixels: 450
+2016-08-11 15:57:30,997 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:31,000 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:31,164 INFO  [default] Current Edge Pixels: 322
+2016-08-11 15:57:32,063 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:32,067 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:32,240 INFO  [default] Current Edge Pixels: 9
+2016-08-11 15:57:33,065 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:33,068 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:33,228 INFO  [default] Current Edge Pixels: 285
+2016-08-11 15:57:34,065 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:34,068 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:34,228 INFO  [default] Current Edge Pixels: 64
+2016-08-11 15:57:36,064 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:36,068 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:36,209 INFO  [default] Current Edge Pixels: 261
+2016-08-11 15:57:37,130 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:37,133 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:37,296 INFO  [default] Current Edge Pixels: 488
+2016-08-11 15:57:38,131 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:38,134 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:38,294 INFO  [default] Current Edge Pixels: 549
+2016-08-11 15:57:39,131 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:39,134 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:39,294 INFO  [default] Current Edge Pixels: 602
+2016-08-11 15:57:40,129 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:40,131 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:40,286 INFO  [default] Current Edge Pixels: 306
+2016-08-11 15:57:41,137 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:41,140 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:41,282 INFO  [default] Current Edge Pixels: 151
+2016-08-11 15:57:42,131 INFO  [default] Found good distance in center square!
+2016-08-11 15:57:42,136 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:57:42,290 INFO  [default] Current Edge Pixels: 278
+2016-08-11 15:58:05,600 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:05,604 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:05,781 INFO  [default] Current Edge Pixels: 383
+2016-08-11 15:58:06,601 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:06,605 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:06,756 INFO  [default] Current Edge Pixels: 90
+2016-08-11 15:58:11,667 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:11,671 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:11,829 INFO  [default] Current Edge Pixels: 530
+2016-08-11 15:58:12,669 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:12,672 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:12,838 INFO  [default] Current Edge Pixels: 478
+2016-08-11 15:58:13,672 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:13,675 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:13,827 INFO  [default] Current Edge Pixels: 482
+2016-08-11 15:58:14,732 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:14,735 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:14,890 INFO  [default] Current Edge Pixels: 343
+2016-08-11 15:58:15,732 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:15,735 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:15,890 INFO  [default] Current Edge Pixels: 488
+2016-08-11 15:58:16,797 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:16,801 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:16,952 INFO  [default] Current Edge Pixels: 361
+2016-08-11 15:58:17,798 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:17,801 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:17,963 INFO  [default] Current Edge Pixels: 534
+2016-08-11 15:58:18,865 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:18,867 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:19,023 INFO  [default] Current Edge Pixels: 500
+2016-08-11 15:58:19,866 INFO  [default] Found good distance in center square!
+2016-08-11 15:58:19,869 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:58:20,021 INFO  [default] Current Edge Pixels: 434
+2016-08-11 15:58:59,881 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 15:58:59,888 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 15:59:02,067 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:02,091 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:02,334 INFO  [default] Current Edge Pixels: 80
+2016-08-11 15:59:03,068 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:03,071 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:03,225 INFO  [default] Current Edge Pixels: 419
+2016-08-11 15:59:04,131 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:04,133 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:04,300 INFO  [default] Current Edge Pixels: 457
+2016-08-11 15:59:05,198 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:05,201 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:05,353 INFO  [default] Current Edge Pixels: 511
+2016-08-11 15:59:06,199 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:06,203 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:06,367 INFO  [default] Current Edge Pixels: 883
+2016-08-11 15:59:07,200 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:07,203 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:07,367 INFO  [default] Current Edge Pixels: 637
+2016-08-11 15:59:08,198 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:08,201 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:08,370 INFO  [default] Current Edge Pixels: 775
+2016-08-11 15:59:09,196 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:09,199 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:09,360 INFO  [default] Current Edge Pixels: 372
+2016-08-11 15:59:10,198 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:10,201 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:10,245 ERROR [default] ColorBasics-D2D.exe: negative or zero image size `' @ error/image.c/CloneImage/817
+2016-08-11 15:59:12,201 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:12,205 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:12,360 INFO  [default] Current Edge Pixels: 67
+2016-08-11 15:59:13,264 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:13,267 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:13,433 INFO  [default] Current Edge Pixels: 163
+2016-08-11 15:59:14,263 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:14,267 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:14,418 INFO  [default] Current Edge Pixels: 734
+2016-08-11 15:59:15,399 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:15,402 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:15,556 INFO  [default] Current Edge Pixels: 606
+2016-08-11 15:59:16,464 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:16,466 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:16,618 INFO  [default] Current Edge Pixels: 648
+2016-08-11 15:59:19,530 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:19,533 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:19,701 INFO  [default] Current Edge Pixels: 552
+2016-08-11 15:59:20,530 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:20,532 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:20,684 INFO  [default] Current Edge Pixels: 600
+2016-08-11 15:59:21,531 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:21,534 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:21,698 INFO  [default] Current Edge Pixels: 410
+2016-08-11 15:59:22,529 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:22,532 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:22,681 INFO  [default] Current Edge Pixels: 296
+2016-08-11 15:59:23,597 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:23,601 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:23,763 INFO  [default] Current Edge Pixels: 516
+2016-08-11 15:59:24,597 INFO  [default] Found good distance in center square!
+2016-08-11 15:59:24,601 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 15:59:24,759 INFO  [default] Current Edge Pixels: 507
+2016-08-11 16:00:18,997 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:19,000 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:19,162 INFO  [default] Current Edge Pixels: 278
+2016-08-11 16:00:19,998 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:20,001 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:20,164 INFO  [default] Current Edge Pixels: 28
+2016-08-11 16:00:20,999 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:21,002 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:21,171 INFO  [default] Current Edge Pixels: 282
+2016-08-11 16:00:21,999 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:22,002 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:22,169 INFO  [default] Current Edge Pixels: 287
+2016-08-11 16:00:23,063 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:23,066 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:23,228 INFO  [default] Current Edge Pixels: 50
+2016-08-11 16:00:24,064 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:24,067 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:24,227 INFO  [default] Current Edge Pixels: 272
+2016-08-11 16:00:25,064 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:25,068 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:25,229 INFO  [default] Current Edge Pixels: 94
+2016-08-11 16:00:26,062 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:26,065 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:26,225 INFO  [default] Current Edge Pixels: 293
+2016-08-11 16:00:33,132 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:33,136 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:33,310 INFO  [default] Current Edge Pixels: 16
+2016-08-11 16:00:34,130 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:34,133 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:34,300 INFO  [default] Current Edge Pixels: 774
+2016-08-11 16:00:38,264 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:38,267 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:38,422 INFO  [default] Current Edge Pixels: 153
+2016-08-11 16:00:39,265 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:39,269 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:39,426 INFO  [default] Current Edge Pixels: 309
+2016-08-11 16:00:40,266 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:40,270 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:40,436 INFO  [default] Current Edge Pixels: 259
+2016-08-11 16:00:41,265 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:41,269 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:41,438 INFO  [default] Current Edge Pixels: 314
+2016-08-11 16:00:42,328 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:42,332 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:42,481 INFO  [default] Current Edge Pixels: 107
+2016-08-11 16:00:43,332 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:43,335 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:43,488 INFO  [default] Current Edge Pixels: 85
+2016-08-11 16:00:44,396 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:44,399 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:44,552 INFO  [default] Current Edge Pixels: 71
+2016-08-11 16:00:47,464 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:47,467 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:47,631 INFO  [default] Current Edge Pixels: 219
+2016-08-11 16:00:48,464 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:48,467 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:48,621 INFO  [default] Current Edge Pixels: 259
+2016-08-11 16:00:49,462 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:49,466 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:49,622 INFO  [default] Current Edge Pixels: 395
+2016-08-11 16:00:50,463 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:50,466 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:50,639 INFO  [default] Current Edge Pixels: 456
+2016-08-11 16:00:54,535 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:54,538 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:54,688 INFO  [default] Current Edge Pixels: 95
+2016-08-11 16:00:55,530 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:55,535 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:55,688 INFO  [default] Current Edge Pixels: 296
+2016-08-11 16:00:56,596 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:56,600 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:56,766 INFO  [default] Current Edge Pixels: 284
+2016-08-11 16:00:57,598 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:57,601 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:57,773 INFO  [default] Current Edge Pixels: 311
+2016-08-11 16:00:58,598 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:58,601 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:58,772 INFO  [default] Current Edge Pixels: 364
+2016-08-11 16:00:59,666 INFO  [default] Found good distance in center square!
+2016-08-11 16:00:59,669 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:00:59,825 INFO  [default] Current Edge Pixels: 80
+2016-08-11 16:01:00,664 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:00,667 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:00,826 INFO  [default] Current Edge Pixels: 35
+2016-08-11 16:01:01,730 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:01,733 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:01,740 ERROR [default] ColorBasics-D2D.exe: negative or zero image size `' @ error/image.c/CloneImage/817
+2016-08-11 16:01:02,730 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:02,732 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:02,893 INFO  [default] Current Edge Pixels: 110
+2016-08-11 16:01:03,733 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:03,737 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:03,897 INFO  [default] Current Edge Pixels: 413
+2016-08-11 16:01:04,798 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:04,802 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:04,964 INFO  [default] Current Edge Pixels: 171
+2016-08-11 16:01:05,800 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:05,803 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:05,954 INFO  [default] Current Edge Pixels: 243
+2016-08-11 16:01:06,865 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:06,869 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:07,032 INFO  [default] Current Edge Pixels: 380
+2016-08-11 16:01:07,865 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:07,868 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:08,025 INFO  [default] Current Edge Pixels: 281
+2016-08-11 16:01:08,863 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:08,865 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:09,026 INFO  [default] Current Edge Pixels: 97
+2016-08-11 16:01:09,863 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:09,866 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:10,039 INFO  [default] Current Edge Pixels: 10
+2016-08-11 16:01:10,145 INFO  [default] 0 22 512
+2016-08-11 16:01:10,345 INFO  [default] Current Edge Pixels: 31
+2016-08-11 16:01:14,932 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:14,935 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:15,104 INFO  [default] Current Edge Pixels: 5
+2016-08-11 16:01:15,208 INFO  [default] 44 22 512
+2016-08-11 16:01:15,675 INFO  [default] Executed python function: createNewItemWithTextures
+2016-08-11 16:01:15,679 INFO  [default] Created new Clothing Item with ID: -1
+2016-08-11 16:01:20,063 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:20,066 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:20,212 INFO  [default] Current Edge Pixels: 241
+2016-08-11 16:01:21,134 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:21,137 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:21,307 INFO  [default] Current Edge Pixels: 259
+2016-08-11 16:01:22,197 INFO  [default] Found good distance in center square!
+2016-08-11 16:01:22,200 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:01:22,371 INFO  [default] Current Edge Pixels: 7
+2016-08-11 16:01:22,465 INFO  [default] 0 22 512
+2016-08-11 16:01:22,662 INFO  [default] Current Edge Pixels: 6
+2016-08-11 16:01:22,752 INFO  [default] 44 22 512
+2016-08-11 16:01:22,948 INFO  [default] Executed python function: createNewItemWithTextures
+2016-08-11 16:01:22,951 INFO  [default] Created new Clothing Item with ID: -1
+2016-08-11 16:09:55,574 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 16:09:55,578 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 16:10:03,863 INFO  [default] Found good distance in center square!
+2016-08-11 16:10:03,881 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:10:04,117 INFO  [default] Current Edge Pixels: 0
+2016-08-11 16:10:04,214 INFO  [default] 0 22 512
+2016-08-11 16:10:04,411 INFO  [default] Current Edge Pixels: 0
+2016-08-11 16:10:04,512 INFO  [default] 44 22 512
+2016-08-11 16:10:05,005 INFO  [default] Executed python function: createNewItemWithTextures
+2016-08-11 16:10:05,007 INFO  [default] Created new Clothing Item with ID: -1
+2016-08-11 16:10:51,072 INFO  [default] Found good distance in center square!
+2016-08-11 16:10:51,075 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:10:51,263 INFO  [default] Current Edge Pixels: 150
+2016-08-11 16:11:02,265 INFO  [default] Found good distance in center square!
+2016-08-11 16:11:02,268 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:11:02,442 INFO  [default] Current Edge Pixels: 0
+2016-08-11 16:11:02,547 INFO  [default] 0 22 512
+2016-08-11 16:11:02,756 INFO  [default] Current Edge Pixels: 32
+2016-08-11 16:11:03,332 INFO  [default] Found good distance in center square!
+2016-08-11 16:11:03,335 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:11:03,483 INFO  [default] Current Edge Pixels: 16
+2016-08-11 16:11:04,398 INFO  [default] Found good distance in center square!
+2016-08-11 16:11:04,401 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:11:04,604 INFO  [default] Current Edge Pixels: 68
+2016-08-11 16:11:05,400 INFO  [default] Found good distance in center square!
+2016-08-11 16:11:05,404 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:11:05,571 INFO  [default] Current Edge Pixels: 50
+2016-08-11 16:11:06,475 INFO  [default] Found good distance in center square!
+2016-08-11 16:11:06,478 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:11:06,664 INFO  [default] Current Edge Pixels: 12
+2016-08-11 16:11:07,470 INFO  [default] Found good distance in center square!
+2016-08-11 16:11:07,473 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:11:07,642 INFO  [default] Current Edge Pixels: 152
+2016-08-11 16:11:08,469 INFO  [default] Found good distance in center square!
+2016-08-11 16:11:08,472 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:11:08,631 INFO  [default] Current Edge Pixels: 0
+2016-08-11 16:11:08,725 INFO  [default] 44 22 512
+2016-08-11 16:11:08,914 INFO  [default] Executed python function: createNewItemWithTextures
+2016-08-11 16:11:08,917 INFO  [default] Created new Clothing Item with ID: -1
+2016-08-11 16:11:46,262 INFO  [default] Found good distance in center square!
+2016-08-11 16:11:46,266 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:11:46,442 INFO  [default] Current Edge Pixels: 0
+2016-08-11 16:11:46,530 INFO  [default] 0 22 512
+2016-08-11 16:11:46,721 INFO  [default] Current Edge Pixels: 0
+2016-08-11 16:11:46,813 INFO  [default] 44 22 512
+2016-08-11 16:11:47,005 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2016-08-11 16:13:26,581 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 16:13:26,587 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 16:13:32,799 INFO  [default] Found good distance in center square!
+2016-08-11 16:13:32,819 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:13:33,046 INFO  [default] Current Edge Pixels: 0
+2016-08-11 16:13:33,146 INFO  [default] 0 22 512
+2016-08-11 16:13:33,352 INFO  [default] Current Edge Pixels: 346
+2016-08-11 16:13:34,800 INFO  [default] Found good distance in center square!
+2016-08-11 16:13:34,804 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:13:34,962 INFO  [default] Current Edge Pixels: 25
+2016-08-11 16:13:35,798 INFO  [default] Found good distance in center square!
+2016-08-11 16:13:35,802 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:13:35,955 INFO  [default] Current Edge Pixels: 12
+2016-08-11 16:13:36,798 INFO  [default] Found good distance in center square!
+2016-08-11 16:13:36,801 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:13:36,955 INFO  [default] Current Edge Pixels: 6
+2016-08-11 16:13:37,797 INFO  [default] Found good distance in center square!
+2016-08-11 16:13:37,800 INFO  Executed [class Magick::Image __cdecl WardrobeManager::CreateMagickImageFromBuffer(struct tagRGBQUAD *,int,int)] in [0 ms]
+2016-08-11 16:13:37,950 INFO  [default] Current Edge Pixels: 0
+2016-08-11 16:13:38,050 INFO  [default] 44 22 512
+2016-08-11 16:13:38,464 INFO  [default] Executed python function: createNewItemWithTextures
+2016-08-11 16:13:38,467 INFO  [default] Created new Clothing Item with ID: -1
+2016-08-11 17:29:20,178 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 17:29:20,181 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 17:30:37,885 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 17:30:37,889 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
+2016-08-11 17:31:02,741 INFO  [default] Python Program path: E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\
+2016-08-11 17:31:02,746 INFO  [default] List insert result: 0`[E:\Unreal Projects\IntelligentMirror\IMBasics\PythonProgram\, E:\Anaconda27_64\python27.zip, E:\Anaconda27_64\Lib, E:\Anaconda27_64\DLLs, E:\Unreal Projects\IntelligentMirror\IMBasics, E:\Unreal Projects\IntelligentMirror\IMBasics\x64\Release, E:\Anaconda27_64, E:\Anaconda27_64\lib\site-packages, E:\Anaconda27_64\lib\site-packages\Sphinx-1.4.1-py2.7.egg, E:\Anaconda27_64\lib\site-packages\win32, E:\Anaconda27_64\lib\site-packages\win32\lib, E:\Anaconda27_64\lib\site-packages\Pythonwin, E:\Anaconda27_64\lib\site-packages\setuptools-23.0.0-py2.7.egg
