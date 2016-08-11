@@ -144,7 +144,10 @@ int createNewItemWithTextures(const char* backPath1, const char* backPath2)
 	PyObject* pRet = callPythonFunction("createNewItemWithTextures", args);
 	if (PyNumber_Check(pRet))
 	{
-		return PyNumber_AsSsize_t(pRet, nullptr);
+		int num = PyNumber_AsSsize_t(pRet, nullptr);
+		Py_DECREF(pRet);
+		Py_DECREF(args);
+		return num;
 	}
 	else
 	{
@@ -152,6 +155,7 @@ int createNewItemWithTextures(const char* backPath1, const char* backPath2)
 	}
 
 	Py_DECREF(pRet);
+	Py_DECREF(args);
 
 	return -1;
 }
@@ -215,6 +219,11 @@ void InitPython(FString currentPath)
 	{
 		printd("Result from call: %s", *SFC(PyString_AsString(res)));
 	}
+
+	Py_DECREF(res);
+	Py_DECREF(args);
+	Py_DECREF(path);
+	Py_DECREF(sysPath);
 	
 }
 
