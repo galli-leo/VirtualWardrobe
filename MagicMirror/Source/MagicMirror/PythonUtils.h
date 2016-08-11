@@ -15,6 +15,9 @@ FString SFC(const char* arr)
 	return FString(ANSI_TO_TCHAR(arr));
 }
 
+static PyObject* sysPath;
+static PyObject* path;
+
 /************************************************************************/
 /* Python Interface Functions                                           */
 /************************************************************************/
@@ -63,7 +66,7 @@ bool ErrorPrint()
 	return true;
 
 }
-
+/*
 FString* convertPyListToString(PyObject* list)
 {
 	//char buffer[6000];
@@ -95,9 +98,9 @@ FString* convertPyListToString(PyObject* list)
 
 	return newString;
 	//return new FString("");
-}
+}*/
 
-PyObject* callPythonFunction(const char* function, PyObject* args, const char* module = "CInterface")
+/*PyObject* callPythonFunction(const char* function, PyObject* args, const char* module = "CInterface")
 {
 	PyObject* pModule = PyImport_ImportModule(module);
 	if (ErrorPrint())
@@ -125,28 +128,48 @@ PyObject* callPythonFunction(const char* function, PyObject* args, const char* m
 
 	Py_DECREF(pFunc);
 	Py_DECREF(pModule);
-	Py_DECREF(args);
 
 	return pRet;
-}
+}*/
 
-void reloadImportantPyModules()
+/*void reloadImportantPyModules()
 {
 	PyObject* pRet = callPythonFunction("reloadImportantModules", NULL);
-}
+}*/
 
-int createNewItemWithTextures(const char* backPath1, const char* backPath2)
+int createNewItemWithTextures(char* backPath1, char* backPath2)
 {
-	//PyObject* args = Py_BuildValue("(s, s)", backPath1, backPath2);
-	PyObject* args = PyTuple_New(2);
-	PyTuple_SetItem(args, 0, PyString_FromString(backPath1));
-	PyTuple_SetItem(args, 1, PyString_FromString(backPath2));
-	PyObject* pRet = callPythonFunction("createNewItemWithTextures", args);
-	if (PyNumber_Check(pRet))
+	PyObject* ret, *module, *dict, *func;
+
+	//PyRun_SimpleString((const char*)"import CInterface; CInterface.createNewItemWithTextures('E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back1.png', 'E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back2.png')");
+
+	module = PyImport_ImportModule((const char*)"CInterface");
+	if (module == NULL)
 	{
-		int num = PyNumber_AsSsize_t(pRet, nullptr);
-		Py_DECREF(pRet);
-		Py_DECREF(args);
+		return -1;
+	}
+
+	dict = PyModule_GetDict(module);
+
+	func = PyDict_GetItemString(dict, (const char*)"createNewItemWithTexturesFromCWD");
+	Py_INCREF(func);
+
+	if (func == NULL)
+	{
+		return -1;
+	}
+
+	ret = PyObject_CallFunction(func, NULL);
+	if (PyNumber_Check(ret))
+	{
+		int num = PyNumber_AsSsize_t(ret, nullptr);
+		Py_DECREF(ret);
+		//Py_DECREF(args);
+		//Py_DECREF(args);
+		Py_DECREF(func);
+		Py_DECREF(module);
+		Py_DECREF(dict);
+
 		return num;
 	}
 	else
@@ -154,12 +177,34 @@ int createNewItemWithTextures(const char* backPath1, const char* backPath2)
 		ErrorPrint();
 	}
 
-	Py_DECREF(pRet);
-	Py_DECREF(args);
-
 	return -1;
 }
 
+/*void testing()
+{
+	Py_Initialize();
+	PyObject* pRet, *pModule, *pDict, *pFunc;
+
+	pModule = PyImport_ImportModule((const char*)"CInterface");
+	if (pModule == NULL)
+	{
+		return;
+	}
+
+	pDict = PyModule_GetDict(pModule);
+
+	pFunc = PyDict_GetItemString(pDict, (const char*)"createNewItemWithTexturesFromCWD");
+	Py_INCREF(pFunc);
+
+	if (pFunc == NULL)
+	{
+		return;
+	}
+
+	PyObject_CallObject(pFunc, NULL);
+	Py_Finalize();
+}*/
+/*
 FString getCurrentPath()
 {
 	PyObject* myModuleString = PyString_FromString((char*)"os");
@@ -184,36 +229,50 @@ FString getCurrentPath()
 	}
 
 	return FString("");
-}
+}*/
 
 void InitPython(FString currentPath)
 {
 	Py_Initialize();
 
-	//char * dir = "\\PythonProgram\\";
-	//char cCurrentPath[FILENAME_MAX + sizeof(dir)];
-	//_getcwd(cCurrentPath, sizeof(cCurrentPath));
-	//strcat(currentPath, dir);
+	
 
 	currentPath.Append("PythonProgram/");
 
 	printd("Python Program path: %s", *currentPath);
 
-	PyObject *sysPath = PySys_GetObject("path");
-	ErrorPrint();
-	PyObject *path = PyString_FromString(TCHAR_TO_ANSI(*currentPath));
-	ErrorPrint();
+	PyObject *aa, *pModule, *pDict, *pFunc, *res;
+	
+	sysPath = PySys_GetObject("path");
+	//ErrorPrint();
+	path = PyString_FromString(TCHAR_TO_ANSI(*currentPath));
+	//ErrorPrint();
 	int result = PyList_Insert(sysPath, 0, path);
-	ErrorPrint();
+	//ErrorPrint();
 	PySys_SetObject("path", sysPath);
 
-	//PyObject* args = Py_BuildValue((char *)"(s,)", TCHAR_TO_ANSI(*currentPath));
-	PyObject* args = PyTuple_New(1);
-	PyTuple_SetItem(args, 0, PyString_FromString((const char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/"));
-	PyObject* res = callPythonFunction((const char*)"initWithPath", args);
+	
+	ErrorPrint();
+	//aa = PyTuple_New(1);
+	aa = Py_BuildValue((const char*)"(s)", (const char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/");;
+	//PyTuple_SetItem(aa, 0, PyString_FromString((const char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/"));
+	pModule = PyImport_ImportModule((const char*)"CInterface");
+	//ErrorPrint();
+
+	pDict = PyModule_GetDict(pModule);
+	//ErrorPrint();
+	// pFunc is also a borrowed reference 
+	pFunc = PyDict_GetItemString(pDict, (const char*)"initWithPath");
+	//ErrorPrint();
+	printd("Length of args: %i", PyTuple_Size(aa));
+
+	res = PyEval_CallObject(pFunc, aa);
+	//ErrorPrint();
+	
 	if (res == NULL)
 	{
-		ErrorPrint();
+		//ErrorPrint();
+		return;
 	}
 	else
 	{
@@ -221,10 +280,23 @@ void InitPython(FString currentPath)
 	}
 
 	Py_DECREF(res);
-	Py_DECREF(args);
-	Py_DECREF(path);
-	Py_DECREF(sysPath);
-	
+	Py_DECREF(pFunc);
+	Py_DECREF(pModule);
+	Py_DECREF(aa);
+	Py_DECREF(pDict);
+	Py_DECREF(aa);
+	/*Py_DECREF(path);
+	Py_DECREF(sysPath);*/
+
+	res = NULL;
+	pFunc = NULL;
+	pModule = NULL;
+	aa = NULL;
+	pDict = NULL;
+
+	//Py_Finalize();
+
+	//testing();
 }
 
 /************************************************************************/

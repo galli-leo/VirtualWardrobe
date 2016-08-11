@@ -103,13 +103,15 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 
 uint8 UWardrobeManager::TestPython()
 {
-	uint8 result = createNewItemWithTextures((const char*)"E:/Unreal Projects/IntelligentMirror/IMBasics/back1.png", (const char*)"E:/Unreal Projects/IntelligentMirror/IMBasics/back2.png");
-	return result;
+	//uint8 result = createNewItemWithTextures((const char*)"E:/Unreal Projects/IntelligentMirror/IMBasics/back1.png", (const char*)"E:/Unreal Projects/IntelligentMirror/IMBasics/back2.png");
+	//return result;
+	return -1;
 }
 
 FString UWardrobeManager::GetCurrentPathAsSeenByPython()
 {
-	return getCurrentPath();
+	//return getCurrentPath();
+	return FString("I dont even know.");
 }
 
 void UWardrobeManager::InitSensor()
@@ -215,6 +217,9 @@ UWardrobeManager::~UWardrobeManager()
 		m_pMultiSourceFrameReader->Release();
 	}*/
 	
+	//Py_DECREF(path);
+	//Py_DECREF(sysPath);
+
 	//Py_Finalize();
 }
 

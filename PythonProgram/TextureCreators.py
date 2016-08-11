@@ -218,7 +218,7 @@ class CircleCreator(TextureCreator):
                 self.texture.paste(s_image, (i-s_w/2, j-s_h/2), orig_mask)
                 self.texture.paste(s_image, (i, j-s_h/2), orig_mask)
                 self.texture.paste(s_image, (i-s_w/2, j), orig_mask)
-        self.save(tile)
+        #self.save(tile)
         return self.texture
 
     def createMaskForOrig(self, size):

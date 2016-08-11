@@ -1,6 +1,6 @@
 import DatabaseInterface
 import os, glob
-from PIL import Image
+from PIL import Image, ImageChops
 import Vars
 from TextureCreators import TextureCreator, BigTileCreator, TilableCreator, NoiseCreator
 from TextureRecognizers import TemplateRecgonizer, CategoryRecognizer
@@ -59,6 +59,7 @@ class ClothingItem(object):
         self.finaltexture = ""
         self.printedtexture = False
         self.texture_creators = {"tshirt" : NoiseCreator, "uncategorized" : NoiseCreator}
+        self.diffuse_textures = {"tshirt" : "tshirt_diffuse.png"}
 
 
     @classmethod
@@ -112,6 +113,8 @@ class ClothingItem(object):
             printed_texture = Image.open(os.path.join(path, "print"+".png"))
         creator = creator_cls(self.texturesamples, printed_texture)
         final_texture = creator.createTexture()
+        dif_text = Image.open(os.path.join(Vars.REALPATH, self.diffuse_textures[self.category.name]))
+        final_texture = ImageChops.multiply(final_texture, dif_text.convert("RGBA"))
         final_texture.save(os.path.join(self.getTexturePath(), "final_texture.png"))
         return final_texture
 

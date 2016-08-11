@@ -49,6 +49,18 @@ def createNewItemWithTextures(back1, back2):
     clothing.createFinalTexture()
     return clothing.id
 
+def createNewItemWithTexturesFromCWD():
+    clothing = ClothingItem()
+    LOG.debug("Created new clothing item: {0}".format(clothing.id))
+    img1 = Image.open("back1.png")
+    img2 = Image.open("back2.png")
+    LOG.debug("Opened images.")
+    clothing.addImage(img1, "back1")
+    clothing.addImage(img2, "back2")
+    LOG.debug("Added images.")
+    clothing.createFinalTexture()
+    return clothing.id
+
 def categorize(id, front_image):
     print CategoryRecognizer().recognizeCategory(None, None)
     pass
