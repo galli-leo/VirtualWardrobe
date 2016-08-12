@@ -259,6 +259,7 @@ void InitPython(FString currentPath)
 	PySys_SetObject("path", sysPath);*/
 
 	PyRun_SimpleString((const char*)"import sys; sys.path.insert(0, 'E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/');");
+	//PyRun_SimpleString((const char*)"if not 'CInterface' in sys.modules: import CInterface");
 	PyRun_SimpleString((const char*)"import CInterface; CInterface.initWithPath('E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/')");
 	//PyRun_SimpleString("import C;");
 
