@@ -8,7 +8,10 @@
 #include "KinectV2InputDevice.h"
 //#include "KinectListener.h"
 #include "KinectSensor.h"
+#ifndef WINDOWS_PLATFORM_TYPES_GUARD
 #include "AllowWindowsPlatformTypes.h"
+#endif
+
 #include <WinUser.h>
 #include "HideWindowsPlatformTypes.h"
 //TArray<FKinectListenerObject*> FKinectListenerObject::KinectListenersObjects;

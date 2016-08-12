@@ -52,6 +52,7 @@ class Logger(object):
         self.color_map = {"warning" : "yellow", "default" : "black", "critical" : "red", "debug" : "magenta"}
         self.add_time = include_timestamp
         self.today = datetime.datetime.now().strftime('%Y-%m-%d')
+        self.enabled = True
         self.openLogFile()
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -82,6 +83,8 @@ class Logger(object):
 
     def log(self, message, level, skip=2):
         if self.log_levels.index(level) < self.log_level:
+            return
+        if not self.enabled:
             return
         color = self.color_map[level]
         symbol = self.symbol_map[level]

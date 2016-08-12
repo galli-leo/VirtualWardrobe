@@ -2,6 +2,7 @@ from DBWrappers import ClothingItem, Category
 import DBWrappers
 from TextureRecognizers import CategoryRecognizer
 from TextureCreators import NoiseCreator
+import DatabaseInterface
 import importlib
 import os
 import glob
@@ -38,6 +39,7 @@ def getCurrentPath():
     return os.getcwd()
 
 def createNewItemWithTextures(back1, back2):
+    LOG.enabled = False
     clothing = ClothingItem()
     LOG.debug("Created new clothing item: {0}".format(clothing.id))
     img1 = Image.open(back1)
@@ -47,9 +49,13 @@ def createNewItemWithTextures(back1, back2):
     clothing.addImage(img2, "back2")
     LOG.debug("Added images.")
     clothing.createFinalTexture()
+    LOG.enabled = True
     return clothing.id
 
 def createNewItemWithTexturesFromCWD():
+    #Hack so this function can be called from any thread
+    tempDB = Vars.DB
+    Vars.DB = DatabaseInterface.Database()
     clothing = ClothingItem()
     LOG.debug("Created new clothing item: {0}".format(clothing.id))
     img1 = Image.open("back1.png")
@@ -59,6 +65,7 @@ def createNewItemWithTexturesFromCWD():
     clothing.addImage(img2, "back2")
     LOG.debug("Added images.")
     clothing.createFinalTexture()
+    Vars.DB = tempDB
     return clothing.id
 
 def categorize(id, front_image):

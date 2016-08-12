@@ -8,7 +8,10 @@
 #include "ImageUtils.h"
 #include "KinectSensor.h"
 #include "KinectFunctionLibrary.h"
+#ifndef WINDOWS_PLATFORM_TYPES_GUARD
 #include "AllowWindowsPlatformTypes.h"
+#endif
+
 
 #define BODY_WAIT_OBJECT WAIT_OBJECT_0
 #define COLOR_WAIT_OBJECT WAIT_OBJECT_0 + 1

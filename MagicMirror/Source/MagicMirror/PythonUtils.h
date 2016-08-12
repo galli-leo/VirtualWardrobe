@@ -1,71 +1,28 @@
-//#include "AllowWindowsPlatformTypes.h"
+
+#pragma once
+#ifndef PYTHONUTILS_H
+#define PYTHONUTILS_H
 #include <include/Python.h>
 #include <include/frameobject.h>
 //#include "HideWindowsPlatformTypes.h"
 #include "MagicMirror.h"
+#ifndef WINDOWS_PLATFORM_TYPES_GUARD
+#include "AllowWindowsPlatformTypes.h"
+#endif
 
 
-FString SFC(char* arr)
-{
-	return FString(ANSI_TO_TCHAR(arr));
-}
+FString SFC(char* arr);
 
-FString SFC(const char* arr)
-{
-	return FString(ANSI_TO_TCHAR(arr));
-}
+FString SFC(const char* arr);
 
-static PyObject* sysPath;
-static PyObject* path;
+//static PyObject* sysPath;
+//static PyObject* path;
 
 /************************************************************************/
 /* Python Interface Functions                                           */
 /************************************************************************/
 
-bool ErrorPrint()
-{
-	PyObject *ptype, *pvalue, *ptraceback;
-	PyErr_Fetch(&ptype, &pvalue, &ptraceback);
-	//pvalue contains error message
-	if (pvalue == NULL)
-	{
-		//printe("Even pvalue of error message is NULL. Something really bad happened.");
-		return false;
-	}
-
-	if (ptype != NULL)
-	{
-		char *pStrErrorMessage = PyString_AsString(pvalue);
-		char *errorType = PyString_AsString(ptype);
-		printe("%s:%s", *SFC(errorType),*SFC(pStrErrorMessage));
-	}
-	else
-	{
-		char *pStrErrorMessage = PyString_AsString(pvalue);
-		printe("%s", *SFC(pStrErrorMessage));
-	}
-	
-
-	if (ptraceback != NULL)
-	{
-		PyThreadState *tstate = PyThreadState_GET();
-		if (NULL != tstate && NULL != tstate->frame) {
-			PyFrameObject *frame = tstate->frame;
-
-			printe("Python stack trace:");
-			while (NULL != frame) {
-				int line = frame->f_lineno;
-				const char *filename = PyString_AsString(frame->f_code->co_filename);
-				const char *funcname = PyString_AsString(frame->f_code->co_name);
-				printe("\t%s(%d): %s", *SFC(filename), *FString::FromInt(line), *SFC(funcname));
-				frame = frame->f_back;
-			}
-		}
-	}
-
-	return true;
-
-}
+bool ErrorPrint();
 /*
 FString* convertPyListToString(PyObject* list)
 {
@@ -137,48 +94,7 @@ FString* convertPyListToString(PyObject* list)
 	PyObject* pRet = callPythonFunction("reloadImportantModules", NULL);
 }*/
 
-int createNewItemWithTextures(char* backPath1, char* backPath2)
-{
-	PyObject* ret, *module, *dict, *func;
-
-	//PyRun_SimpleString((const char*)"import CInterface; CInterface.createNewItemWithTextures('E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back1.png', 'E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back2.png')");
-
-	module = PyImport_ImportModule((const char*)"CInterface");
-	if (module == NULL)
-	{
-		return -1;
-	}
-
-	dict = PyModule_GetDict(module);
-
-	func = PyDict_GetItemString(dict, (const char*)"createNewItemWithTexturesFromCWD");
-	Py_INCREF(func);
-
-	if (func == NULL)
-	{
-		return -1;
-	}
-
-	ret = PyObject_CallFunction(func, NULL);
-	if (PyNumber_Check(ret))
-	{
-		int num = PyNumber_AsSsize_t(ret, nullptr);
-		Py_DECREF(ret);
-		//Py_DECREF(args);
-		//Py_DECREF(args);
-		Py_DECREF(func);
-		Py_DECREF(module);
-		Py_DECREF(dict);
-
-		return num;
-	}
-	else
-	{
-		ErrorPrint();
-	}
-
-	return -1;
-}
+int createNewItemWithTextures(char* backPath1, char* backPath2);
 
 /*void testing()
 {
@@ -231,136 +147,12 @@ FString getCurrentPath()
 	return FString("");
 }*/
 
-void InitPython(FString currentPath)
-{
-	Py_Initialize();
-
-	
-
-	currentPath.Append("PythonProgram/");
-
-	printd("Python Program path: %s", *currentPath);
-
-	PyObject *aa, *pModule, *pDict, *pFunc, *res;
-	
-	sysPath = PySys_GetObject("path");
-	//ErrorPrint();
-	path = PyString_FromString(TCHAR_TO_ANSI(*currentPath));
-	//ErrorPrint();
-	int result = PyList_Insert(sysPath, 0, path);
-	//ErrorPrint();
-	PySys_SetObject("path", sysPath);
-
-	
-	ErrorPrint();
-	//aa = PyTuple_New(1);
-	aa = Py_BuildValue((const char*)"(s)", (const char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/");;
-	//PyTuple_SetItem(aa, 0, PyString_FromString((const char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/"));
-	pModule = PyImport_ImportModule((const char*)"CInterface");
-	//ErrorPrint();
-
-	pDict = PyModule_GetDict(pModule);
-	//ErrorPrint();
-	// pFunc is also a borrowed reference 
-	pFunc = PyDict_GetItemString(pDict, (const char*)"initWithPath");
-	//ErrorPrint();
-	printd("Length of args: %i", PyTuple_Size(aa));
-
-	res = PyEval_CallObject(pFunc, aa);
-	//ErrorPrint();
-	
-	if (res == NULL)
-	{
-		//ErrorPrint();
-		return;
-	}
-	else
-	{
-		printd("Result from call: %s", *SFC(PyString_AsString(res)));
-	}
-
-	Py_DECREF(res);
-	Py_DECREF(pFunc);
-	Py_DECREF(pModule);
-	Py_DECREF(aa);
-	Py_DECREF(pDict);
-	Py_DECREF(aa);
-	/*Py_DECREF(path);
-	Py_DECREF(sysPath);*/
-
-	res = NULL;
-	pFunc = NULL;
-	pModule = NULL;
-	aa = NULL;
-	pDict = NULL;
-
-	//Py_Finalize();
-
-	//testing();
-}
-
+void InitPython(FString currentPath);
 /************************************************************************/
 /* WardrobeManager Utility Functions                                    */
 /************************************************************************/
 
-HRESULT SaveBitmapToFile(BYTE* pBitmapBits, LONG lWidth, LONG lHeight, WORD wBitsPerPixel, LPCWSTR lpszFilePath)
-{
-	DWORD dwByteCount = lWidth * lHeight * (wBitsPerPixel / 8);
+HRESULT SaveBitmapToFile(BYTE* pBitmapBits, LONG lWidth, LONG lHeight, WORD wBitsPerPixel, LPCWSTR lpszFilePath);
+int ConvertCoordFromBiggerRect(int biggerSize, int smallerSize, int coord);
 
-	BITMAPINFOHEADER bmpInfoHeader = { 0 };
-
-	bmpInfoHeader.biSize = sizeof(BITMAPINFOHEADER);  // Size of the header
-	bmpInfoHeader.biBitCount = wBitsPerPixel;             // Bit count
-	bmpInfoHeader.biCompression = BI_RGB;                    // Standard RGB, no compression
-	bmpInfoHeader.biWidth = lWidth;                    // Width in pixels
-	bmpInfoHeader.biHeight = -lHeight;                  // Height in pixels, negative indicates it's stored right-side-up
-	bmpInfoHeader.biPlanes = 1;                         // Default
-	bmpInfoHeader.biSizeImage = dwByteCount;               // Image size in bytes
-
-	BITMAPFILEHEADER bfh = { 0 };
-
-	bfh.bfType = 0x4D42;                                           // 'M''B', indicates bitmap
-	bfh.bfOffBits = bmpInfoHeader.biSize + sizeof(BITMAPFILEHEADER);  // Offset to the start of pixel data
-	bfh.bfSize = bfh.bfOffBits + bmpInfoHeader.biSizeImage;        // Size of image + headers
-
-	// Create the file on disk to write to
-	HANDLE hFile = CreateFileW(lpszFilePath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	// Return if error opening file
-	if (NULL == hFile)
-	{
-		return E_ACCESSDENIED;
-	}
-
-	DWORD dwBytesWritten = 0;
-
-	// Write the bitmap file header
-	if (!WriteFile(hFile, &bfh, sizeof(bfh), &dwBytesWritten, NULL))
-	{
-		CloseHandle(hFile);
-		return E_FAIL;
-	}
-
-	// Write the bitmap info header
-	if (!WriteFile(hFile, &bmpInfoHeader, sizeof(bmpInfoHeader), &dwBytesWritten, NULL))
-	{
-		CloseHandle(hFile);
-		return E_FAIL;
-	}
-
-	// Write the RGB Data
-	if (!WriteFile(hFile, pBitmapBits, bmpInfoHeader.biSizeImage, &dwBytesWritten, NULL))
-	{
-		CloseHandle(hFile);
-		return E_FAIL;
-	}
-
-	// Close the file
-	CloseHandle(hFile);
-	return S_OK;
-}
-
-int ConvertCoordFromBiggerRect(int biggerSize, int smallerSize, int coord)
-{
-	return coord - (biggerSize - smallerSize) / 2;
-}
+#endif

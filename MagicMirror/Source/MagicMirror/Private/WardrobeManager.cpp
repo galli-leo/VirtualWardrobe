@@ -2,13 +2,20 @@
 
 #include "MagicMirror.h"
 #include "WardrobeManager.h"
+
 #include "KinectFunctionLibrary.h"
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapper.h"
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapperModule.h"
+#ifndef WINDOWS_PLATFORM_TYPES_GUARD
 #include "AllowWindowsPlatformTypes.h"
-#include "PythonUtils.h"
+#endif
+
+
 
 using namespace Magick;
+
+FString UWardrobeManager::texturePath = FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
+
 
 
 // Safe release for interfaces
@@ -217,10 +224,10 @@ UWardrobeManager::~UWardrobeManager()
 		m_pMultiSourceFrameReader->Release();
 	}*/
 	
-	//Py_DECREF(path);
-	//Py_DECREF(sysPath);
+//	Py_DECREF(path);
+//	Py_DECREF(sysPath);
 
-	//Py_Finalize();
+	Py_Finalize();
 }
 
 Image UWardrobeManager::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height)
@@ -471,11 +478,17 @@ void UWardrobeManager::ScanForTShirt()
 			{
 				//TODO: Communicate with Python CInterface!
 				//SetStatusMessage(L"Scanned TShirt! Prepare the next one!", 2000, true);
-				int newItemID = createNewItemWithTextures("back1.png", "back2.png");
+				TshirtScanned.Broadcast();
+				/*int newItemID = createNewItemWithTextures("back1.png", "back2.png");
 				//LOG(INFO) << "Created new Clothing Item with ID: " << newItemID;
 				FString finalTexturePath = FString::Printf(TEXT("%stshirt/%04d/final_texture.png"), *texturePath, newItemID);
 				UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
-				this->tshirtScanned.Broadcast(finalTexture);
+				this->TshirtProcessed.Broadcast(finalTexture);*/
+				if (FTextureCreator::Runnable->IsThreadFinished())
+				{
+					FTextureCreator::Shutdown();
+					FTextureCreator::JoyInit(this);
+				}
 			}
 			delete[]cutRect;
 		}

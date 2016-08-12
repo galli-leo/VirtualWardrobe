@@ -151,7 +151,33 @@ int convertCoordFromBiggerRect(int biggerSize, int smallerSize, int coord)
 
 Image WardrobeManager::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height)
 {
+	//Blob blob = Blob(pBuffer, 1920*1080/sizeof(RGBQUAD)*2);
+	size_t rgbquad_size = sizeof(RGBQUAD);
+	size_t total_bytes = width * height * rgbquad_size / 8;
+	/*uint8_t * pCopyBuffer = new uint8_t(total_bytes);
+	for (size_t cursor = 0; cursor < total_bytes; ++cursor) {
+		if (cursor % rgbquad_size < rgbquad_size - 1) {
+			pCopyBuffer[cursor] = (uint8_t)(pBuffer[cursor]);
+		}
+		else {
+			pCopyBuffer[cursor] = 0xFF;
+		}
+	}*/
+
+	for (size_t i = 0; i < width*height; i++)
+	{
+		RGBQUAD q = pBuffer[i];
+		q.rgbReserved = 255;
+	}
+
+	Blob blob = Blob(pBuffer, total_bytes);
 	Image img;
+	img.size("1920x1080");
+
+	img.magick("RGBA");
+	img.depth(8);
+	img.read(blob);
+	return img;
 	TIMED_FUNC();
 	HRESULT hr = SaveBitmapToFile(reinterpret_cast<BYTE*>(pBuffer), width, height, sizeof(RGBQUAD) * 8, L"tmp.bmp");
 
@@ -288,10 +314,6 @@ int WardrobeManager::Run(HINSTANCE hInstance, int nCmdShow)
         return 0;
     }
 
-
-	Image image("E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\tmp.bmp");
-	image.cannyEdge();
-	image.write("wtf.png");
 	
 
     // Create main application window

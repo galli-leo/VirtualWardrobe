@@ -3,24 +3,30 @@
 #pragma once
 
 #include "Object.h"
-#include "AllowWindowsPlatformTypes.h"
 
+#ifndef WINDOWS_PLATFORM_TYPES_GUARD
+#include "AllowWindowsPlatformTypes.h"
+#endif
 #include "Kinect.h"
 #include "HideWindowsPlatformTypes.h"
 #include <Magick++.h>
-
+#include "TextureCreator.h"
+#include "PythonUtils.h"
 #include "Tickable.h"
 #include "WardrobeManager.generated.h"
 
 UENUM(BlueprintType)		//"BlueprintType" is essential to include
 enum class EWardrobeMode : uint8
 {
+	MM_None			UMETA(DisplayName = "None"),
 	MM_Outfitting 	UMETA(DisplayName = "Outfitting"),
 	MM_Scanning 	UMETA(DisplayName = "Scanning"),
 	MM_Categorizing	UMETA(DisplayName = "Categorizing")
+
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTshirtScannedDelegate, UTexture2D*, texture);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtScannedDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTshirtProcessedDelegate, UTexture2D*, texture);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtCategorizedDelegate);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectColorFrameEvent, const class UTexture2D*, ColorFrameTexture);
 
@@ -53,6 +59,11 @@ public:
 		UFUNCTION(BlueprintCallable, Category = "Python")
 			FString GetCurrentPathAsSeenByPython();
 
+		UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
+		FTshirtProcessedDelegate TshirtProcessed;
+
+		static FString texturePath;
+
 		~UWardrobeManager();
 
 private:
@@ -69,7 +80,7 @@ private:
 	static const uint32 depthWidth = 512;
 	static const uint32 depthHeight = 424;
 
-	FString texturePath = FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
+
 
 	UTexture2D* LoadImageFromFile(FString file);
 
@@ -90,7 +101,9 @@ private:
 	UTexture2D* colorFrame;
 
 	UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
-	FTshirtScannedDelegate tshirtScanned;
+	FTshirtScannedDelegate TshirtScanned;
+
+	
 
 	/*UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
 	FNewKinectColorFrameEvent newColorFrame;*/

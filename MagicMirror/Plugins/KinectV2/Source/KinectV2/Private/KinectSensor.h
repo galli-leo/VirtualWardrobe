@@ -5,7 +5,10 @@
 //------------------------------------------------------------------------------
 #pragma once
 #include "Core.h"
+#ifndef WINDOWS_PLATFORM_TYPES_GUARD
 #include "AllowWindowsPlatformTypes.h"
+#endif
+
 #include "Kinect.h"
 #include "Kinect.Face.h"
 

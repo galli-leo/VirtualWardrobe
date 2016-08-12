@@ -8,7 +8,10 @@
 #include "CoreUObject.h"
 #include "Engine.h"
 #include "Engine/EngineTypes.h"
+#ifndef WINDOWS_PLATFORM_TYPES_GUARD
 #include "AllowWindowsPlatformTypes.h"
+#endif
+
 #include "Kinect.h"
 #include "HideWindowsPlatformTypes.h"
 #include "BoneOrientationDoubleExponentialFilter.h"
