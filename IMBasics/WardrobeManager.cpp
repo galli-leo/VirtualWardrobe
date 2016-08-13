@@ -153,7 +153,7 @@ Image WardrobeManager::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, 
 {
 	//Blob blob = Blob(pBuffer, 1920*1080/sizeof(RGBQUAD)*2);
 	size_t rgbquad_size = sizeof(RGBQUAD);
-	size_t total_bytes = width * height * rgbquad_size / 8;
+	size_t total_bytes = width * height * rgbquad_size;
 	/*uint8_t * pCopyBuffer = new uint8_t(total_bytes);
 	for (size_t cursor = 0; cursor < total_bytes; ++cursor) {
 		if (cursor % rgbquad_size < rgbquad_size - 1) {
@@ -172,7 +172,7 @@ Image WardrobeManager::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, 
 
 	Blob blob = Blob(pBuffer, total_bytes);
 	Image img;
-	img.size("1920x1080");
+	img.size(Geometry(width, height));
 
 	img.magick("RGBA");
 	img.depth(8);
@@ -508,8 +508,8 @@ void WardrobeManager::ScanForTshirt(RGBQUAD* pBuffer, int width, int height, UIN
 		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, distanceSize, distanceSize);
 		Image edgeImage = Image(cutRectImage);
 		try{
-			edgeImage.edge();
-			edgeImage.write("testing.png");
+			edgeImage.cannyEdge();
+			//edgeImage.write("testing.png");
 
 			if (!this->hasFirstScan)
 			{

@@ -161,10 +161,18 @@ int createNewItemWithTextures(char* backPath1, char* backPath2)
 
 	//PyObject* ret = Py_CompileString("CInterface.createNewItemWithTexturesFromCWD();", "", Py_file_input);
 	ErrorPrint();
+
+	if (ret == NULL)
+	{
+		Py_DECREF(func);
+		return -1;
+	}
+
 	if (PyNumber_Check(ret))
 	{
 		int num = PyNumber_AsSsize_t(ret, nullptr);
 		Py_DECREF(ret);
+		Py_DECREF(func);
 		//Py_DECREF(args);
 		//Py_DECREF(args);
 		//Py_DECREF(func);
@@ -173,10 +181,11 @@ int createNewItemWithTextures(char* backPath1, char* backPath2)
 
 		return num;
 	}
-	else if (PyString_Check(ret))
+ 	else if (PyString_Check(ret))
 	{
 		printw("Trallalal: %s", *SFC(PyString_AsString(ret)));
 		Py_DECREF(ret);
+		Py_DECREF(func);
 		return -1;
 	}
 	else

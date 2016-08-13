@@ -16,7 +16,29 @@ using namespace Magick;
 
 FString UWardrobeManager::texturePath = FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
 
+SQLite::Database UWardrobeManager::database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
 
+TArray<FCategory> UWardrobeManager::categories;
+
+
+FClothingItem::FClothingItem(){
+	id = -1;
+	category = FCategory();
+	texture = UTexture2D::CreateTransient(1024, 1024);
+}
+
+FClothingItem::FClothingItem(SQLite::Statement *query){
+	id = query->getColumn("id");
+	uint32 catID = query->getColumn("category");
+	texture = UTexture2D::CreateTransient(1024, 1024);
+	for (FCategory cat : UWardrobeManager::categories)
+	{
+		if (cat.id == catID)
+		{
+			category = cat;
+		}
+	}
+}
 
 // Safe release for interfaces
 template<class Interface>
@@ -80,13 +102,47 @@ void UWardrobeManager::Tick(float deltaTime)
 	this->lastAction = currentTime;
 }
 
-void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::MM_Scanning, FString databaseFile = "Fuck all")
+void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::MM_Scanning, FString databaseFile = "shirt_db.db")
 {
 	this->mode = mode;
 	this->databaseFile = databaseFile;
 
 	//HARDCODED!!
 	InitializeMagick("C:\\Program Files\\ImageMagick-7.0.2-Q16");
+
+	//UWardrobeManager::database = SQLite::Database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
+
+	try
+	{
+
+		SQLite::Statement query(database, "SELECT id as id, fullname as fullname, name as name FROM categories");
+
+		while (query.executeStep())
+		{
+			FCategory cat(&query);
+			categories.Add(cat);
+		}
+
+		SQLite::Statement cQuery(database, "SELECT id as id, category as category FROM clothes");
+
+		while (cQuery.executeStep())
+		{
+			FClothingItem item(&cQuery);
+			items.Add(item);
+		}
+
+		currentItemPos = 0;
+
+		if (items.Num() > 0)
+		{
+			currentClothingItem = items[currentItemPos];
+			LoadTextureForItem(currentClothingItem);
+		}
+	}
+	catch (std::exception& e)
+	{
+		printe("SQL Error: %s", *SFC(e.what()));
+	}
 
 	pBuffer = new RGBQUAD[colorWidth * colorHeight];
 	pDepthBuffer = new uint16[depthWidth * depthHeight];
@@ -119,6 +175,61 @@ FString UWardrobeManager::GetCurrentPathAsSeenByPython()
 {
 	//return getCurrentPath();
 	return FString("I dont even know.");
+}
+
+TArray<FCategory> UWardrobeManager::GetCategories()
+{
+	return UWardrobeManager::categories;
+}
+
+FClothingItem UWardrobeManager::NextClothingItem()
+{
+	if (currentItemPos == items.Num()-1)
+	{
+		currentItemPos = 0;
+	}
+	else
+	{
+		currentItemPos++;
+	}
+
+	//currentClothingItem.texture->BeginDestroy();
+
+	currentClothingItem = items[currentItemPos];
+
+	currentItemTexture = LoadTextureForItem(currentClothingItem);
+
+
+	return currentClothingItem;
+}
+
+FClothingItem UWardrobeManager::PreviousClothingItem()
+{
+	if (currentItemPos == 0)
+	{
+		currentItemPos = items.Num() - 1;
+	}
+	else
+	{
+		currentItemPos--;
+	}
+
+	//currentClothingItem.texture->BeginDestroy();
+
+	currentClothingItem = items[currentItemPos];
+
+	LoadTextureForItem(currentClothingItem);
+
+	return currentClothingItem;
+}
+
+UTexture2D* UWardrobeManager::LoadTextureForItem(FClothingItem &currentClothingItem)
+{
+	FString path = FString::Printf(TEXT("%s%s/%04d/final_texture.png"), *texturePath, *currentClothingItem.category.name, currentClothingItem.id);
+	UTexture2D *fText = LoadImageFromFile(path);
+	currentClothingItem.texture = fText;
+
+	return fText;
 }
 
 void UWardrobeManager::InitSensor()
@@ -232,6 +343,28 @@ UWardrobeManager::~UWardrobeManager()
 
 Image UWardrobeManager::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height)
 {
+	double startTime = FPlatformTime::Seconds();
+/*	size_t rgbquad_size = sizeof(RGBQUAD);
+	size_t total_bytes = width * height * rgbquad_size;
+
+	for (size_t i = 0; i < width*height; i++)
+	{
+		RGBQUAD q = pBuffer[i];
+		q.rgbReserved = 255;
+	}
+
+	Blob blob = Blob(pBuffer, total_bytes);
+	Image img;
+	img.size(Geometry(width, height));
+
+	img.magick("RGBA");
+	img.depth(8);
+	img.read(blob);
+	double endTime = FPlatformTime::Seconds();
+	printd("Time taken: %f", (endTime - startTime))
+	return img;*/
+
+	
 	Image img;
 	HRESULT hr = SaveBitmapToFile(reinterpret_cast<BYTE*>(pBuffer), width, height, sizeof(RGBQUAD) * 8, L"tmp.bmp");
 
@@ -246,11 +379,16 @@ Image UWardrobeManager::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width,
 		}
 	}
 
+	double endTime = FPlatformTime::Seconds();
+	printd("Time taken: %f", (endTime - startTime))
+
 	return img;
 }
 
 RGBQUAD* UWardrobeManager::CutRectFromBuffer(RGBQUAD* pBuffer, int colorWidth, int colorHeight, int start_x, int start_y, int width, int height)
 {
+	double startTime = FPlatformTime::Seconds();
+
 	RGBQUAD* finalBuffer = new RGBQUAD[width*height];
 	int index = 0;
 	for (int y = start_y; y < start_y + height; y++)
@@ -264,6 +402,9 @@ RGBQUAD* UWardrobeManager::CutRectFromBuffer(RGBQUAD* pBuffer, int colorWidth, i
 		}
 	}
 
+	double endTime = FPlatformTime::Seconds();
+	printd("Time Taken for this: %f", (endTime - startTime));
+
 	return finalBuffer;
 }
 
@@ -272,6 +413,8 @@ bool UWardrobeManager::HasFlatSurface(Image edgeImage, int start_x, int start_y,
 	int maxEdgePixels = 2;
 	int currentEdgePixels = 0;
 	int edgePixels = 0;
+
+	double startTime = FPlatformTime::Seconds();
 
 	try {
 		Quantum* quant = edgeImage.getPixels(start_x, start_y, width, height);
@@ -327,6 +470,9 @@ bool UWardrobeManager::HasFlatSurface(Image edgeImage, int start_x, int start_y,
 		if (currentEdgePixels <= maxEdgePixels)
 		{
 			printw("Found TShirt!: %i", edgePixels);
+			double endTime = FPlatformTime::Seconds();
+			printd("Time Taken for this: %f", (endTime - startTime));
+
 			return true;
 		}
 		else
@@ -339,6 +485,10 @@ bool UWardrobeManager::HasFlatSurface(Image edgeImage, int start_x, int start_y,
 	{
 		printe("Error %s",  *SFC(error_.what()));
 	}
+
+	double endTime = FPlatformTime::Seconds();
+	printd("Time Taken for this: %f", (endTime - startTime));
+
 
 	return false;
 }
@@ -426,7 +576,10 @@ void UWardrobeManager::ScanForTShirt()
 		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, distanceSize, distanceSize);
 		Image edgeImage = Image(cutRectImage);
 		try{
+			double startTime = FPlatformTime::Seconds();
 			edgeImage.cannyEdge();
+			double endTime = FPlatformTime::Seconds();
+			printd("Time Taken for this: %f", (endTime - startTime));
 			//cutRectImage.write("testing2.png");
 			//edgeImage.write("testing.png");
 

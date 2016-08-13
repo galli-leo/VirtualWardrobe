@@ -23,6 +23,10 @@ public class MagicMirror : ModuleRules
         PublicIncludePaths.AddRange(new string[] { "KinectV2/Public", "KinectV2/Classes" });
         UEBuildConfiguration.bForceEnableExceptions = true;
 
+        PublicAdditionalLibraries.Add("E:/Unreal Projects/IntelligentMirror/MagicMirror/sqlite3.lib");
+        PublicAdditionalLibraries.Add("E:/Unreal Projects/IntelligentMirror/MagicMirror/SQLiteCpp.lib");
+        PublicIncludePaths.Add("E:/Unreal Projects/IntelligentMirror/MagicMirror/include/");
+
         LoadPython(Target);
         LoadMagick(Target);
 	}

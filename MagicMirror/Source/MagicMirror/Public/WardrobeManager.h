@@ -8,12 +8,17 @@
 #include "AllowWindowsPlatformTypes.h"
 #endif
 #include "Kinect.h"
+#include <SQLiteCpp/SQLiteCpp.h>
+#include <SQLiteCpp/VariadicBind.h>
 #include "HideWindowsPlatformTypes.h"
+
 #include <Magick++.h>
 #include "TextureCreator.h"
 #include "PythonUtils.h"
 #include "Tickable.h"
 #include "WardrobeManager.generated.h"
+
+
 
 UENUM(BlueprintType)		//"BlueprintType" is essential to include
 enum class EWardrobeMode : uint8
@@ -24,6 +29,49 @@ enum class EWardrobeMode : uint8
 	MM_Categorizing	UMETA(DisplayName = "Categorizing")
 
 };
+
+
+
+USTRUCT(BlueprintType)
+struct FCategory{
+	GENERATED_BODY()
+
+		UPROPERTY(BlueprintReadOnly)
+		FString fullname;
+	UPROPERTY(BlueprintReadOnly)
+		int32 id;
+	UPROPERTY(BlueprintReadOnly)
+		FString name;
+
+	FCategory(){
+		fullname = FString("");
+		id = -1;
+		name = FString("");
+	}
+
+	FCategory(SQLite::Statement *query){
+		fullname = FString(query->getColumn("fullname").getText());
+		id = query->getColumn("id");
+		name = FString(query->getColumn("name").getText());
+	}
+};
+
+
+USTRUCT(BlueprintType)
+struct FClothingItem{
+	GENERATED_BODY()
+		UPROPERTY(BlueprintReadOnly)
+		int32 id;
+	UPROPERTY(BlueprintReadOnly)
+		FCategory category;
+	UPROPERTY(BlueprintReadOnly)
+		UTexture2D* texture;
+
+	FClothingItem();
+
+	FClothingItem(SQLite::Statement *query);
+};
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtScannedDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTshirtProcessedDelegate, UTexture2D*, texture);
@@ -62,9 +110,35 @@ public:
 		UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
 		FTshirtProcessedDelegate TshirtProcessed;
 
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+		TArray<FCategory> GetCategories();
+
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+		FClothingItem NextClothingItem();
+
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+		FClothingItem PreviousClothingItem();
+
+		UPROPERTY(BlueprintReadOnly, Category = "Wardrobe")
+		FClothingItem currentClothingItem;
+
+		UPROPERTY(BlueprintReadOnly, Category = "Wardrobe")
+			UTexture2D* currentItemTexture;
+
+
 		static FString texturePath;
 
 		~UWardrobeManager();
+
+		static SQLite::Database database;
+
+		TArray<FClothingItem> items;
+
+		int currentItemPos;
+
+		UTexture2D* LoadTextureForItem(FClothingItem &item);
+
+		static TArray<FCategory> categories;
 
 private:
 	
@@ -120,3 +194,6 @@ private:
 	void OnNewRawDepthFrameReceived();
 	
 };
+
+
+
