@@ -53,7 +53,7 @@ class ClothingItem(object):
     def __init__(self, createNewID = True):
         super(ClothingItem, self).__init__()
         if createNewID:
-            self.id = Vars.DB.createNewEntry("clothes", fields={"category":"0", "finaltexture":"NULL", "printedtexture":"0"})
+            self.id = Vars.DB.createNewEntry("clothes", fields={"category":"1", "finaltexture":"NULL", "printedtexture":"0"})
         self.category = Vars.CATEGORIES[1]
         self.frontimage = False
         self.finaltexture = ""

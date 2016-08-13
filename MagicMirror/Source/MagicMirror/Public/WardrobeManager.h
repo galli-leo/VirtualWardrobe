@@ -138,6 +138,9 @@ public:
 
 		UTexture2D* LoadTextureForItem(FClothingItem &item);
 
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+		void GetClothesFromDB();
+
 		static TArray<FCategory> categories;
 
 private:

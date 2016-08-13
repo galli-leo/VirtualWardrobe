@@ -123,21 +123,7 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 			categories.Add(cat);
 		}
 
-		SQLite::Statement cQuery(database, "SELECT id as id, category as category FROM clothes");
-
-		while (cQuery.executeStep())
-		{
-			FClothingItem item(&cQuery);
-			items.Add(item);
-		}
-
-		currentItemPos = 0;
-
-		if (items.Num() > 0)
-		{
-			currentClothingItem = items[currentItemPos];
-			LoadTextureForItem(currentClothingItem);
-		}
+		GetClothesFromDB();
 	}
 	catch (std::exception& e)
 	{
@@ -162,6 +148,32 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	//UKinectFunctionLibrary::newRawColorFrame.
 	//UKinectFunctionLibrary::newRawColorFrame.BindRaw();
 	//InitSensor();
+}
+
+void UWardrobeManager::GetClothesFromDB()
+{
+	try
+	{
+		SQLite::Statement cQuery(database, "SELECT id as id, category as category FROM clothes");
+
+		while (cQuery.executeStep())
+		{
+			FClothingItem item(&cQuery);
+			items.Add(item);
+		}
+
+		currentItemPos = 0;
+
+		if (items.Num() > 0)
+		{
+			currentClothingItem = items[currentItemPos];
+			LoadTextureForItem(currentClothingItem);
+		}
+	}
+	catch (std::exception& e)
+	{
+		printe("SQL Error: %s", *SFC(e.what()));
+	}
 }
 
 uint8 UWardrobeManager::TestPython()
