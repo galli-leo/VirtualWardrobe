@@ -66,6 +66,19 @@ public:
 
 		~UWardrobeManager();
 
+		static SQLite::Database database;
+
+		TArray<FClothingItem> items;
+
+		int currentItemPos;
+
+		UTexture2D* LoadTextureForItem(FClothingItem &item);
+
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+		void GetClothesFromDB();
+
+		static TArray<FCategory> categories;
+
 private:
 	
 

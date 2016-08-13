@@ -88,6 +88,26 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	//HARDCODED!!
 	InitializeMagick("C:\\Program Files\\ImageMagick-7.0.2-Q16");
 
+	//UWardrobeManager::database = SQLite::Database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
+
+	try
+	{
+
+		SQLite::Statement query(database, "SELECT id as id, fullname as fullname, name as name FROM categories");
+
+		while (query.executeStep())
+		{
+			FCategory cat(&query);
+			categories.Add(cat);
+		}
+
+		GetClothesFromDB();
+	}
+	catch (std::exception& e)
+	{
+		printe("SQL Error: %s", *SFC(e.what()));
+	}
+
 	pBuffer = new RGBQUAD[colorWidth * colorHeight];
 	pDepthBuffer = new uint16[depthWidth * depthHeight];
 	colorFrame = UTexture2D::CreateTransient(colorWidth, colorHeight);
@@ -106,6 +126,32 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	//UKinectFunctionLibrary::newRawColorFrame.
 	//UKinectFunctionLibrary::newRawColorFrame.BindRaw();
 	//InitSensor();
+}
+
+void UWardrobeManager::GetClothesFromDB()
+{
+	try
+	{
+		SQLite::Statement cQuery(database, "SELECT id as id, category as category FROM clothes");
+
+		while (cQuery.executeStep())
+		{
+			FClothingItem item(&cQuery);
+			items.Add(item);
+		}
+
+		currentItemPos = 0;
+
+		if (items.Num() > 0)
+		{
+			currentClothingItem = items[currentItemPos];
+			LoadTextureForItem(currentClothingItem);
+		}
+	}
+	catch (std::exception& e)
+	{
+		printe("SQL Error: %s", *SFC(e.what()));
+	}
 }
 
 uint8 UWardrobeManager::TestPython()
