@@ -95,6 +95,17 @@ void UWardrobeManager::Tick(float deltaTime)
 		}
 
 		break;
+
+	case EWardrobeMode::MM_ScanningForPrint:
+		if (secondsDiff > this->scanInterval)
+		{
+			this->timeSinceScanningForPrint += deltaTime;
+			this->ScanForPrint();
+		}
+
+		break;
+
+
 	case EWardrobeMode::MM_Outfitting:
 		break;
 	}
@@ -115,7 +126,7 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	try
 	{
 
-		SQLite::Statement query(database, "SELECT id as id, fullname as fullname, name as name FROM categories");
+		SQLite::Statement query(database, "SELECT id as id, fullname as fullname, name as name, layer as layer, istrousers as istrousers FROM categories");
 
 		while (query.executeStep())
 		{
@@ -129,6 +140,8 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	{
 		printe("SQL Error: %s", *SFC(e.what()));
 	}
+
+	this->scanningCategory = GetCategory(1);
 
 	pBuffer = new RGBQUAD[colorWidth * colorHeight];
 	pDepthBuffer = new uint16[depthWidth * depthHeight];
@@ -194,8 +207,28 @@ TArray<FCategory> UWardrobeManager::GetCategories()
 	return UWardrobeManager::categories;
 }
 
+FCategory UWardrobeManager::GetCategory(int32 id)
+{
+	for (FCategory cat : UWardrobeManager::categories)
+	{
+		if (cat.id == id)
+		{
+			return cat;
+		}
+	}
+
+	return FCategory();
+}
+
 FClothingItem UWardrobeManager::NextClothingItem()
 {
+	if (items.Num() == 0)
+	{
+		currentClothingItem = FClothingItem();
+		currentItemPos = 0;
+		return currentClothingItem;
+	}
+
 	if (currentItemPos == items.Num()-1)
 	{
 		currentItemPos = 0;
@@ -217,6 +250,13 @@ FClothingItem UWardrobeManager::NextClothingItem()
 
 FClothingItem UWardrobeManager::PreviousClothingItem()
 {
+	if (items.Num() == 0)
+	{
+		currentClothingItem = FClothingItem();
+		currentItemPos = 0;
+		return currentClothingItem;
+	}
+
 	if (currentItemPos == 0)
 	{
 		currentItemPos = items.Num() - 1;
@@ -231,6 +271,106 @@ FClothingItem UWardrobeManager::PreviousClothingItem()
 	currentClothingItem = items[currentItemPos];
 
 	LoadTextureForItem(currentClothingItem);
+
+	return currentClothingItem;
+}
+
+
+FClothingItem UWardrobeManager::RefreshClothingItems()
+{
+	int numItems = items.Num();
+
+	FClothingItem item = this->FilterClothingItems(currentFilter);
+
+	if (numItems > items.Num())
+	{
+		currentItemPos = items.Num() - 1;
+		item = this->items[currentItemPos];
+		LoadTextureForItem(item);
+		this->currentClothingItem = item;
+	}
+
+	return item;
+}
+
+//Category.id = -1 -> All clothes
+
+FClothingItem UWardrobeManager::FilterClothingItems(FCategory category)
+{
+	try
+	{
+
+		this->items.Empty();
+
+		currentFilter = category;
+		
+		if (category.id == -1)
+		{
+			int id = currentClothingItem.id;
+			this->GetClothesFromDB();
+			int index = 0;
+
+			for (FClothingItem item : items)
+			{
+				if (item.id == id)
+				{
+					break;
+				}
+				index++;
+			}
+			if (index >= items.Num())
+			{
+				index = items.Num() - 1;
+			}
+
+			currentItemPos = index;
+			currentClothingItem = this->items[currentItemPos];
+			LoadTextureForItem(currentClothingItem);
+			return currentClothingItem;
+		}
+
+		SQLite::Statement cQuery(database, "SELECT id as id, category as category FROM clothes WHERE category = ?");
+
+		cQuery.bind(1, category.id);
+
+		while (cQuery.executeStep())
+		{
+			FClothingItem item(&cQuery);
+			items.Add(item);
+		}
+
+		int index = 0;
+
+		for (FClothingItem item : items)
+		{
+			if (item.id >= currentClothingItem.id)
+			{
+				break;
+			}
+			index++;
+		}
+
+		if (items.Num() > 0)
+		{
+			currentItemPos = index;
+			currentClothingItem = items[currentItemPos];
+			LoadTextureForItem(currentClothingItem);
+		}
+		else
+		{
+			currentClothingItem = FClothingItem();
+			currentClothingItem.id = -1;
+		}
+
+		return currentClothingItem;
+	}
+	catch (std::exception& e)
+	{
+		printe("SQL Error: %s", *SFC(e.what()));
+	}
+
+	currentClothingItem = FClothingItem();
+	currentClothingItem.id = -1;
 
 	return currentClothingItem;
 }
@@ -537,6 +677,31 @@ UTexture2D* UWardrobeManager::LoadImageFromFile(FString file)
 	return UTexture2D::CreateTransient(512, 512);
 }
 
+void UWardrobeManager::ScanPrint(FClothingItem tshirt)
+{
+	this->mode = EWardrobeMode::MM_ScanningForPrint;
+	this->currentPrintScan = tshirt;
+	this->timeSinceScanningForPrint = 0;
+}
+
+void UWardrobeManager::ScanForPrint()
+{
+	ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("Get TShirt ready! Taking picture in: %f"), 5.0-timeSinceScanningForPrint));
+
+	if (5.0 - timeSinceScanningForPrint < 0)
+	{
+		int distanceSize = 556;
+		int start_x = (colorWidth - distanceSize) / 2;
+		int start_y = (colorHeight - distanceSize) / 2;
+		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, colorWidth, colorHeight, start_x, start_y, distanceSize, distanceSize);
+		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, distanceSize, distanceSize);
+		cutRectImage.write("print_testing.png");
+		this->mode = EWardrobeMode::MM_None;
+	}
+}
+
+
+
 void UWardrobeManager::ScanForTShirt()
 {
 	int rangeMin = 700;
@@ -546,6 +711,14 @@ void UWardrobeManager::ScanForTShirt()
 	{
 		return;
 	}
+
+	FCategory filter = scanningCategory;
+	if (filter.id == -1)
+	{
+		filter = this->GetCategory(1);
+	}
+
+	//ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("Scanning for %s"), *currentFilter.fullname));
 
 	
 	HRESULT hr = m_pCoordinateMapper->MapColorFrameToDepthSpace(depthWidth * depthHeight, (UINT16*)pDepthBuffer, colorWidth * colorHeight, m_pDepthCoordinates);
@@ -571,11 +744,13 @@ void UWardrobeManager::ScanForTShirt()
 			if (averageValue < rangeMin)
 			{
 				//printw("Please move the TShirt back a bit.");
+				ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("Scanning for %s. Please move back a bit"), *filter.fullname));
 			}
 
 			if (averageValue > rangeMax)
 			{
 				//printw("Please move the TShirt forth a bit.");
+				ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("Scanning for %s. Please move forward a bit"), *filter.fullname));
 			}
 
 			return;
@@ -613,6 +788,7 @@ void UWardrobeManager::ScanForTShirt()
 				else
 				{
 					//SetStatusMessage(L"Please move the TShirt to the left a bit.", 1000, true);
+					ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("Scanning for %s on the left side."), *filter.fullname));
 				}
 
 			}
@@ -636,6 +812,7 @@ void UWardrobeManager::ScanForTShirt()
 				else
 				{
 					//SetStatusMessage(L"Please move the TShirt to the right a bit.", 1000, true);
+					ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("Scanning for %s on the right side."), *filter.fullname));
 				}
 			}
 

@@ -26,6 +26,8 @@ enum class EWardrobeMode : uint8
 	MM_None			UMETA(DisplayName = "None"),
 	MM_Outfitting 	UMETA(DisplayName = "Outfitting"),
 	MM_Scanning 	UMETA(DisplayName = "Scanning"),
+	MM_ScanningForPrint 	UMETA(DisplayName = "Scanning for print"),
+	MM_ScanningForPattern 	UMETA(DisplayName = "Scanning for pattern"),
 	MM_Categorizing	UMETA(DisplayName = "Categorizing")
 
 };
@@ -36,23 +38,39 @@ USTRUCT(BlueprintType)
 struct FCategory{
 	GENERATED_BODY()
 
-		UPROPERTY(BlueprintReadOnly)
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wardrobe|Structs")
 		FString fullname;
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wardrobe|Structs")
 		int32 id;
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wardrobe|Structs")
 		FString name;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wardrobe|Structs")
+		bool isTrousers;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wardrobe|Structs")
+		int32 layer;
 
 	FCategory(){
 		fullname = FString("");
 		id = -1;
 		name = FString("");
+		isTrousers = false;
+		layer = 0;
+	}
+
+	FCategory(FString fullname, int32 id, FString name, bool isTrousers, int32 layer){
+		fullname = fullname;
+		id = id;
+		name = name;
+		isTrousers = isTrousers;
+		layer = layer;
 	}
 
 	FCategory(SQLite::Statement *query){
 		fullname = FString(query->getColumn("fullname").getText());
 		id = query->getColumn("id");
 		name = FString(query->getColumn("name").getText());
+		isTrousers = ((int)query->getColumn("istrousers") != 0);
+		layer = query->getColumn("layer");
 	}
 };
 
@@ -75,6 +93,7 @@ struct FClothingItem{
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtScannedDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTshirtProcessedDelegate, UTexture2D*, texture);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScanningStatusUpdate, FString, newStatus);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtCategorizedDelegate);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectColorFrameEvent, const class UTexture2D*, ColorFrameTexture);
 
@@ -94,12 +113,19 @@ public:
 		UPROPERTY(BlueprintReadWrite)
 		FString databaseFile;
 
+		UPROPERTY(BlueprintReadWrite)
+		FCategory scanningCategory;
+
 		//UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 		void StartWardrobeManager(EWardrobeMode startingMode, FString dbFile);
 		//UPROPERTY(BlueprintReadOnly)
 
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 		void Tick(float deltaTime);
+
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+			void ScanPrint(FClothingItem tshirt);
+
 
 		UFUNCTION(BlueprintCallable, Category = "Test")
 		uint8 TestPython();
@@ -110,20 +136,15 @@ public:
 		UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
 		FTshirtProcessedDelegate TshirtProcessed;
 
+		UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
+			FScanningStatusUpdate ScanningStatusUpdate;
+
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 		TArray<FCategory> GetCategories();
 
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
-		FClothingItem NextClothingItem();
+			FCategory GetCategory(int32 id);
 
-		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
-		FClothingItem PreviousClothingItem();
-
-		UPROPERTY(BlueprintReadOnly, Category = "Wardrobe")
-		FClothingItem currentClothingItem;
-
-		UPROPERTY(BlueprintReadOnly, Category = "Wardrobe")
-			UTexture2D* currentItemTexture;
 
 
 		static FString texturePath;
@@ -131,6 +152,32 @@ public:
 		~UWardrobeManager();
 
 		static SQLite::Database database;
+
+		/************************************************************************/
+		/* Outfitting                                                           */
+		/************************************************************************/
+
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+			FClothingItem NextClothingItem();
+
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+			FClothingItem PreviousClothingItem();
+
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+			FClothingItem RefreshClothingItems();
+
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+			FClothingItem FilterClothingItems(FCategory category);
+
+		UPROPERTY(BlueprintReadOnly, Category = "Wardrobe")
+			FClothingItem currentClothingItem;
+
+		UPROPERTY(BlueprintReadOnly, Category = "Wardrobe")
+			FCategory currentFilter;
+
+		UPROPERTY(BlueprintReadOnly, Category = "Wardrobe")
+			UTexture2D* currentItemTexture;
+
 
 		TArray<FClothingItem> items;
 
@@ -163,12 +210,15 @@ private:
 
 	long GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight, DepthSpacePoint* pDepthPoints, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight, int start_x, int start_y, int width, int height);
 	void ScanForTShirt();
+	void ScanForPrint();
 	Magick::Image			CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height);
 	bool					HasFlatSurface(Magick::Image img, int start_x, int start_y, int width, int height);
 	bool UpdateFrames();
 	RGBQUAD* CutRectFromBuffer(RGBQUAD* pBuffer, int colorWidth, int colorHeight, int start_x, int start_y, int width, int height);
 	void InitSensor();
 
+	FClothingItem currentPrintScan;
+	float timeSinceScanningForPrint = -1;
 	bool hasFirstScan = false;
 	bool hasSecondScan = false;
 	float scanInterval = 1 / 3;
