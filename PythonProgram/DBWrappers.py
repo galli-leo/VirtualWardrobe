@@ -95,6 +95,11 @@ class ClothingItem(object):
         self.texturesamples = glob.glob(path+"/*.png")
         self.texturesamples.extend(glob.glob(path+"/*.jpg"))
         self.texturesamples.extend(glob.glob(path+"/*.jpeg"))
+        for texture in self.texturesamples:
+            if "final_texture" in texture:
+                self.texturesamples.remove(texture)
+            if "print" in texture:
+                self.texturesamples.remove(texture)
 
     def addImage(self, image, name="back", extension=".png"):
         path = self.getTexturePath()
@@ -110,7 +115,7 @@ class ClothingItem(object):
         printed_texture = None
         if self.printedtexture:
             path = self.getTexturePath()
-            printed_texture = Image.open(os.path.join(path, "print"+".png"))
+            printed_texture = os.path.join(path, "print.png")
         creator = creator_cls(self.texturesamples, printed_texture)
         final_texture = creator.createTexture()
         dif_text = Image.open(os.path.join(Vars.REALPATH, self.diffuse_textures[self.category.name]))

@@ -1,7 +1,11 @@
 import noise
 import math
-from PIL import Image, ImageOps, ImageChops
+from PIL import Image, ImageOps, ImageChops, ImageEnhance
 import time
+import sys
+sys.path.append("E:\\Anaconda27_64\\Lib\\site-packages\\")
+import cv2
+import numpy as np
 from Vars import LOG
 import Vars
 import inspect
@@ -21,7 +25,7 @@ class TextureCreator(object):
     def __init__(self, samples, printed_texture, size = (2048, 2048), prefix="testing"):
         super(TextureCreator, self).__init__()
         self.samples = samples
-        printed_texture = printed_texture
+        self.printed_texture = printed_texture
         self.size = size
         self.prefix = prefix
         self.num_per_processing = 1
@@ -180,6 +184,43 @@ class TextureCreator(object):
                 count = 0
                 self.processSample(images)
                 images = []
+
+        if self.printed_texture:
+            prnt = Image.open(self.printed_texture)
+            prnt = prnt.crop((22, 22, 534, 534)).transpose(Image.FLIP_LEFT_RIGHT)
+            prnt.save("print_tmp.png")
+            sample = self.samples[0]
+            img1 = cv2.imread("print_tmp.png")
+            img2 = cv2.imread(sample)
+            result = cv2.subtract(img1, img2)
+            cv2.imwrite("print_tmp.png", result)
+            prnt = Image.open("print_tmp.png")
+            prnt = ImageEnhance.Contrast(prnt).enhance(1.5)
+            prnt = ImageEnhance.Brightness(prnt).enhance(1.75)
+            prnt.save("print_tmp.png")
+            result = cv2.imread("print_tmp.png")
+            img_bw = 255*(cv2.cvtColor(result, cv2.COLOR_BGR2GRAY) > 5).astype('uint8')
+
+            se1 = cv2.getStructuringElement(cv2.MORPH_RECT, (10,10))
+            se2 = cv2.getStructuringElement(cv2.MORPH_RECT, (5,5))
+            mask = cv2.morphologyEx(img_bw, cv2.MORPH_CLOSE, se1)
+            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, se2)
+
+            mask = np.dstack([mask, mask, mask]) / 255
+            out = result * mask
+            cv2.imwrite("print_tmp.png", out)
+            prnt = Image.open("print_tmp.png")
+            self.save(prnt)
+            prnt = prnt.convert("RGBA")
+            w, h = prnt.size
+            for y in range(0, h):
+                for x in range(0, w):
+                    r, g, b, a = prnt.getpixel((int(x), int(y)))
+                    comb = (r + g + b) / 3.0
+                    if comb < 10:
+                        prnt.putpixel((int(x), int(y)), (0,0,0,0))
+            self.save(prnt)
+
 
 
         return self.texture

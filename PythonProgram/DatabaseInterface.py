@@ -13,7 +13,6 @@ class Database(object):
         self.dbname = dbname
         if self.dbname is None:
             self.dbname = Vars.DBFILE
-        print(self.dbname)
         self.conn = sqlite3.connect(self.dbname)
         sqlite3.register_adapter(bool, int)
         sqlite3.register_converter("BOOLEAN", lambda v: bool(int(v)))
@@ -33,7 +32,12 @@ class Database(object):
     def select(self, table, fields=[], condition={}, raw_values=False):
         #TODO: add fields and conditions
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * from "+table+"")
+        statement = "SELECT * from " + table
+        if condition:
+            statement += " WHERE "
+            for key,value in condition.iteritems():
+                statement += (key + "=" + value + " ")
+        cursor.execute(statement)
         rows = cursor.fetchall()
         if raw_values:
             return rows
