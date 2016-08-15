@@ -68,15 +68,30 @@ def createNewItemWithTexturesFromCWD():
     Vars.DB = tempDB
     return clothing.id
 
+def addPrintToItemFromCWD(id):
+    #Hack so this function can be called from any thread
+    tempDB = Vars.DB
+    Vars.DB = DatabaseInterface.Database()
+    Vars.DB.update("clothes", {"printedtexture" : "1"}, {"id" : str(id)})
+    img = Image.open("print_testing.png")
+    items = Vars.DB.select("clothes", condition = {"id" : str(id)})
+    cloth = items[0]
+    cloth.addImage(img, "print")
+    cloth.createFinalTexture()
+    Vars.DB = tempDB
+    return
+
+def recreateTextureForID(id):
+    items = Vars.DB.select("clothes", condition = {"id" : str(id)})
+    items[0].createFinalTexture()
+
 def categorize(id, front_image):
     print CategoryRecognizer().recognizeCategory(None, None)
     pass
 
 def initWithPath(path):
     global clothes
-    print(path)
     Vars.setRealPath(path)
-    print(Vars.DBFILE)
     clothes = DBWrappers.loadCategories()
     return Vars.DBFILE
 
@@ -91,4 +106,7 @@ def test():
     createNewItemWithTextures("back1.png", "back2.png")
 
 if __name__ == "__main__":
-    createNewItemWithTextures("back1.png", "back2.png")
+    #createNewItemWithTextures("back1.png", "back2.png")
+    initWithPath(".")
+    #addPrintToItemFromCWD(145)
+    recreateTextureForID(152)

@@ -2,7 +2,7 @@ MIN_CONFIDENCE = 80
 import random
 import sys
 sys.path.append("E:\\Anaconda\\Lib\\site-packages\\")
-import cv2
+#import cv2
 import numpy
 from PIL import Image
 from TextureCreators import timeit
@@ -57,11 +57,11 @@ class TemplateRecgonizer(object):
                 cv_temp = numpy.array(Image.open(template).convert("RGB"), dtype=numpy.uint8)
                 front = numpy.array(Image.open(snippet).convert("RGB"), dtype=numpy.uint8)
                 # Apply template Matching
-                res = cv2.matchTemplate(front,cv_temp,cv2.TM_CCOEFF_NORMED)
-                min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-                print(max_val)
-                if max_val > max_value[0]:
-                    max_value = (max_val, cloth)
+                #res = cv2.matchTemplate(front,cv_temp,cv2.TM_CCOEFF_NORMED)
+                #min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+                #print(max_val)
+                #if max_val > max_value[0]:
+                    #max_value = (max_val, cloth)
 
 
         return max_value

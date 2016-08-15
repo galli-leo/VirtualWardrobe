@@ -11,6 +11,7 @@ FString SFC(const char* arr)
 	return FString(ANSI_TO_TCHAR(arr));
 }
 
+static PyObject* cInterfaceModule = NULL;
 
 /************************************************************************/
 /* Python Interface Functions                                           */
@@ -141,7 +142,7 @@ int createNewItemWithTextures(char* backPath1, char* backPath2)
 
 	//PyRun_SimpleString((const char*)"import CInterface; CInterface.createNewItemWithTextures('E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back1.png', 'E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back2.png')");
 
-	module = PyImport_ImportModule((const char*)"CInterface");
+	module = cInterfaceModule;
 	if (module == NULL)
 	{
 		return -1;
@@ -194,6 +195,51 @@ int createNewItemWithTextures(char* backPath1, char* backPath2)
 	}
 
 	return -1;
+}
+
+
+void addPrintToItemFromCWD(uint32 id)
+{
+	PyObject* ret, *module, *dict, *func;
+
+	//PyRun_SimpleString((const char*)"import CInterface; CInterface.createNewItemWithTextures('E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back1.png', 'E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back2.png')");
+
+	module = cInterfaceModule;
+	if (module == NULL)
+	{
+		return;
+	}
+
+	dict = PyModule_GetDict(module);
+
+	func = PyDict_GetItemString(dict, (const char*)"addPrintToItemFromCWD");
+	Py_INCREF(func);
+
+	if (func == NULL)
+	{
+		return;
+	}
+
+	//args = Py_BuildValue((const char*)"(i)", id);
+
+	ret = PyObject_CallFunctionObjArgs(func, Py_BuildValue("i", id));
+	//ret = NULL;
+	//ret = Py_CompileString(TCHAR_TO_ANSI(*FString::Printf(TEXT("CInterface.addPrintToItemFromCWD(%i);"), id)), "", Py_file_input);
+	//PyRun_SimpleString(TCHAR_TO_ANSI(*FString::Printf(TEXT("CInterface.addPrintToItemFromCWD(%i);"), id)));
+	//PyRun_SimpleString((const char*)"CInterface.addPrintToItemFromCWD(154)");
+	ErrorPrint();
+
+	if (ret == NULL)
+	{
+		Py_DECREF(ret);
+		Py_DECREF(func);
+		return;
+	}
+
+	Py_DECREF(ret);
+	Py_DECREF(func);
+
+	return;
 }
 
 /*void testing()
@@ -271,7 +317,7 @@ void InitPython(FString currentPath)
 	//PyRun_SimpleString((const char*)"if not 'CInterface' in sys.modules: import CInterface");
 	PyRun_SimpleString((const char*)"import CInterface; CInterface.initWithPath('E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/')");
 	//PyRun_SimpleString("import C;");
-
+	cInterfaceModule = PyImport_ImportModule((const char*)"CInterface");
 	//ErrorPrint();
 	//aa = PyTuple_New(1);
 	/*aa = Py_BuildValue((const char*)"(s)", (const char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/");;

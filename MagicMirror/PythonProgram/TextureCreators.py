@@ -1,7 +1,11 @@
 import noise
 import math
-from PIL import Image, ImageOps, ImageChops
+from PIL import Image, ImageOps, ImageChops, ImageEnhance, ImageStat
 import time
+import sys
+sys.path.append("E:\\Anaconda27_64\\Lib\\site-packages\\")
+import cv2
+import numpy as np
 from Vars import LOG
 import Vars
 import inspect
@@ -21,7 +25,7 @@ class TextureCreator(object):
     def __init__(self, samples, printed_texture, size = (2048, 2048), prefix="testing"):
         super(TextureCreator, self).__init__()
         self.samples = samples
-        printed_texture = printed_texture
+        self.printed_texture = printed_texture
         self.size = size
         self.prefix = prefix
         self.num_per_processing = 1
@@ -161,6 +165,16 @@ class TextureCreator(object):
         larger.paste(tiled, (0,0))
         return tiled
 
+    def brightness(self,  img ):
+        stat = ImageStat.Stat(img)
+        r,g,b = stat.rms
+        return math.sqrt(0.241*(r**2) + 0.691*(g**2) + 0.068*(b**2))
+
+    def brightness_alt(self, img ):
+        im = img.convert('L')
+        stat = ImageStat.Stat(im)
+        return stat.mean[0]
+
     def createTexture(self):
         if len(self.samples) == 0:
             LOG.warning("Not enough samples")
@@ -180,6 +194,66 @@ class TextureCreator(object):
                 count = 0
                 self.processSample(images)
                 images = []
+
+        if self.printed_texture:
+            prnt = Image.open(self.printed_texture)
+            prnt = prnt.crop((33, 22, 523, 534)).transpose(Image.FLIP_LEFT_RIGHT)
+            new = Image.new("RGB", (512,512))
+            new.paste(prnt, (11, 0))
+            new.save("print_tmp.png")
+            sample = self.samples[0]
+            s_img = Image.open(sample)
+            img1 = cv2.imread("print_tmp.png")
+            img2 = cv2.imread(sample)
+            bright = self.brightness_alt(s_img.convert("RGB"))
+            is_white = False
+            print(bright)
+            if bright > 255/2:
+                is_white = True
+            if is_white:
+                result = cv2.subtract(img2, img1)
+            else:
+                result = cv2.subtract(img1, img2)
+            cv2.imwrite("print_tmp.png", result)
+            prnt = Image.open("print_tmp.png")
+
+            prnt = ImageEnhance.Contrast(prnt).enhance(1.5)
+            if is_white:
+                prnt = ImageOps.invert(prnt)
+                prnt = ImageEnhance.Brightness(prnt).enhance(1.25)
+            else:
+                prnt = ImageEnhance.Brightness(prnt).enhance(1.75)
+
+            prnt.save("print_tmp.png")
+            prnt.save("aaa.png")
+            result = cv2.imread("print_tmp.png")
+            img_bw = 255*(cv2.cvtColor(result, cv2.COLOR_BGR2GRAY) > 5).astype('uint8')
+
+            se1 = cv2.getStructuringElement(cv2.MORPH_RECT, (10,10))
+            se2 = cv2.getStructuringElement(cv2.MORPH_RECT, (5,5))
+            mask = cv2.morphologyEx(img_bw, cv2.MORPH_CLOSE, se1)
+            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, se2)
+
+            mask = np.dstack([mask, mask, mask]) / 255
+            out = result * mask
+            cv2.imwrite("print_tmp.png", out)
+            prnt = Image.open("print_tmp.png")
+            self.save(prnt)
+            prnt = prnt.convert("RGBA")
+            w, h = prnt.size
+            for y in range(0, h):
+                for x in range(0, w):
+                    r, g, b, a = prnt.getpixel((int(x), int(y)))
+                    comb = (r + g + b) / 3.0
+                    if comb < 10 and not is_white:
+                        prnt.putpixel((int(x), int(y)), (0,0,0,0))
+                    if comb > 245 and is_white:
+                        prnt.putpixel((int(x), int(y)), (0,0,0,0))
+            self.save(prnt)
+            prnt = prnt.resize((460, 460), Image.ANTIALIAS).crop((11,0,523,534))
+            self.texture.paste(prnt, (self.size[0]/4, 110), mask=prnt.split()[3])
+            asdf = self.texture
+            self.save(asdf)
 
 
         return self.texture

@@ -118,6 +118,7 @@ class ClothingItem(object):
             printed_texture = os.path.join(path, "print.png")
         creator = creator_cls(self.texturesamples, printed_texture)
         final_texture = creator.createTexture()
+        final_texture.save("WTF.png")
         dif_text = Image.open(os.path.join(Vars.REALPATH, self.diffuse_textures[self.category.name]))
         final_texture = ImageChops.multiply(final_texture, dif_text.convert("RGBA"))
         final_texture.save(os.path.join(self.getTexturePath(), "final_texture.png"))

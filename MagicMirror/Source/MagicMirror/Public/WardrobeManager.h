@@ -13,9 +13,12 @@
 #include "HideWindowsPlatformTypes.h"
 
 #include <Magick++.h>
-#include "TextureCreator.h"
+
+#include "PrintTextureAdder.h"
 #include "PythonUtils.h"
 #include "Tickable.h"
+
+#include "WardrobeStructs.h"
 #include "WardrobeManager.generated.h"
 
 
@@ -31,7 +34,6 @@ enum class EWardrobeMode : uint8
 	MM_Categorizing	UMETA(DisplayName = "Categorizing")
 
 };
-
 
 
 USTRUCT(BlueprintType)
@@ -96,6 +98,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTshirtProcessedDelegate, UTexture2D
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScanningStatusUpdate, FString, newStatus);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtCategorizedDelegate);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectColorFrameEvent, const class UTexture2D*, ColorFrameTexture);
+
+
+
 
 /**
  * 
@@ -224,6 +229,7 @@ private:
 	float scanInterval = 1 / 3;
 	float timeSinceSecondScan = -1;
 	float lastAction = -1;
+	float timeToScanForPrint = 7.5;
 
 	UTexture2D* colorFrame;
 

@@ -9,10 +9,11 @@
 FTextureCreator* FTextureCreator::Runnable = NULL;
 //***********************************************************
 
-FTextureCreator::FTextureCreator(UWardrobeManager* theManager)
+FTextureCreator::FTextureCreator(UWardrobeManager* theManager, FCategory theCat)
 {
 	//Link to where data should be stored
 	this->manager = theManager;
+	this->category = theCat;
 
 	Thread = FRunnableThread::Create(this, TEXT("FTextureCreator"), 0, TPri_BelowNormal); //windows default = 8mb for thread, could specify more
 }
@@ -40,7 +41,7 @@ uint32 FTextureCreator::Run()
 	//While not told to stop this thread 
 	//		and not yet finished finding Prime Numbers
 	int id = createNewItemWithTextures("", "");
-	FString finalTexturePath = FString::Printf(TEXT("%stshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, id);
+	FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, id);
 	UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
 	manager->TshirtProcessed.Broadcast(finalTexture);
 
@@ -87,13 +88,13 @@ UTexture2D* FTextureCreator::LoadImageFromFile(FString file)
 	return UTexture2D::CreateTransient(512, 512);
 }
 
-FTextureCreator* FTextureCreator::JoyInit(UWardrobeManager* theManager)
+FTextureCreator* FTextureCreator::JoyInit(UWardrobeManager* theManager, FCategory theCat)
 {
 	//Create new instance of thread if it does not exist
 	//		and the platform supports multi threading!
 	if (!Runnable && FPlatformProcess::SupportsMultithreading())
 	{
-		Runnable = new FTextureCreator(theManager);
+		Runnable = new FTextureCreator(theManager, theCat);
 	}
 	return Runnable;
 }

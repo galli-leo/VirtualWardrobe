@@ -2,6 +2,8 @@
 #ifndef TEXTURECREATOR_H
 #define TEXTURECREATOR_H
 #include "MagicMirror.h"
+#include "WardrobeManager.h"
+//#include "Structs.h"
 //#include "WardrobeManager.h"
 //#include "PythonUtils.h"
 
@@ -23,6 +25,8 @@ public:
 	/** The Wardrobe Manager containing the Delegate*/
 	UWardrobeManager* manager;
 
+	FCategory category;
+
 private:
 	UTexture2D* finalTexture;
 
@@ -37,7 +41,7 @@ public:
 	//~~~ Thread Core Functions ~~~
 
 	//Constructor / Destructor
-	FTextureCreator(UWardrobeManager* manager);
+	FTextureCreator(UWardrobeManager* manager, FCategory theCat);
 	virtual ~FTextureCreator();
 
 	// Begin FRunnable interface.
@@ -60,7 +64,7 @@ public:
 	This code ensures only 1 Prime Number thread will be able to run at a time.
 	This function returns a handle to the newly started instance.
 	*/
-	static FTextureCreator* JoyInit(UWardrobeManager* manager);
+	static FTextureCreator* JoyInit(UWardrobeManager* manager, FCategory theCat);
 
 	/** Shuts down the thread. Static so it can easily be called from outside the thread context */
 	static void Shutdown();

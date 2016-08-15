@@ -44,6 +44,19 @@ class Database(object):
         if table in self.obj_map:
             return self.convertRowToObject(rows, self.obj_map[table])
 
+    def update(self, table, vals={}, condition={}):
+        cursor = self.conn.cursor()
+        statement = "UPDATE " + table + " SET "
+        for key, value in vals.iteritems():
+            statement += (key + "=" + value + " ")
+        if condition:
+            statement += " WHERE "
+            for key,value in condition.iteritems():
+                statement += (key + "=" + value + " ")
+        cursor.execute(statement)
+        self.conn.commit()
+        return "asdf"
+
     def createNewEntry(self, table, fields={}):
         cursor = self.conn.cursor()
         cursor.execute("INSERT into "+table+" ("+",".join(fields.keys())+") VALUES ("+",".join(fields.values())+")")
@@ -53,9 +66,6 @@ class Database(object):
     def delete(self, table, id):
         cursor = self.conn.cursor()
         cursor.execute("DELETE from "+table+" WHERE id=?", id)
-
-    def update(self, table, values, conditions):
-        pass
 
     def insert(self, table, values={}):
         pass

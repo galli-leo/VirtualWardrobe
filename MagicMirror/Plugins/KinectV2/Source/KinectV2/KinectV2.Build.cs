@@ -37,7 +37,7 @@ namespace UnrealBuildTool.Rules
                     "Core",
                     "Engine",
                     "InputDevice",
-                    "BlueprintGraph",
+                    //"BlueprintGraph",
                     //"MSSpeech",
                     "InputCore",
                      "K4WLib",
@@ -64,7 +64,7 @@ namespace UnrealBuildTool.Rules
                new string[] 
                {
                // ... add private dependencies that you statically link with here ... 
-               "Core", "CoreUObject", "InputCore", "Slate", "Engine", "AssetTools", "UnrealEd", 
+               "Core", "CoreUObject", "InputCore", "Slate", "Engine", "AssetTools"// "UnrealEd", 
                // for FAssetEditorManager
                //"BlueprintGraph", "UnrealEd", "GraphEditor"
                //"KismetWidgets", "KismetCompiler", "BlueprintGraph", "GraphEditor", "Kismet",

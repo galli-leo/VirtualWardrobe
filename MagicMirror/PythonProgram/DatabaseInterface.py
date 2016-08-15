@@ -13,7 +13,6 @@ class Database(object):
         self.dbname = dbname
         if self.dbname is None:
             self.dbname = Vars.DBFILE
-        print(self.dbname)
         self.conn = sqlite3.connect(self.dbname)
         sqlite3.register_adapter(bool, int)
         sqlite3.register_converter("BOOLEAN", lambda v: bool(int(v)))
@@ -33,12 +32,30 @@ class Database(object):
     def select(self, table, fields=[], condition={}, raw_values=False):
         #TODO: add fields and conditions
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * from "+table+"")
+        statement = "SELECT * from " + table
+        if condition:
+            statement += " WHERE "
+            for key,value in condition.iteritems():
+                statement += (key + "=" + value + " ")
+        cursor.execute(statement)
         rows = cursor.fetchall()
         if raw_values:
             return rows
         if table in self.obj_map:
             return self.convertRowToObject(rows, self.obj_map[table])
+
+    def update(self, table, vals={}, condition={}):
+        cursor = self.conn.cursor()
+        statement = "UPDATE " + table + " SET "
+        for key, value in vals.iteritems():
+            statement += (key + "=" + value + " ")
+        if condition:
+            statement += " WHERE "
+            for key,value in condition.iteritems():
+                statement += (key + "=" + value + " ")
+        cursor.execute(statement)
+        self.conn.commit()
+        return "asdf"
 
     def createNewEntry(self, table, fields={}):
         cursor = self.conn.cursor()
@@ -49,9 +66,6 @@ class Database(object):
     def delete(self, table, id):
         cursor = self.conn.cursor()
         cursor.execute("DELETE from "+table+" WHERE id=?", id)
-
-    def update(self, table, values, conditions):
-        pass
 
     def insert(self, table, values={}):
         pass

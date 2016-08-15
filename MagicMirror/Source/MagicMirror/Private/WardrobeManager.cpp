@@ -6,6 +6,7 @@
 #include "KinectFunctionLibrary.h"
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapper.h"
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapperModule.h"
+#include "TextureCreator.h"
 #ifndef WINDOWS_PLATFORM_TYPES_GUARD
 #include "AllowWindowsPlatformTypes.h"
 #endif
@@ -14,9 +15,9 @@
 
 using namespace Magick;
 
-FString UWardrobeManager::texturePath = FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
+FString UWardrobeManager::texturePath = FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("textures"));// FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
 
-SQLite::Database UWardrobeManager::database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
+SQLite::Database UWardrobeManager::database(TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
 
 TArray<FCategory> UWardrobeManager::categories;
 
@@ -352,6 +353,11 @@ FClothingItem UWardrobeManager::FilterClothingItems(FCategory category)
 
 		if (items.Num() > 0)
 		{
+			if (index >= items.Num())
+			{
+				index = items.Num() - 1;
+			}
+
 			currentItemPos = index;
 			currentClothingItem = items[currentItemPos];
 			LoadTextureForItem(currentClothingItem);
@@ -377,7 +383,7 @@ FClothingItem UWardrobeManager::FilterClothingItems(FCategory category)
 
 UTexture2D* UWardrobeManager::LoadTextureForItem(FClothingItem &currentClothingItem)
 {
-	FString path = FString::Printf(TEXT("%s%s/%04d/final_texture.png"), *texturePath, *currentClothingItem.category.name, currentClothingItem.id);
+	FString path = FString::Printf(TEXT("%s/%s/%04d/final_texture.png"), *texturePath, *currentClothingItem.category.name, currentClothingItem.id);
 	UTexture2D *fText = LoadImageFromFile(path);
 	currentClothingItem.texture = fText;
 
@@ -686,16 +692,32 @@ void UWardrobeManager::ScanPrint(FClothingItem tshirt)
 
 void UWardrobeManager::ScanForPrint()
 {
-	ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("Get TShirt ready! Taking picture in: %f"), 5.0-timeSinceScanningForPrint));
-
-	if (5.0 - timeSinceScanningForPrint < 0)
+	if (timeToScanForPrint - timeSinceScanningForPrint >= 0)
 	{
+		ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("Get TShirt ready! Taking picture in: %f"), timeToScanForPrint - timeSinceScanningForPrint));
+	}
+
+	if (timeToScanForPrint - timeSinceScanningForPrint < 0)
+	{
+		ScanningStatusUpdate.Broadcast(FString("Print Scanned! Processing."));
 		int distanceSize = 556;
 		int start_x = (colorWidth - distanceSize) / 2;
 		int start_y = (colorHeight - distanceSize) / 2;
 		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, colorWidth, colorHeight, start_x, start_y, distanceSize, distanceSize);
 		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, distanceSize, distanceSize);
 		cutRectImage.write("print_testing.png");
+		/*if (FPrintTextureCreator::PrintCreator->IsThreadFinished() == true)
+		{
+			FTextureCreator::Shutdown();
+			FPrintTextureCreator::Shutdown();
+			FPrintTextureCreator::JoyInit(this, this->currentClothingItem.id);
+		}*/
+
+		addPrintToItemFromCWD(this->currentClothingItem.id);
+		FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, this->currentClothingItem.id);
+		UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
+		this->TshirtProcessed.Broadcast(finalTexture);
+
 		this->mode = EWardrobeMode::MM_None;
 	}
 }
@@ -713,7 +735,7 @@ void UWardrobeManager::ScanForTShirt()
 	}
 
 	FCategory filter = scanningCategory;
-	if (filter.id == -1)
+	if (filter.id < 1)
 	{
 		filter = this->GetCategory(1);
 	}
@@ -829,7 +851,7 @@ void UWardrobeManager::ScanForTShirt()
 				if (FTextureCreator::Runnable->IsThreadFinished())
 				{
 					FTextureCreator::Shutdown();
-					FTextureCreator::JoyInit(this);
+					FTextureCreator::JoyInit(this, scanningCategory);
 				}
 			}
 			delete[]cutRect;

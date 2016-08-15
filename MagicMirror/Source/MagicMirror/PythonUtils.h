@@ -96,6 +96,8 @@ FString* convertPyListToString(PyObject* list)
 
 int createNewItemWithTextures(char* backPath1, char* backPath2);
 
+void addPrintToItemFromCWD(uint32 id);
+
 /*void testing()
 {
 	Py_Initialize();

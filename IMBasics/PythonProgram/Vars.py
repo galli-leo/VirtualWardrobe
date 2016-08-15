@@ -11,5 +11,4 @@ def setRealPath(path):
     global REALPATH, DBFILE, TEXTURE_FOLDER
     REALPATH = path
     DBFILE = os.path.join(path, DBFILE)
-    print(path, DBFILE)
     TEXTURE_FOLDER = os.path.join(path, TEXTURE_FOLDER)
