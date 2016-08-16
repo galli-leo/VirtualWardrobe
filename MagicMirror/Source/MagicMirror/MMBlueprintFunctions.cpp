@@ -90,6 +90,12 @@ UWardrobeManager* UMMBlueprintFunctions::StartWardrobeManager(EWardrobeMode star
 	return wardrobeManager;
 }
 
+USkeletalMesh* UMMBlueprintFunctions::GetMeshForName(FString name)
+{
+	USkeletalMesh* mesh = LoadObject<USkeletalMesh>(NULL, *FString::Printf(TEXT("/Game/Clothes/%s.%s"), *name, *name), NULL, LOAD_None, NULL);
+	return mesh;
+}
+
 /*
 void UMMBlueprintFunctions::TickWardrobeManager(float deltaTime)
 {

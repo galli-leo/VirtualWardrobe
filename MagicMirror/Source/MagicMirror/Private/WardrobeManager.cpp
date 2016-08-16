@@ -301,6 +301,10 @@ FClothingItem UWardrobeManager::FilterClothingItems(FCategory category)
 	try
 	{
 
+		FClothingItem first = FClothingItem();
+		first.id = -2;
+		first.category = category;
+
 		this->items.Empty();
 
 		currentFilter = category;
@@ -309,6 +313,7 @@ FClothingItem UWardrobeManager::FilterClothingItems(FCategory category)
 		{
 			int id = currentClothingItem.id;
 			this->GetClothesFromDB();
+			items.Insert(first, 0);
 			int index = 0;
 
 			for (FClothingItem item : items)
@@ -333,7 +338,7 @@ FClothingItem UWardrobeManager::FilterClothingItems(FCategory category)
 		SQLite::Statement cQuery(database, "SELECT id as id, category as category FROM clothes WHERE category = ?");
 
 		cQuery.bind(1, category.id);
-
+		items.Insert(first, 0);
 		while (cQuery.executeStep())
 		{
 			FClothingItem item(&cQuery);

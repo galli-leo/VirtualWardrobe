@@ -68,6 +68,22 @@ def createNewItemWithTexturesFromCWD():
     Vars.DB = tempDB
     return clothing.id
 
+def newWithTexturesFromCWD(cat):
+    #Hack so this function can be called from any thread
+    tempDB = Vars.DB
+    Vars.DB = DatabaseInterface.Database()
+    clothing = ClothingItem(category = cat)
+    LOG.debug("Created new clothing item: {0}".format(clothing.id))
+    img1 = Image.open("back1.png")
+    img2 = Image.open("back2.png")
+    LOG.debug("Opened images.")
+    clothing.addImage(img1, "back1")
+    clothing.addImage(img2, "back2")
+    LOG.debug("Added images.")
+    clothing.createFinalTexture()
+    Vars.DB = tempDB
+    return clothing.id
+
 def addPrintToItemFromCWD(id):
     #Hack so this function can be called from any thread
     tempDB = Vars.DB
@@ -109,4 +125,5 @@ if __name__ == "__main__":
     #createNewItemWithTextures("back1.png", "back2.png")
     initWithPath(".")
     #addPrintToItemFromCWD(145)
-    recreateTextureForID(152)
+    #recreateTextureForID(152)
+    newWithTexturesFromCWD(6)

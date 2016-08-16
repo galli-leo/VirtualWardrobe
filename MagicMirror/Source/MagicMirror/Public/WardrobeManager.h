@@ -18,7 +18,7 @@
 #include "PythonUtils.h"
 #include "Tickable.h"
 
-#include "WardrobeStructs.h"
+//#include "WardrobeStructs.h"
 #include "WardrobeManager.generated.h"
 
 

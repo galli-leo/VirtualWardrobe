@@ -22,6 +22,9 @@ public:
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 		static UWardrobeManager* StartWardrobeManager(EWardrobeMode startingMode, FString dbFile);
 
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
+			static USkeletalMesh* GetMeshForName(FString name);
+
 		/*UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 		static void TickWardrobeManager(float deltaTime);*/
 

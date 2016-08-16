@@ -198,6 +198,70 @@ int createNewItemWithTextures(char* backPath1, char* backPath2)
 }
 
 
+int newItemWithTexturesFromCWD(uint32 id)
+{
+	PyObject* ret, *module, *dict, *func;
+
+	//PyRun_SimpleString((const char*)"import CInterface; CInterface.createNewItemWithTextures('E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back1.png', 'E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back2.png')");
+
+	module = cInterfaceModule;
+	if (module == NULL)
+	{
+		return -1;
+	}
+
+	dict = PyModule_GetDict(module);
+
+	func = PyDict_GetItemString(dict, (const char*)"newWithTexturesFromCWD");
+
+
+	if (func == NULL)
+	{
+		return -1;
+	}
+
+	Py_INCREF(func);
+
+	ret = PyObject_CallFunction(func, (char*)"i", id);
+
+	//PyObject* ret = Py_CompileString("CInterface.createNewItemWithTexturesFromCWD();", "", Py_file_input);
+	ErrorPrint();
+
+	if (ret == NULL)
+	{
+		Py_DECREF(func);
+		return -1;
+	}
+
+	if (PyNumber_Check(ret))
+	{
+		int num = PyNumber_AsSsize_t(ret, nullptr);
+		Py_DECREF(ret);
+		Py_DECREF(func);
+		//Py_DECREF(args);
+		//Py_DECREF(args);
+		//Py_DECREF(func);
+		//Py_DECREF(module);
+		//Py_DECREF(dict);
+
+		return num;
+	}
+	else if (PyString_Check(ret))
+	{
+		printw("Trallalal: %s", *SFC(PyString_AsString(ret)));
+		Py_DECREF(ret);
+		Py_DECREF(func);
+		return -1;
+	}
+	else
+	{
+		ErrorPrint();
+	}
+
+	return -1;
+}
+
+
 void addPrintToItemFromCWD(uint32 id)
 {
 	PyObject* ret, *module, *dict, *func;

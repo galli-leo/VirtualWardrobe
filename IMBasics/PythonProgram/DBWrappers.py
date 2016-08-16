@@ -50,16 +50,16 @@ class Category(object):
 
 class ClothingItem(object):
     """docstring for ClothingItem"""
-    def __init__(self, createNewID = True):
+    def __init__(self, createNewID = True, category = 1):
         super(ClothingItem, self).__init__()
         if createNewID:
-            self.id = Vars.DB.createNewEntry("clothes", fields={"category":"1", "finaltexture":"NULL", "printedtexture":"0"})
-        self.category = Vars.CATEGORIES[1]
+            self.id = Vars.DB.createNewEntry("clothes", fields={"category":str(category), "finaltexture":"NULL", "printedtexture":"0"})
+        self.category = getCat(category)
         self.frontimage = False
         self.finaltexture = ""
         self.printedtexture = False
         self.texture_creators = {"tshirt" : NoiseCreator, "uncategorized" : NoiseCreator}
-        self.diffuse_textures = {"tshirt" : "tshirt_diffuse.png"}
+        self.diffuse_textures = {"tshirt" : "tshirt_diffuse.png", "hoodie" : "hoodie_diffuse.png"}
 
 
     @classmethod
@@ -110,7 +110,7 @@ class ClothingItem(object):
         self.addImage(image, name="front")
 
     def createFinalTexture(self):
-        creator_cls = self.texture_creators[self.category.name]
+        creator_cls = self.texture_creators["tshirt"]
         self.loadTextures()
         printed_texture = None
         if self.printedtexture:
@@ -166,6 +166,11 @@ def createNewClothingItem():
         img = Image.open(text)
         clothing.addImage(img, "back{0}".format(count))
         count += 1
+
+def getCat(id):
+    for cat in Vars.CATEGORIES:
+        if cat.id == id:
+            return cat
 
 def loadClothes():
     DB = DatabaseInterface.Database()
