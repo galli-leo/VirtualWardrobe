@@ -59,7 +59,7 @@ class ClothingItem(object):
         self.finaltexture = ""
         self.printedtexture = False
         self.texture_creators = {"tshirt" : NoiseCreator, "uncategorized" : NoiseCreator}
-        self.diffuse_textures = {"tshirt" : "tshirt_diffuse.png", "hoodie" : "hoodie_diffuse.png"}
+        self.diffuse_textures = {"tshirt" : "tshirt_diffuse.png", "hoodie" : "hoodie_diffuse.png", "jeans" : "jeans_diffuse.png", "shorts" : "shorts_diffuse.png"}
 
 
     @classmethod
@@ -70,7 +70,8 @@ class ClothingItem(object):
         if row["category"] == None:
             new.category = Vars.CATEGORIES[0]
         else:
-            new.category = Vars.CATEGORIES[row["category"]]
+            new.category = Vars.getCat(row["category"])
+            #new.category = Vars.CATEGORIES[row["category"]]
         new.finaltexture = row["finaltexture"]
         new.frontimage = bool(int(row["frontimage"]))
         new.printedtexture = bool(int(row["printedtexture"]))

@@ -96,6 +96,11 @@ USkeletalMesh* UMMBlueprintFunctions::GetMeshForName(FString name)
 	return mesh;
 }
 
+void UMMBlueprintFunctions::DisplayMessage(FText message, FText title)
+{
+	FMessageDialog::Open(EAppMsgType::Ok, message, &title);
+}
+
 /*
 void UMMBlueprintFunctions::TickWardrobeManager(float deltaTime)
 {

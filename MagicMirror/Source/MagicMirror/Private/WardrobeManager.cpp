@@ -281,22 +281,20 @@ FClothingItem UWardrobeManager::RefreshClothingItems()
 {
 	int numItems = items.Num();
 
-	FClothingItem item = this->FilterClothingItems(currentFilter);
+	FClothingItem item = this->FilterClothingItems(scanningCategory, currentClothingItem);
 
-	if (numItems > items.Num())
-	{
-		currentItemPos = items.Num() - 1;
-		item = this->items[currentItemPos];
-		LoadTextureForItem(item);
-		this->currentClothingItem = item;
-	}
+	currentItemPos = items.Num() - 1;
+	item = this->items[currentItemPos];
+	LoadTextureForItem(item);
+	this->currentClothingItem = item;
+
 
 	return item;
 }
 
 //Category.id = -1 -> All clothes
 
-FClothingItem UWardrobeManager::FilterClothingItems(FCategory category)
+FClothingItem UWardrobeManager::FilterClothingItems(FCategory category, FClothingItem recommendedItem)
 {
 	try
 	{
@@ -349,7 +347,7 @@ FClothingItem UWardrobeManager::FilterClothingItems(FCategory category)
 
 		for (FClothingItem item : items)
 		{
-			if (item.id >= currentClothingItem.id)
+			if (item.id >= recommendedItem.id)
 			{
 				break;
 			}
@@ -758,6 +756,10 @@ void UWardrobeManager::ScanForTShirt()
 	if (SUCCEEDED(hr))
 	{
 		int distanceSize = 556;
+		if (scanningCategory.isTrousers)
+		{
+			distanceSize = 278;
+		}
 		int start_x = (colorWidth - distanceSize) / 2;
 		int start_y = (colorHeight - distanceSize) / 2;
 		long averageValue = GetAverageDistanceForRect(pBuffer, colorWidth, colorHeight, m_pDepthCoordinates, pDepthBuffer, depthWidth, depthHeight, start_x, start_y, distanceSize, distanceSize);
@@ -784,6 +786,10 @@ void UWardrobeManager::ScanForTShirt()
 		}
 
 		int size = 512;
+		if (scanningCategory.isTrousers)
+		{
+			size = 256;
+		}
 		//Use old start_x and y. start_x and y are relative to the full color image (1920x1080).
 		//Therefore they need to be converted.
 		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, colorWidth, colorHeight, start_x, start_y, distanceSize, distanceSize);
@@ -848,6 +854,7 @@ void UWardrobeManager::ScanForTShirt()
 				//TODO: Communicate with Python CInterface!
 				//SetStatusMessage(L"Scanned TShirt! Prepare the next one!", 2000, true);
 				TshirtScanned.Broadcast();
+				ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("%s scanned! Processing."), *filter.fullname));
 				/*int newItemID = createNewItemWithTextures("back1.png", "back2.png");
 				//LOG(INFO) << "Created new Clothing Item with ID: " << newItemID;
 				FString finalTexturePath = FString::Printf(TEXT("%stshirt/%04d/final_texture.png"), *texturePath, newItemID);

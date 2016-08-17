@@ -282,6 +282,8 @@ class CircleCreator(TextureCreator):
         self.texture = Image.new("RGBA", self.size)
         s_w, s_h = s_image.size
         orig_mask = Image.open(os.path.join(Vars.REALPATH, "mask.png")).convert("L")
+        if orig_mask.size != s_image.size:
+            orig_mask = orig_mask.resize(s_image.size, Image.ANTIALIAS)
         #self.save(orig_mask)
         tile = Image.new("RGBA", s_image.size)
         tile.paste(s_image, (0,0), orig_mask)

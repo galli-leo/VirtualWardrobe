@@ -7,6 +7,12 @@ DBFILE = "shirt_db.db"
 REALPATH = ""
 DB = None
 
+def getCat(id):
+    global CATEGORIES
+    for cat in CATEGORIES:
+        if cat.id == id:
+            return cat
+
 def setRealPath(path):
     global REALPATH, DBFILE, TEXTURE_FOLDER
     REALPATH = path

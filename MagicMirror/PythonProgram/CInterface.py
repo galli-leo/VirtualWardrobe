@@ -125,5 +125,5 @@ if __name__ == "__main__":
     #createNewItemWithTextures("back1.png", "back2.png")
     initWithPath(".")
     #addPrintToItemFromCWD(145)
-    #recreateTextureForID(152)
-    newWithTexturesFromCWD(6)
+    recreateTextureForID(164)
+    #newWithTexturesFromCWD(6)

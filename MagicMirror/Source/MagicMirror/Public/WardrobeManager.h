@@ -172,7 +172,7 @@ public:
 			FClothingItem RefreshClothingItems();
 
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
-			FClothingItem FilterClothingItems(FCategory category);
+			FClothingItem FilterClothingItems(FCategory category, FClothingItem recommendedItem);
 
 		UPROPERTY(BlueprintReadOnly, Category = "Wardrobe")
 			FClothingItem currentClothingItem;

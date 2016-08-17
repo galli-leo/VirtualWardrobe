@@ -25,6 +25,9 @@ public:
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 			static USkeletalMesh* GetMeshForName(FString name);
 
+		UFUNCTION(BlueprintCallable, Category = "UI")
+			static void DisplayMessage(FText message, FText title);
+
 		/*UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 		static void TickWardrobeManager(float deltaTime);*/
 
