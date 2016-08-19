@@ -50,7 +50,7 @@ UTexture2D* UMMBlueprintFunctions::CreateSquare(UTexture2D* texture, int32 thick
 	}
 
 	rawImageData->Unlock();
-	texture->UpdateResourceW();
+	texture->UpdateResource();
 	return texture;
 }
 
@@ -78,7 +78,7 @@ void UMMBlueprintFunctions::CropTexture(UTexture2D* texture, FVector2D topLeft, 
 	}
 
 	rawImageData->Unlock();
-	texture->UpdateResourceW();
+	texture->UpdateResource();
 	return;
 }
 

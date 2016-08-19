@@ -10,7 +10,7 @@
 #if WITH_EDITOR
 /* Get Screen Percentage */
 static const auto CVarScreenPercentage = IConsoleManager::Get().FindTConsoleVariableDataFloat(TEXT("r.SCreenPercentage"));
-#endif WITH_EDITOR
+#endif
 
 FVector2D AMMPlayerController::GetObjectScreenSize(AActor* InActor)
 {
@@ -22,7 +22,7 @@ FVector2D AMMPlayerController::GetObjectScreenSize(AActor* InActor)
 	 //TODO: Replace With Function that returns camera FOV
 #if WITH_EDITOR
 	float ScreenPerc = CVarScreenPercentage->GetValueOnGameThread() / 100.0f;
-#endif WITH_EDITOR
+#endif
 
 	/* Get the size of the viewport, and the player cameras location. */
 	GetViewportSize(Width, Height);
@@ -34,7 +34,7 @@ FVector2D AMMPlayerController::GetObjectScreenSize(AActor* InActor)
 	/* Factor in Screen Percentage & Quality Settings */
 	Width *= ScreenPerc;
 	Height *= ScreenPerc;
-#endif WITH_EDITOR
+#endif
 
 	/* Easy Way To Return The Size, Create a vector and scale it. Alternative would be to use FMath::Max3 */
 	float SRad = FVector2D(Width, Height).Size();

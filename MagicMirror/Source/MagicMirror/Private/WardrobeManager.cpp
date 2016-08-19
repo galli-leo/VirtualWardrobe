@@ -18,7 +18,14 @@
 
 #if PLATFORM_WINDOWS
 using namespace Magick;
+#else
+FString SFC(const char* arr)
+{
+    return FString(ANSI_TO_TCHAR(arr));
+}
 #endif
+
+
 
 FString UWardrobeManager::texturePath = FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("textures"));// FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
 
@@ -397,10 +404,12 @@ UTexture2D* UWardrobeManager::LoadTextureForItem(FClothingItem &currentClothingI
 	return fText;
 }
 
+#if PLATFORM_WINDOWS
 void UWardrobeManager::InitSensor()
 {
 	
 }
+#endif
 
 
 void UWardrobeManager::OnNewRawColorFrameReceived()
@@ -867,12 +876,13 @@ void UWardrobeManager::ScanForTShirt()
 		}
 	}
 }
-#endif
+
 
 bool UWardrobeManager::UpdateFrames(){
 
 	return false;
 }
+#endif
 
 
 
