@@ -1,3 +1,4 @@
+#if PLATFORM_WINDOWS
 #include "MagicMirror.h"
 #include "PythonUtils.h"
 
@@ -495,3 +496,5 @@ int ConvertCoordFromBiggerRect(int biggerSize, int smallerSize, int coord)
 {
 	return coord - (biggerSize - smallerSize) / 2;
 }
+
+#endif

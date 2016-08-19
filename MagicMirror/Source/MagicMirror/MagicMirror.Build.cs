@@ -14,22 +14,51 @@ public class MagicMirror : ModuleRules
     {
         get { return Path.GetFullPath(Path.Combine(ModulePath, "../../ThirdParty/")); }
     }
+
+    private bool IsWindows(TargetInfo Target)
+    {
+        return ((Target.Platform == UnrealTargetPlatform.Win64) || (Target.Platform == UnrealTargetPlatform.Win32));
+    }
  
 
 	public MagicMirror(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "K4WLib", "KinectV2" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
         PrivateDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-        PublicIncludePaths.AddRange(new string[] { "KinectV2/Public", "KinectV2/Classes" });
+       
         UEBuildConfiguration.bForceEnableExceptions = true;
 
-        PublicAdditionalLibraries.Add("E:/Unreal Projects/IntelligentMirror/MagicMirror/sqlite3.lib");
-        PublicAdditionalLibraries.Add("E:/Unreal Projects/IntelligentMirror/MagicMirror/SQLiteCpp.lib");
-        PublicIncludePaths.Add("E:/Unreal Projects/IntelligentMirror/MagicMirror/include/");
+        LoadSqlite(Target);
 
-        LoadPython(Target);
-        LoadMagick(Target);
+        if(IsWindows(Target))
+        {
+            PublicDependencyModuleNames.AddRange(new string[] { "K4WLib", "KinectV2" });
+            PublicIncludePaths.AddRange(new string[] { "KinectV2/Public", "KinectV2/Classes" });
+            LoadPython(Target);
+            LoadMagick(Target);
+        }
+
+        
 	}
+
+    public bool LoadSqlite(TargetInfo Target)
+    {
+        string Platform = "Win";
+        if (Target.Platform == UnrealTargetPlatform.Mac)
+        {
+            Platform = "macOS";
+        }
+        if (Target.Platform == UnrealTargetPlatform.IOS)
+        {
+            Platform = "iOS";
+        }
+        string sqlitePath = Path.Combine(ThirdPartyPath, "sqlite");
+        PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "sqlite3.lib"));
+        PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "SQLiteCpp.lib"));
+        PublicIncludePaths.Add(Path.Combine(sqlitePath, "include"));
+
+        return true;
+    }
 
     public bool LoadPython(TargetInfo Target)
     {

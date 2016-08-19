@@ -2,18 +2,23 @@
 
 #include "MagicMirror.h"
 #include "WardrobeManager.h"
-
+#if PLATFORM_WINDOWS
 #include "KinectFunctionLibrary.h"
+#endif
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapper.h"
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapperModule.h"
 #include "TextureCreator.h"
+
+#if PLATFORM_WINDOWS
 #ifndef WINDOWS_PLATFORM_TYPES_GUARD
 #include "AllowWindowsPlatformTypes.h"
 #endif
+#endif
 
 
-
+#if PLATFORM_WINDOWS
 using namespace Magick;
+#endif
 
 FString UWardrobeManager::texturePath = FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("textures"));// FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
 
@@ -41,16 +46,6 @@ FClothingItem::FClothingItem(SQLite::Statement *query){
 	}
 }
 
-// Safe release for interfaces
-template<class Interface>
-inline void SafeRelease(Interface *& pInterfaceToRelease)
-{
-	if (pInterfaceToRelease != NULL)
-	{
-		pInterfaceToRelease->Release();
-		pInterfaceToRelease = NULL;
-	}
-}
 
 void UWardrobeManager::Tick(float deltaTime)
 {
@@ -77,7 +72,7 @@ void UWardrobeManager::Tick(float deltaTime)
 		break;
 	case EWardrobeMode::MM_Scanning:
 		
-
+#if PLATFORM_WINDOWS
 		if (this->lastAction == -1 || secondsDiff > this->scanInterval)
 		{
 			
@@ -94,16 +89,18 @@ void UWardrobeManager::Tick(float deltaTime)
 			}
 
 		}
+#endif
 
 		break;
 
 	case EWardrobeMode::MM_ScanningForPrint:
+#if PLATFORM_WINDOWS
 		if (secondsDiff > this->scanInterval)
 		{
 			this->timeSinceScanningForPrint += deltaTime;
 			this->ScanForPrint();
 		}
-
+#endif
 		break;
 
 
@@ -120,8 +117,9 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	this->databaseFile = databaseFile;
 
 	//HARDCODED!!
+#if PLATFORM_WINDOWS
 	InitializeMagick("C:\\Program Files\\ImageMagick-7.0.2-Q16");
-
+#endif
 	//UWardrobeManager::database = SQLite::Database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
 
 	try
@@ -144,21 +142,25 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 
 	this->scanningCategory = GetCategory(1);
 
+#if PLATFORM_WINDOWS
 	pBuffer = new RGBQUAD[colorWidth * colorHeight];
 	pDepthBuffer = new uint16[depthWidth * depthHeight];
-	colorFrame = UTexture2D::CreateTransient(colorWidth, colorHeight);
 	m_pDepthCoordinates = new DepthSpacePoint[colorWidth * colorHeight];
-
+#endif
+	colorFrame = UTexture2D::CreateTransient(colorWidth, colorHeight);
 	printd("Starting Wardrobe Manager");
 
 	FString GameDir = FPaths::ConvertRelativePathToFull(FPaths::GameDir());
 
+#if PLATFORM_WINDOWS
 	InitPython(GameDir);
 
 	//UKinectFunctionLibrary::newRawColorFrame.Broadcast();
 	UKinectFunctionLibrary::newRawColorFrame.AddUObject(this, &UWardrobeManager::OnNewRawColorFrameReceived);
 
 	UKinectFunctionLibrary::newRawDepthFrame.AddUObject(this, &UWardrobeManager::OnNewRawDepthFrameReceived);
+
+#endif
 	//UKinectFunctionLibrary::newRawColorFrame.
 	//UKinectFunctionLibrary::newRawColorFrame.BindRaw();
 	//InitSensor();
@@ -190,18 +192,6 @@ void UWardrobeManager::GetClothesFromDB()
 	}
 }
 
-uint8 UWardrobeManager::TestPython()
-{
-	//uint8 result = createNewItemWithTextures((const char*)"E:/Unreal Projects/IntelligentMirror/IMBasics/back1.png", (const char*)"E:/Unreal Projects/IntelligentMirror/IMBasics/back2.png");
-	//return result;
-	return -1;
-}
-
-FString UWardrobeManager::GetCurrentPathAsSeenByPython()
-{
-	//return getCurrentPath();
-	return FString("I dont even know.");
-}
 
 TArray<FCategory> UWardrobeManager::GetCategories()
 {
@@ -395,44 +385,26 @@ UTexture2D* UWardrobeManager::LoadTextureForItem(FClothingItem &currentClothingI
 
 void UWardrobeManager::InitSensor()
 {
-	HRESULT hr;
-
-	hr = GetDefaultKinectSensor(&m_pKinectSensor);
-
-	if (m_pKinectSensor)
-	{
-		// Initialize the Kinect and get the color reader
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pKinectSensor->get_CoordinateMapper(&m_pCoordinateMapper);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pKinectSensor->Open();
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pKinectSensor->OpenMultiSourceFrameReader(
-				FrameSourceTypes::FrameSourceTypes_Depth | FrameSourceTypes::FrameSourceTypes_Color | FrameSourceTypes::FrameSourceTypes_BodyIndex,
-				&m_pMultiSourceFrameReader);
-		}
-	}
+	
 }
 
 
 void UWardrobeManager::OnNewRawColorFrameReceived()
 {
+#if PLATFORM_WINDOWS
 	this->pBuffer = UKinectFunctionLibrary::pBuffer;
 	this->m_pCoordinateMapper = UKinectFunctionLibrary::coordinateMapper;
+#endif
 }
 
 void UWardrobeManager::OnNewRawDepthFrameReceived()
 {
+#if PLATFORM_WINDOWS
 	this->pDepthBuffer = UKinectFunctionLibrary::pDepthBuffer;
+#endif
 }
 
+#if PLATFORM_WINDOWS
 long UWardrobeManager::GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight, DepthSpacePoint* pDepthPoints, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight, int start_x, int start_y, int width, int height)
 {
 	long sum = 0;
@@ -468,6 +440,7 @@ long UWardrobeManager::GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nCol
 	}
 	return float(sum) / (width*height);
 }
+#endif
 
 UWardrobeManager::~UWardrobeManager()
 {
@@ -480,7 +453,7 @@ UWardrobeManager::~UWardrobeManager()
 	{
 		//delete[] pDepthBuffer;
 	}*/
-
+#if PLATFORM_WINDOWS
 	if (m_pDepthCoordinates != NULL)
 	{
 		delete[] m_pDepthCoordinates;
@@ -497,11 +470,12 @@ UWardrobeManager::~UWardrobeManager()
 	}*/
 	
 //	Py_DECREF(path);
-//	Py_DECREF(sysPath);
 
 	Py_Finalize();
+#endif
 }
 
+#if PLATFORM_WINDOWS
 Image UWardrobeManager::CreateMagickImageFromBuffer(RGBQUAD* pBuffer, int width, int height)
 {
 	double startTime = FPlatformTime::Seconds();
@@ -653,6 +627,7 @@ bool UWardrobeManager::HasFlatSurface(Image edgeImage, int start_x, int start_y,
 
 	return false;
 }
+#endif
 
 UTexture2D* UWardrobeManager::LoadImageFromFile(FString file)
 {
@@ -688,11 +663,14 @@ UTexture2D* UWardrobeManager::LoadImageFromFile(FString file)
 
 void UWardrobeManager::ScanPrint(FClothingItem tshirt)
 {
+#if PLATFORM_WINDOWS
 	this->mode = EWardrobeMode::MM_ScanningForPrint;
 	this->currentPrintScan = tshirt;
 	this->timeSinceScanningForPrint = 0;
+#endif
 }
 
+#if PLATFORM_WINDOWS
 void UWardrobeManager::ScanForPrint()
 {
 	if (timeToScanForPrint - timeSinceScanningForPrint >= 0)
@@ -875,202 +853,9 @@ void UWardrobeManager::ScanForTShirt()
 		}
 	}
 }
+#endif
 
 bool UWardrobeManager::UpdateFrames(){
-	if (!m_pMultiSourceFrameReader)
-	{
-		return false;
-	}
-
-	IMultiSourceFrame* pMultiSourceFrame = NULL;
-	IColorFrame* pColorFrame = NULL;
-	IDepthFrame* pDepthFrame = NULL;
-	IBodyIndexFrame* pBodyIndexFrame = NULL;
-
-	HRESULT hr = m_pMultiSourceFrameReader->AcquireLatestFrame(&pMultiSourceFrame);
-
-	while (hr == E_PENDING)
-	{
-		hr = m_pMultiSourceFrameReader->AcquireLatestFrame(&pMultiSourceFrame);
-	}
-
-	if (SUCCEEDED(hr))
-	{
-		IDepthFrameReference* pDepthFrameReference = NULL;
-
-		hr = pMultiSourceFrame->get_DepthFrameReference(&pDepthFrameReference);
-		if (SUCCEEDED(hr))
-		{
-			hr = pDepthFrameReference->AcquireFrame(&pDepthFrame);
-		}
-
-		SafeRelease(pDepthFrameReference);
-	}
-
-	if (SUCCEEDED(hr))
-	{
-		IColorFrameReference* pColorFrameReference = NULL;
-
-		hr = pMultiSourceFrame->get_ColorFrameReference(&pColorFrameReference);
-		if (SUCCEEDED(hr))
-		{
-			hr = pColorFrameReference->AcquireFrame(&pColorFrame);
-		}
-
-		SafeRelease(pColorFrameReference);
-	}
-
-	if (SUCCEEDED(hr))
-	{
-		IBodyIndexFrameReference* pBodyIndexFrameReference = NULL;
-
-		hr = pMultiSourceFrame->get_BodyIndexFrameReference(&pBodyIndexFrameReference);
-		if (SUCCEEDED(hr))
-		{
-			hr = pBodyIndexFrameReference->AcquireFrame(&pBodyIndexFrame);
-		}
-
-		SafeRelease(pBodyIndexFrameReference);
-	}
-
-	if (SUCCEEDED(hr))
-	{
-		INT64 nDepthTime = 0;
-		IFrameDescription* pDepthFrameDescription = NULL;
-		int nDepthWidth = 0;
-		int nDepthHeight = 0;
-		UINT nDepthBufferSize = 0;
-
-		IFrameDescription* pColorFrameDescription = NULL;
-		int nColorWidth = 0;
-		int nColorHeight = 0;
-		ColorImageFormat imageFormat = ColorImageFormat_None;
-		UINT nColorBufferSize = 0;
-
-		IFrameDescription* pBodyIndexFrameDescription = NULL;
-		int nBodyIndexWidth = 0;
-		int nBodyIndexHeight = 0;
-		UINT nBodyIndexBufferSize = 0;
-		BYTE *pBodyIndexBuffer = NULL;
-
-		// get depth frame data
-
-		hr = pDepthFrame->get_RelativeTime(&nDepthTime);
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pDepthFrame->get_FrameDescription(&pDepthFrameDescription);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pDepthFrameDescription->get_Width(&nDepthWidth);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pDepthFrameDescription->get_Height(&nDepthHeight);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pDepthFrame->AccessUnderlyingBuffer(&nDepthBufferSize, &pDepthBuffer);
-		}
-
-		//get color frame data
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pColorFrame->get_FrameDescription(&pColorFrameDescription);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pColorFrameDescription->get_Width(&nColorWidth);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pColorFrameDescription->get_Height(&nColorHeight);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pColorFrame->get_RawColorImageFormat(&imageFormat);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			/*if (imageFormat == ColorImageFormat_Bgra)
-			{
-				hr = pColorFrame->AccessRawUnderlyingBuffer(&nColorBufferSize, reinterpret_cast<BYTE**>(&pBuffer));
-				
-			}
-			else*/ if (pBuffer)
-			{
-				RGBQUAD* pColorBuffer = pBuffer;
-				nColorBufferSize = colorWidth * colorHeight * sizeof(RGBQUAD);
-				hr = pColorFrame->CopyConvertedFrameDataToArray(nColorBufferSize, reinterpret_cast<BYTE*>(pBuffer), ColorImageFormat_Bgra);
-				UTexture2D* Texture = colorFrame;
-
-				const size_t Size = colorWidth * colorHeight* sizeof(RGBQUAD);
-
-				uint8* Src = (uint8*)pBuffer;
-
-				uint8* Dest = (uint8*)Texture->PlatformData->Mips[0].BulkData.Lock(LOCK_READ_WRITE);
-
-				FMemory::Memcpy(Dest, Src, Size);
-
-				Texture->PlatformData->Mips[0].BulkData.Unlock();
-
-				Texture->UpdateResource();
-
-				//newColorFrame.Broadcast(colorFrame);
-			}
-			else
-			{
-				hr = E_FAIL;
-			}
-		}
-
-		// get body index frame data
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pBodyIndexFrame->get_FrameDescription(&pBodyIndexFrameDescription);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pBodyIndexFrameDescription->get_Width(&nBodyIndexWidth);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pBodyIndexFrameDescription->get_Height(&nBodyIndexHeight);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			hr = pBodyIndexFrame->AccessUnderlyingBuffer(&nBodyIndexBufferSize, &pBodyIndexBuffer);
-		}
-
-		if (SUCCEEDED(hr))
-		{
-			return true;/*ProcessFrame(nDepthTime, pDepthBuffer, nDepthWidth, nDepthHeight,
-				pColorBuffer, nColorWidth, nColorHeight,
-				pBodyIndexBuffer, nBodyIndexWidth, nBodyIndexHeight);*/
-		}
-
-		SafeRelease(pDepthFrameDescription);
-		SafeRelease(pColorFrameDescription);
-		SafeRelease(pBodyIndexFrameDescription);
-	}
-
-	SafeRelease(pDepthFrame);
-	SafeRelease(pColorFrame);
-	SafeRelease(pBodyIndexFrame);
-	SafeRelease(pMultiSourceFrame);
 
 	return false;
 }

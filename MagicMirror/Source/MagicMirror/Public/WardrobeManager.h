@@ -4,18 +4,32 @@
 
 #include "Object.h"
 
+#if PLATFORM_WINDOWS
 #ifndef WINDOWS_PLATFORM_TYPES_GUARD
 #include "AllowWindowsPlatformTypes.h"
 #endif
 #include "Kinect.h"
-#include <SQLiteCpp/SQLiteCpp.h>
-#include <SQLiteCpp/VariadicBind.h>
+
 #include "HideWindowsPlatformTypes.h"
 
 #include <Magick++.h>
+#endif
+
+#if PLATFORM_WINDOWS
+#ifndef WINDOWS_PLATFORM_TYPES_GUARD
+#include "AllowWindowsPlatformTypes.h"
+#endif
+#endif
+#include <SQLiteCpp/SQLiteCpp.h>
+#include <SQLiteCpp/VariadicBind.h>
+#if PLATFORM_WINDOWS
+#include "HideWindowsPlatformTypes.h"
+#endif
 
 #include "PrintTextureAdder.h"
+#if PLATFORM_WINDOWS
 #include "PythonUtils.h"
+#endif
 #include "Tickable.h"
 
 //#include "WardrobeStructs.h"
@@ -131,13 +145,6 @@ public:
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 			void ScanPrint(FClothingItem tshirt);
 
-
-		UFUNCTION(BlueprintCallable, Category = "Test")
-		uint8 TestPython();
-
-		UFUNCTION(BlueprintCallable, Category = "Python")
-			FString GetCurrentPathAsSeenByPython();
-
 		UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
 		FTshirtProcessedDelegate TshirtProcessed;
 
@@ -200,9 +207,12 @@ private:
 
 	float currentTime = 0;
 
+#if PLATFORM_WINDOWS
 	RGBQUAD* pBuffer;
 	uint16* pDepthBuffer;
 	DepthSpacePoint* m_pDepthCoordinates;
+	ICoordinateMapper* m_pCoordinateMapper;
+#endif
 
 	static const uint32 colorWidth = 1920;
 	static const uint32 colorHeight = 1080;
@@ -212,7 +222,7 @@ private:
 
 
 	UTexture2D* LoadImageFromFile(FString file);
-
+#if PLATFORM_WINDOWS
 	long GetAverageDistanceForRect(RGBQUAD* pColorBuffer, int nColorWidth, int nColorHeight, DepthSpacePoint* pDepthPoints, UINT16* pDepthBuffer, int nDepthWidth, int nDepthHeight, int start_x, int start_y, int width, int height);
 	void ScanForTShirt();
 	void ScanForPrint();
@@ -221,6 +231,7 @@ private:
 	bool UpdateFrames();
 	RGBQUAD* CutRectFromBuffer(RGBQUAD* pBuffer, int colorWidth, int colorHeight, int start_x, int start_y, int width, int height);
 	void InitSensor();
+#endif
 
 	FClothingItem currentPrintScan;
 	float timeSinceScanningForPrint = -1;
@@ -236,15 +247,6 @@ private:
 	UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
 	FTshirtScannedDelegate TshirtScanned;
 
-	
-
-	/*UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
-	FNewKinectColorFrameEvent newColorFrame;*/
-
-	IKinectSensor* m_pKinectSensor;
-	ICoordinateMapper* m_pCoordinateMapper;
-	// Frame reader
-	IMultiSourceFrameReader*m_pMultiSourceFrameReader;
 	
 	UFUNCTION()
 	void OnNewRawColorFrameReceived();

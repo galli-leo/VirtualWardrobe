@@ -1,4 +1,4 @@
-
+#if PLATFORM_WINDOWS
 #pragma once
 #ifndef PYTHONUTILS_H
 #define PYTHONUTILS_H
@@ -158,5 +158,7 @@ void InitPython(FString currentPath);
 
 HRESULT SaveBitmapToFile(BYTE* pBitmapBits, LONG lWidth, LONG lHeight, WORD wBitsPerPixel, LPCWSTR lpszFilePath);
 int ConvertCoordFromBiggerRect(int biggerSize, int smallerSize, int coord);
+
+#endif
 
 #endif

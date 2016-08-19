@@ -40,7 +40,11 @@ uint32 FTextureCreator::Run()
 
 	//While not told to stop this thread 
 	//		and not yet finished finding Prime Numbers
+#if PLATFORM_WINDOWS
 	int id = newItemWithTexturesFromCWD(category.id);
+#else
+	int id = 0;
+#endif
 	FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, id);
 	UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
 	manager->TshirtProcessed.Broadcast(finalTexture);

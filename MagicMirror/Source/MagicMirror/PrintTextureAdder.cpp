@@ -40,7 +40,9 @@ uint32 FPrintTextureCreator::Run()
 
 	//While not told to stop this thread 
 	//		and not yet finished finding Prime Numbers
+#if PLATFORM_WINDOWS
 	addPrintToItemFromCWD(this->id);
+#endif
 	//FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, this->id);
 	//UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
 	//manager->TshirtProcessed.Broadcast(finalTexture);
