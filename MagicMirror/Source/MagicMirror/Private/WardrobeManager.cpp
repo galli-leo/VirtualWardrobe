@@ -22,7 +22,7 @@ using namespace Magick;
 
 FString UWardrobeManager::texturePath = FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("textures"));// FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
 
-SQLite::Database UWardrobeManager::database(TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
+SQLite::Database* UWardrobeManager::database = NULL;
 
 TArray<FCategory> UWardrobeManager::categories;
 
@@ -122,10 +122,13 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 #endif
 	//UWardrobeManager::database = SQLite::Database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
 
+	printd("SQLPath: %s", *FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
+
 	try
 	{
+		UWardrobeManager::database = new SQLite::Database(TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
 
-		SQLite::Statement query(database, "SELECT id as id, fullname as fullname, name as name, layer as layer, istrousers as istrousers FROM categories");
+		SQLite::Statement query(*database, "SELECT id as id, fullname as fullname, name as name, layer as layer, istrousers as istrousers FROM categories");
 
 		while (query.executeStep())
 		{
@@ -168,9 +171,14 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 
 void UWardrobeManager::GetClothesFromDB()
 {
+	if (database == NULL)
+	{
+		printe("Error database not loaded.");
+		return;
+	}
 	try
 	{
-		SQLite::Statement cQuery(database, "SELECT id as id, category as category FROM clothes");
+		SQLite::Statement cQuery(*database, "SELECT id as id, category as category FROM clothes");
 
 		while (cQuery.executeStep())
 		{
@@ -323,7 +331,13 @@ FClothingItem UWardrobeManager::FilterClothingItems(FCategory category, FClothin
 			return currentClothingItem;
 		}
 
-		SQLite::Statement cQuery(database, "SELECT id as id, category as category FROM clothes WHERE category = ?");
+		if (database == NULL)
+		{
+			printe("Error database file is not open");
+			return FClothingItem();
+		}
+
+		SQLite::Statement cQuery(*database, "SELECT id as id, category as category FROM clothes WHERE category = ?");
 
 		cQuery.bind(1, category.id);
 		items.Insert(first, 0);

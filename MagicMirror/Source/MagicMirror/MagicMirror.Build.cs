@@ -52,7 +52,7 @@ public class MagicMirror : ModuleRules
         {
             Platform = "iOS";
         }
-        string sqlitePath = Path.Combine(ThirdPartyPath, "sqlite");
+        string sqlitePath = Path.Combine(ThirdPartyPath, "sqlite", Platform);
         PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "sqlite3.lib"));
         PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "SQLiteCpp.lib"));
         PublicIncludePaths.Add(Path.Combine(sqlitePath, "include"));

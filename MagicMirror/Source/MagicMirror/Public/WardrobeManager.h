@@ -163,7 +163,7 @@ public:
 
 		~UWardrobeManager();
 
-		static SQLite::Database database;
+		static SQLite::Database* database;
 
 		/************************************************************************/
 		/* Outfitting                                                           */
