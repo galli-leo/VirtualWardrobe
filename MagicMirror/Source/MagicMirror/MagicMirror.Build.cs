@@ -19,13 +19,13 @@ public class MagicMirror : ModuleRules
     {
         return ((Target.Platform == UnrealTargetPlatform.Win64) || (Target.Platform == UnrealTargetPlatform.Win32));
     }
- 
+
 
 	public MagicMirror(TargetInfo Target)
 	{
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UnrealEd" });
         PrivateDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-       
+
         UEBuildConfiguration.bForceEnableExceptions = true;
 
         LoadSqlite(Target);
@@ -38,7 +38,7 @@ public class MagicMirror : ModuleRules
             LoadMagick(Target);
         }
 
-        
+
 	}
 
     public bool LoadSqlite(TargetInfo Target)
@@ -52,9 +52,17 @@ public class MagicMirror : ModuleRules
         {
             Platform = "iOS";
         }
-        string sqlitePath = Path.Combine(ThirdPartyPath, "sqlite");
-        PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "sqlite3.lib"));
-        PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "SQLiteCpp.lib"));
+        string sqlitePath = Path.Combine(ThirdPartyPath, "sqlite", Platform);
+        if (Platform == "Win")
+        {
+            PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "sqlite3.lib"));
+            PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "SQLiteCpp.lib"));
+        }
+        if (Platform == "macOS")
+        {
+            PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "libsqlite3.a"));
+            PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "libSQLiteCpp.a"));
+        }
         PublicIncludePaths.Add(Path.Combine(sqlitePath, "include"));
 
         return true;
@@ -71,8 +79,8 @@ public class MagicMirror : ModuleRules
         {
             isLibrarySupported = true;
 
-            string PlatformString = (Target.Platform == UnrealTargetPlatform.Win64) ? "x64" : "x86";
-            
+            //string PlatformString = (Target.Platform == UnrealTargetPlatform.Win64) ? "x64" : "x86";
+
 
             PublicAdditionalLibraries.Add(Path.Combine(AnacondaPath, "libs", "python27.lib"));
         }
@@ -97,7 +105,7 @@ public class MagicMirror : ModuleRules
         {
             isLibrarySupported = true;
 
-            string PlatformString = (Target.Platform == UnrealTargetPlatform.Win64) ? "x64" : "x86";
+            //string PlatformString = (Target.Platform == UnrealTargetPlatform.Win64) ? "x64" : "x86";
 
             PublicLibraryPaths.Add("C:/Program Files/ImageMagick-7.0.2-Q16/lib/");
 

@@ -73,12 +73,12 @@ struct FCategory{
 		layer = 0;
 	}
 
-	FCategory(FString fullname, int32 id, FString name, bool isTrousers, int32 layer){
+	FCategory(FString fullname, int32 theID, FString name, bool trousers, int32 theLayer){
 		fullname = fullname;
-		id = id;
+		id = theID;
 		name = name;
-		isTrousers = isTrousers;
-		layer = layer;
+		isTrousers = trousers;
+		layer = theLayer;
 	}
 
 	FCategory(SQLite::Statement *query){
