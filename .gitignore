@@ -66,3 +66,24 @@ DerivedDataCache/
 BluCache/
 
 *.pyc
+
+#include 3rd Party libraries
+
+!MagicMirror/ThirdParty/**
+MagicMirror/ThirdParty/**/.DS_Store
+
+MagicMirror/ThirdParty/sqlite/.DS_Store
+
+MagicMirror/ThirdParty/.DS_Store
+
+MagicMirror/ThirdParty/CEF3/.DS_Store
+
+MagicMirror/ThirdParty/CEF3/cef_binary_3.2272.24.ga8ab9ad_macosx64/.DS_Store
+
+MagicMirror/ThirdParty/CEF3/cef_binary_3.2272.24.ga8ab9ad_macosx64/Release/.DS_Store
+
+MagicMirror/ThirdParty/sqlite/include/.DS_Store
+
+MagicMirror/ThirdParty/sqlite/macOS/.DS_Store
+
+MagicMirror/ThirdParty/sqlite/macOS/include/.DS_Store
