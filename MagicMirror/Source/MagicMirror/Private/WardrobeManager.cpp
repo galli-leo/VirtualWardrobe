@@ -151,10 +151,6 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	{
 		printe("SQL Error: %s", *SFC(e.what()));
 	}
-    catch (std::runtime_error& e)
-    {
-        printe("SQL Error: %s", *SFC(e.what()));
-    }
     catch (...)
     {
         printe("Unkown SQL error type!");

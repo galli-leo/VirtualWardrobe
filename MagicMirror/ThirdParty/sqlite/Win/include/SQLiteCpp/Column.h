@@ -122,7 +122,7 @@ public:
      *          the value returned by sqlite3_column_type() is undefined.
      */
     int getType() const noexcept; // nothrow
-#if WINDOWS_PLATFORM
+#if PLATFORM_WINDOWS
 #include "HideWindowsPlatformTypes.h"
 #endif
     /// Test if the column is an integer type value (meaningful only before any conversion)
@@ -150,7 +150,7 @@ public:
     {
         return (SQLite::Null == getType());
     }
-#if WINDOWS_PLATFORM
+#if PLATFORM_WINDOWS
 #include "AllowWindowsPlatformTypes.h"
 #endif
     /**
