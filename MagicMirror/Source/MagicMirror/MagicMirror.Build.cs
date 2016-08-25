@@ -23,7 +23,7 @@ public class MagicMirror : ModuleRules
 
 	public MagicMirror(TargetInfo Target)
 	{
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UnrealEd" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
         PrivateDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
         UEBuildConfiguration.bForceEnableExceptions = true;
@@ -50,7 +50,7 @@ public class MagicMirror : ModuleRules
         }
         if (Target.Platform == UnrealTargetPlatform.IOS)
         {
-            Platform = "iOS";
+            Platform = "IOS";
         }
         string sqlitePath = Path.Combine(ThirdPartyPath, "sqlite", Platform);
         if (Platform == "Win")
@@ -58,7 +58,7 @@ public class MagicMirror : ModuleRules
             PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "sqlite3.lib"));
             PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "SQLiteCpp.lib"));
         }
-        if (Platform == "macOS")
+        if (Platform == "macOS" || Platform == "IOS")
         {
             PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "libsqlite3.a"));
             PublicAdditionalLibraries.Add(Path.Combine(sqlitePath, "libSQLiteCpp.a"));

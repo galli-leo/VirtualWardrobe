@@ -27,7 +27,7 @@ FString SFC(const char* arr)
 
 
 
-FString UWardrobeManager::texturePath = FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("textures"));// FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
+FString UWardrobeManager::texturePath = FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("textures"));// FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
 
 SQLite::Database* UWardrobeManager::database = NULL;
 
@@ -129,11 +129,13 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 #endif
 	//UWardrobeManager::database = SQLite::Database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
 
-	printd("SQLPath: %s", *FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
+	printd("SQLPath: %s", *FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
+    FString rel_ss = FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db")));
+    FString ss = FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"));
 
 	try
 	{
-		UWardrobeManager::database = new SQLite::Database(TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
+		UWardrobeManager::database = new SQLite::Database(TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
 
 		SQLite::Statement query(*database, "SELECT id as id, fullname as fullname, name as name, layer as layer, istrousers as istrousers FROM categories");
 
@@ -149,6 +151,14 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	{
 		printe("SQL Error: %s", *SFC(e.what()));
 	}
+    catch (std::runtime_error& e)
+    {
+        printe("SQL Error: %s", *SFC(e.what()));
+    }
+    catch (...)
+    {
+        printe("Unkown SQL error type!");
+    }
 
 	this->scanningCategory = GetCategory(1);
 

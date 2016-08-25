@@ -576,9 +576,11 @@ private:
             throw SQLite::Exception(mStmtPtr, aRet);
         }
     }
-
+#if !UE_BUILD_SHIPPING
 #define check(expr)				{ if(!(expr)) { FDebug::LogAssertFailedMessage( #expr, __FILE__, __LINE__ ); _DebugBreakAndPromptForRemote(); FDebug::AssertFailed( #expr, __FILE__, __LINE__ ); CA_ASSUME(expr); } }
-
+#else
+#define check(expr)
+#endif
     /**
      * @brief Check if there is a row of result returnes by executeStep(), else throw a SQLite::Exception.
      */

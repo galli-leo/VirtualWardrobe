@@ -122,8 +122,9 @@ public:
      *          the value returned by sqlite3_column_type() is undefined.
      */
     int getType() const noexcept; // nothrow
-
+#if WINDOWS_PLATFORM
 #include "HideWindowsPlatformTypes.h"
+#endif
     /// Test if the column is an integer type value (meaningful only before any conversion)
     inline bool isInteger() const noexcept // nothrow
     {
@@ -149,7 +150,9 @@ public:
     {
         return (SQLite::Null == getType());
     }
+#if WINDOWS_PLATFORM
 #include "AllowWindowsPlatformTypes.h"
+#endif
     /**
      * @brief Return the number of bytes used by the text (or blob) value of the column
      *
