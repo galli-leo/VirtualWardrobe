@@ -25,6 +25,12 @@ public:
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 			static USkeletalMesh* GetMeshForName(FString name);
 
+		UFUNCTION(BlueprintPure, Category = "Coordiante Mapping")
+			static FVector2D GetFocalDistanceForFOV(FVector2D FOV, APlayerController* controller);
+
+		UFUNCTION(BlueprintPure, Category = "Coordiante Mapping")
+			static TArray<FVector> GetWorldPositionFromHeadAndSpine(TArray<FVector2D> ScreenPos, FVector2D FOV, FVector2D WorldDifference, APlayerController* controller);
+
 		UFUNCTION(BlueprintCallable, Category = "UI")
 			static void DisplayMessage(FText message, FText title);
 

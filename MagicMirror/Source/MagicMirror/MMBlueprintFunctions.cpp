@@ -3,6 +3,10 @@
 #include "MagicMirror.h"
 #include "MMBlueprintFunctions.h"
 
+#if PLATFORM_WINDOWS
+#include "KinectFunctionLibrary.h"
+#endif
+
 
 UTexture2D* UMMBlueprintFunctions::CreateSquare(UTexture2D* texture, int32 thickness = 5, int32 size = 556, FColor color = FColor(0, 0, 255)){
 
@@ -106,3 +110,56 @@ void UMMBlueprintFunctions::TickWardrobeManager(float deltaTime)
 {
 	this->wardrobeManager->Tick(deltaTime);
 }*/
+
+FVector2D UMMBlueprintFunctions::GetFocalDistanceForFOV(FVector2D FOV, APlayerController* controller)
+{
+	int32 Width, Height;
+	controller->GetViewportSize(Width, Height);
+
+	float fx = Width / (2.0 * FMath::Tan(FMath::DegreesToRadians(FOV.X/2.0)));
+	float fy = Height / (2.0 * FMath::Tan(FMath::DegreesToRadians(FOV.Y/2.0)));
+
+	return FVector2D(fx, fy);
+}
+
+
+TArray<FVector> UMMBlueprintFunctions::GetWorldPositionFromHeadAndSpine(TArray<FVector2D> ScreenPos, FVector2D FOV, FVector2D WorldDifference, APlayerController* controller)
+{
+#if PLATFORM_WINDOWS
+	if (ScreenPos.Num() == 0)
+	{
+		return TArray<FVector>();
+	}
+
+	int32 Width, Height;
+	controller->GetViewportSize(Width, Height);
+
+	FVector2D focal = UMMBlueprintFunctions::GetFocalDistanceForFOV(FOV, controller);
+	FVector Head;
+	FVector Spine;
+	FVector2D HeadScreen = ScreenPos[0];
+	FVector2D SpineScreen = ScreenPos[1];
+	HeadScreen.Y = HeadScreen.Y - Height/2.0;
+	SpineScreen.Y = SpineScreen.Y - Height/2.0;
+
+	Spine.Y = (-SpineScreen.Y * WorldDifference.Y) / (SpineScreen.Y - HeadScreen.Y);
+	Spine.X = 0;
+	Spine.Z = (focal.Y * Spine.Y) / SpineScreen.Y;
+	Spine.Y += 68.0;
+
+	printd("Some information: Screen Ys: %f, %f; World Y: %f", SpineScreen.Y, HeadScreen.Y, Spine.Y);
+
+	Head.Z = Spine.Z;
+	Head.Y = (Head.Z * HeadScreen.Y) / focal.Y + 68.0f;
+	Head.X = 0;
+
+	TArray<FVector> Coords;
+	Coords.Add(Head);
+	Coords.Add(Spine);
+
+	return Coords;
+
+#else
+	return FVector();
+#endif
+}

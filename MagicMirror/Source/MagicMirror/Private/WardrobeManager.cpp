@@ -3,7 +3,7 @@
 #include "MagicMirror.h"
 #include "WardrobeManager.h"
 #if PLATFORM_WINDOWS
-#include "KinectFunctionLibrary.h"
+//#include "KinectFunctionLibrary.h"
 #endif
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapper.h"
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapperModule.h"
@@ -169,7 +169,7 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 	FString GameDir = FPaths::ConvertRelativePathToFull(FPaths::GameDir());
 
 #if PLATFORM_WINDOWS
-	InitPython(GameDir);
+	//InitPython(GameDir);
 
 	//UKinectFunctionLibrary::newRawColorFrame.Broadcast();
 	UKinectFunctionLibrary::newRawColorFrame.AddUObject(this, &UWardrobeManager::OnNewRawColorFrameReceived);
@@ -213,6 +213,21 @@ void UWardrobeManager::GetClothesFromDB()
 	}
 }
 
+FVector2D UWardrobeManager::MapSkeletonToScreenCoords(const FVector& cameraPoint, int32 ScreenSizeX, int32 ScreenSizeY)
+{
+	CameraSpacePoint spacePoint = CameraSpacePoint();
+	spacePoint.X = cameraPoint.X;
+	spacePoint.Y = cameraPoint.Y;
+	spacePoint.Z = cameraPoint.Z;
+
+	ColorSpacePoint colorSpace;
+	this->m_pCoordinateMapper->MapCameraPointToColorSpace(spacePoint, &colorSpace);
+	FVector2D colorPoint;
+	colorPoint.X = colorSpace.X / colorWidth * ScreenSizeX;
+	colorPoint.Y = colorSpace.Y / colorHeight * ScreenSizeY;
+
+	return colorPoint;
+}
 
 TArray<FCategory> UWardrobeManager::GetCategories()
 {

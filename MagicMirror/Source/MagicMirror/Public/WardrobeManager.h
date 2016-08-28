@@ -28,6 +28,7 @@
 
 #include "PrintTextureAdder.h"
 #if PLATFORM_WINDOWS
+#include "KinectFunctionLibrary.h"
 #include "PythonUtils.h"
 #endif
 #include "Tickable.h"
@@ -145,6 +146,12 @@ public:
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 			void ScanPrint(FClothingItem tshirt);
 
+		UFUNCTION(BlueprintCallable, Category = "Kinect")
+			FVector2D MapSkeletonToScreenCoords(const FVector& spacePoint, int32 ScreenSizeX, int32 ScreenSizeY);
+
+#if PLATFORM_WINDOWS
+		
+#endif
 		UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
 		FTshirtProcessedDelegate TshirtProcessed;
 
