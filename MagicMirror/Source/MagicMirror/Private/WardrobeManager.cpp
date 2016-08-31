@@ -215,6 +215,10 @@ void UWardrobeManager::GetClothesFromDB()
 
 FVector2D UWardrobeManager::MapSkeletonToScreenCoords(const FVector& cameraPoint, int32 ScreenSizeX, int32 ScreenSizeY)
 {
+	if (m_pCoordinateMapper == NULL)
+	{
+		return FVector2D(-1,-1);
+	}
 	CameraSpacePoint spacePoint = CameraSpacePoint();
 	spacePoint.X = cameraPoint.X;
 	spacePoint.Y = cameraPoint.Y;

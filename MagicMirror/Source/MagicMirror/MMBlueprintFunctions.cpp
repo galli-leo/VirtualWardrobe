@@ -125,6 +125,8 @@ FVector2D UMMBlueprintFunctions::GetFocalDistanceForFOV(FVector2D FOV, APlayerCo
 
 TArray<FVector> UMMBlueprintFunctions::GetWorldPositionFromHeadAndSpine(TArray<FVector2D> ScreenPos, FVector2D FOV, FVector2D WorldDifference, APlayerController* controller)
 {
+	float FOVRatio = 1.070154577883472;
+
 #if PLATFORM_WINDOWS
 	if (ScreenPos.Num() == 0)
 	{
@@ -145,12 +147,12 @@ TArray<FVector> UMMBlueprintFunctions::GetWorldPositionFromHeadAndSpine(TArray<F
 	Spine.Y = (-SpineScreen.Y * WorldDifference.Y) / (SpineScreen.Y - HeadScreen.Y);
 	Spine.X = 0;
 	Spine.Z = (focal.Y * Spine.Y) / SpineScreen.Y;
-	Spine.Y += 68.0;
+//	Spine.Y += 68.0;
 
 	printd("Some information: Screen Ys: %f, %f; World Y: %f", SpineScreen.Y, HeadScreen.Y, Spine.Y);
 
 	Head.Z = Spine.Z;
-	Head.Y = (Head.Z * HeadScreen.Y) / focal.Y + 68.0f;
+//	Head.Y = (Head.Z * HeadScreen.Y) / focal.Y + 68.0f;
 	Head.X = 0;
 
 	TArray<FVector> Coords;
