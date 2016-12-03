@@ -37,7 +37,7 @@ public:
 		/*UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 		static void TickWardrobeManager(float deltaTime);*/
 
-		UPROPERTY(BlueprintReadOnly, Category = "Wardrobe")
-		UWardrobeManager* wardrobeManager;
+		
+		static UWardrobeManager* wardrobeManager;
 	
 };

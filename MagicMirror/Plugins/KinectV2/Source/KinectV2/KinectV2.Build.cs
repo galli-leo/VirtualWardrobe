@@ -37,7 +37,7 @@ namespace UnrealBuildTool.Rules
                     "Core",
                     "Engine",
                     "InputDevice",
-                    "BlueprintGraph",
+                    //"BlueprintGraph",
                     //"MSSpeech",
                     "InputCore",
                      "K4WLib",

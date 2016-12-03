@@ -29,7 +29,7 @@ public:
 
 private:
 	UTexture2D* finalTexture;
-
+	PyGILState_STATE gstate;
 	UTexture2D* LoadImageFromFile(FString file);
 public:
 

@@ -11,7 +11,14 @@ import Vars
 from Vars import LOG
 from dynreload import recompile
 from PIL import Image
+import recognition as recog
+from datetime import datetime
+import shutil
+import atexit
 
+@atexit.register
+def goodbye():
+    purgeTMP()
 
 def loadModule(path = "modules/recognizers"):
     python_files = glob.glob(path+"/*.py")
@@ -109,7 +116,42 @@ def initWithPath(path):
     global clothes
     Vars.setRealPath(path)
     clothes = DBWrappers.loadCategories()
+    initRecogModel()
     return Vars.DBFILE
+
+def initRecogModel(model="E:\\DeepLearning\\Clothing Recognition\\protocol\\fifth attempt\\model_weights.pkl"):
+    recog.load(model)
+
+def purgeTMP():
+    for f in os.listdir(os.path.join(Vars.REALPATH, "tmp/prediction")):
+        p = os.path.join(Vars.REALPATH, "tmp/prediction", f)
+        try:
+            pass
+            #os.unlink(p)
+        except:
+            pass
+
+def predictCategory():
+    t = datetime.utcnow().strftime('%Y-%m-%d %H-%M-%S+%f')[:-3]
+    f = os.path.join(Vars.REALPATH, "tmp", "prediction", "{0}.bmp".format(t))
+    print(f)
+    shutil.copy("predict.bmp", f)
+    result = recog.predict(f)
+    proba = result[2]
+    if proba < .01:
+        return 1 #T-Shirt is the most difficult to detect, if uncertain just use T-Shirt (Could go wrong!!!)
+    else:
+        if result[0] == 3 and result[2] > .55:
+            return 6
+        if result[0] == 4 and result[2] > .79:
+            return 4
+        if result[0] == 1 and result[2] > .50:
+            return 1
+        if result[0] == 5 and result[2] > .30:
+            return 5
+        else:
+            return 420 #Blazeit
+        return str(result[1]) + ", " +  str(proba)
 
 #Vars.TEXTURE_FOLDER = os.path.join("PythonProgram", "textures")
 #Vars.DBFILE = os.path.join("PythonProgram", "shirt_db.db")

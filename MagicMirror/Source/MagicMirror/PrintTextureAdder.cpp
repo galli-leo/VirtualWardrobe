@@ -1,5 +1,6 @@
 #include "MagicMirror.h"
 #include "PrintTextureAdder.h"
+#include "PythonUtils.h"
 #include "WardrobeManager.h"
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapper.h"
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapperModule.h"
@@ -20,6 +21,7 @@ FPrintTextureCreator::FPrintTextureCreator(UWardrobeManager* theManager, uint32 
 
 FPrintTextureCreator::~FPrintTextureCreator()
 {
+
 	delete Thread;
 	Thread = NULL;
 }
@@ -27,6 +29,7 @@ FPrintTextureCreator::~FPrintTextureCreator()
 //Init
 bool FPrintTextureCreator::Init()
 {
+
 	//Init the Data 
 	this->IsFinished = false;
 	return true;
@@ -37,7 +40,7 @@ uint32 FPrintTextureCreator::Run()
 {
 	//Initial wait before starting
 	FPlatformProcess::Sleep(0.1);
-
+	gstate = PyGILState_Ensure();
 	//While not told to stop this thread 
 	//		and not yet finished finding Prime Numbers
 #if PLATFORM_WINDOWS
@@ -46,6 +49,11 @@ uint32 FPrintTextureCreator::Run()
 	//FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, this->id);
 	//UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
 	//manager->TshirtProcessed.Broadcast(finalTexture);
+	PyGILState_Release(gstate);
+
+	FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, this->id);
+	UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
+	this->manager->TshirtProcessed.Broadcast(finalTexture);
 
 	this->IsFinished = true;
 

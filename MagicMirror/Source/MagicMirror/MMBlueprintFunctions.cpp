@@ -7,6 +7,7 @@
 #include "KinectFunctionLibrary.h"
 #endif
 
+UWardrobeManager* UMMBlueprintFunctions::wardrobeManager = NULL;
 
 UTexture2D* UMMBlueprintFunctions::CreateSquare(UTexture2D* texture, int32 thickness = 5, int32 size = 556, FColor color = FColor(0, 0, 255)){
 
@@ -88,10 +89,13 @@ void UMMBlueprintFunctions::CropTexture(UTexture2D* texture, FVector2D topLeft, 
 
 UWardrobeManager* UMMBlueprintFunctions::StartWardrobeManager(EWardrobeMode startingMode, FString dbFile)
 {
-	UWardrobeManager* wardrobeManager = NewObject<UWardrobeManager>();
-	wardrobeManager->StartWardrobeManager(startingMode, dbFile);
-
-	return wardrobeManager;
+	if (UMMBlueprintFunctions::wardrobeManager == NULL)
+	{
+		UWardrobeManager* wardrobeManager = NewObject<UWardrobeManager>();
+		wardrobeManager->StartWardrobeManager(startingMode, dbFile);
+		UMMBlueprintFunctions::wardrobeManager = wardrobeManager;
+	}
+	return UMMBlueprintFunctions::wardrobeManager;
 }
 
 USkeletalMesh* UMMBlueprintFunctions::GetMeshForName(FString name)

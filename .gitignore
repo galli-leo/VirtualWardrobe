@@ -87,3 +87,16 @@ MagicMirror/ThirdParty/sqlite/include/.DS_Store
 MagicMirror/ThirdParty/sqlite/macOS/.DS_Store
 
 MagicMirror/ThirdParty/sqlite/macOS/include/.DS_Store
+
+#exclude image files from recognition subfolder
+PythonProgram/recognition/**/*.jpg
+PythonProgram/recognition/**/*.png
+PythonProgram/recognition/**/*.jpeg
+PythonProgram/recognition/**/*.bmp
+PythonProgram/tmp/**/*
+/**/PythonProgram/tmp/**/*
+IMBasics/PythonProgram/tmp/**/*
+!PythonProgram/tmp/.gitkeep
+#saved models are not backed up! Too large for github. Need some other place for backing them up!
+/**/*.pkl
+**.pkl

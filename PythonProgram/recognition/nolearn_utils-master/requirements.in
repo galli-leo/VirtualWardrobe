@@ -1,0 +1,6 @@
+scipy==0.17.0
+matplotlib==1.5.1
+scikit-image==0.11.3
+
+-e git+https://github.com/Lasagne/Lasagne.git@8f0e8d7283964b5d22d297e045a8e86121a79f84#egg=Lasagne==0.2.git
+-e git+https://github.com/dnouri/nolearn.git@c9b7d1e5a91a1e48608a5678149c8b505bb8f9e4#egg=nolearn==0.6adev.git

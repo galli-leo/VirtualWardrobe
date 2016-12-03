@@ -3,8 +3,8 @@
 #define PRINTTEXTURE_H
 #include "MagicMirror.h"
 //#include "Structs.h"
-//#include "WardrobeManager.h"
-//#include "PythonUtils.h"
+#include "WardrobeManager.h"
+#include "PythonUtils.h"
 
 class UWardrobeManager;
 
@@ -29,7 +29,7 @@ public:
 
 private:
 	UTexture2D* finalTexture;
-
+	PyGILState_STATE gstate;
 	UTexture2D* LoadImageFromFile(FString file);
 public:
 

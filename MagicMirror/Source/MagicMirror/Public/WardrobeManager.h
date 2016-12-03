@@ -112,6 +112,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtScannedDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTshirtProcessedDelegate, UTexture2D*, texture);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScanningStatusUpdate, FString, newStatus);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtCategorizedDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPythonLoadedDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCategoryPredicted, int32, id);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectColorFrameEvent, const class UTexture2D*, ColorFrameTexture);
 
 
@@ -129,6 +131,9 @@ public:
 
 		UPROPERTY(BlueprintReadWrite)
 		EWardrobeMode mode;
+
+		UPROPERTY(BlueprintReadOnly)
+		bool isStarted = false;
 
 		UPROPERTY(BlueprintReadWrite)
 		FString databaseFile;
@@ -149,6 +154,9 @@ public:
 		UFUNCTION(BlueprintCallable, Category = "Kinect")
 			FVector2D MapSkeletonToScreenCoords(const FVector& spacePoint, int32 ScreenSizeX, int32 ScreenSizeY);
 
+		UFUNCTION(BlueprintCallable, Category = "Wardrobe|Scanning")
+			void ToggleAutoSelectingCategory();
+
 #if PLATFORM_WINDOWS
 		
 #endif
@@ -158,13 +166,26 @@ public:
 		UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
 			FScanningStatusUpdate ScanningStatusUpdate;
 
+		UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
+			FPythonLoadedDelegate PythonLoaded;
+
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 		TArray<FCategory> GetCategories();
 
 		UFUNCTION(BlueprintCallable, Category = "Wardrobe")
 			FCategory GetCategory(int32 id);
 
+		UPROPERTY(BlueprintAssignable, Category = "Wardrobe|Scanning")
+			FCategoryPredicted categoryPredicted;
 
+		UFUNCTION()
+			void OnCategoryPredicted(int32 id);
+
+		UPROPERTY(BlueprintReadWrite, Category = "Wardrobe|Scanning")
+			bool shouldBePredicting = false;
+
+		UPROPERTY(BlueprintReadWrite, Category = "Wardrobe|Scanning")
+			bool autoSelectingCategory = false;
 
 		static FString texturePath;
 
@@ -253,6 +274,10 @@ private:
 
 	UPROPERTY(BlueprintAssignable, Category = "Wardrobe")
 	FTshirtScannedDelegate TshirtScanned;
+
+	
+
+
 
 	
 	UFUNCTION()

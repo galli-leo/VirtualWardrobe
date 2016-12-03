@@ -8,6 +8,8 @@
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapper.h"
 #include "Developer/ImageWrapper/Public/Interfaces/IImageWrapperModule.h"
 #include "TextureCreator.h"
+#include "PythonLoading.h"
+#include "CategoryPredicting.h"
 
 #if PLATFORM_WINDOWS
 #ifndef WINDOWS_PLATFORM_TYPES_GUARD
@@ -88,6 +90,11 @@ void UWardrobeManager::Tick(float deltaTime)
 			{
 				this->hasFirstScan = false;
 				this->hasSecondScan = false;
+				if (this->autoSelectingCategory)
+				{
+					this->shouldBePredicting = true;
+				}
+				
 				this->ScanForTShirt();
 			}
 			else if (!(this->hasFirstScan && this->hasSecondScan))
@@ -118,70 +125,101 @@ void UWardrobeManager::Tick(float deltaTime)
 	this->lastAction = currentTime;
 }
 
-void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::MM_Scanning, FString databaseFile = "shirt_db.db")
+void UWardrobeManager::ToggleAutoSelectingCategory()
 {
-	this->mode = mode;
-	this->databaseFile = databaseFile;
-
-	//HARDCODED!!
-#if PLATFORM_WINDOWS
-	InitializeMagick("C:\\Program Files\\ImageMagick-7.0.2-Q16");
-#endif
-	//UWardrobeManager::database = SQLite::Database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
-
-	printd("SQLPath: %s", *FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
-    FString rel_ss = FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db")));
-    FString ss = FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"));
-
-	try
+	this->autoSelectingCategory = !this->autoSelectingCategory;
+	if (this->autoSelectingCategory)
 	{
-		UWardrobeManager::database = new SQLite::Database(TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
-
-		SQLite::Statement query(*database, "SELECT id as id, fullname as fullname, name as name, layer as layer, istrousers as istrousers FROM categories");
-
-		while (query.executeStep())
-		{
-			FCategory cat(&query);
-			categories.Add(cat);
-		}
-
-		GetClothesFromDB();
+		this->shouldBePredicting = true;
 	}
-	catch (std::exception& e)
-	{
-		printe("SQL Error: %s", *SFC(e.what()));
-	}
-    catch (...)
-    {
-        printe("Unkown SQL error type!");
-    }
-
-	this->scanningCategory = GetCategory(1);
-
-#if PLATFORM_WINDOWS
-	pBuffer = new RGBQUAD[colorWidth * colorHeight];
-	pDepthBuffer = new uint16[depthWidth * depthHeight];
-	m_pDepthCoordinates = new DepthSpacePoint[colorWidth * colorHeight];
-#endif
-	colorFrame = UTexture2D::CreateTransient(colorWidth, colorHeight);
-	printd("Starting Wardrobe Manager");
-
-	FString GameDir = FPaths::ConvertRelativePathToFull(FPaths::GameDir());
-
-#if PLATFORM_WINDOWS
-	//InitPython(GameDir);
-
-	//UKinectFunctionLibrary::newRawColorFrame.Broadcast();
-	UKinectFunctionLibrary::newRawColorFrame.AddUObject(this, &UWardrobeManager::OnNewRawColorFrameReceived);
-
-	UKinectFunctionLibrary::newRawDepthFrame.AddUObject(this, &UWardrobeManager::OnNewRawDepthFrameReceived);
-
-#endif
-	//UKinectFunctionLibrary::newRawColorFrame.
-	//UKinectFunctionLibrary::newRawColorFrame.BindRaw();
-	//InitSensor();
 }
 
+void UWardrobeManager::OnCategoryPredicted(int32 id)
+{
+	if (id != 420)//#Blazeit
+	{
+		this->shouldBePredicting = false;
+		scanningCategory = GetCategory(id);
+		printw("Confidently predicted: %s", *scanningCategory.fullname);
+	}
+}
+
+void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::MM_Scanning, FString databaseFile = "shirt_db.db")
+{
+	if (!this->isStarted)
+	{
+		printd("Starting Wardrobe Manager...");
+		this->mode = mode;
+		this->databaseFile = databaseFile;
+
+		//HARDCODED!!
+#if PLATFORM_WINDOWS
+		InitializeMagick("C:\\Program Files\\ImageMagick-7.0.2-Q16");
+#endif
+		//UWardrobeManager::database = SQLite::Database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
+
+		printd("SQLPath: %s", *FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
+		FString rel_ss = FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db")));
+		FString ss = FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"));
+
+		try
+		{
+			UWardrobeManager::database = new SQLite::Database(TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
+
+			SQLite::Statement query(*database, "SELECT id as id, fullname as fullname, name as name, layer as layer, istrousers as istrousers FROM categories");
+
+			while (query.executeStep())
+			{
+				FCategory cat(&query);
+				categories.Add(cat);
+			}
+
+			GetClothesFromDB();
+		}
+		catch (std::exception& e)
+		{
+			printe("SQL Error: %s", *SFC(e.what()));
+		}
+		catch (...)
+		{
+			printe("Unkown SQL error type!");
+		}
+
+		this->scanningCategory = GetCategory(1);
+
+#if PLATFORM_WINDOWS
+		pBuffer = new RGBQUAD[colorWidth * colorHeight];
+		pDepthBuffer = new uint16[depthWidth * depthHeight];
+		m_pDepthCoordinates = new DepthSpacePoint[colorWidth * colorHeight];
+#endif
+		colorFrame = UTexture2D::CreateTransient(colorWidth, colorHeight);
+
+		FString GameDir = FPaths::ConvertRelativePathToFull(FPaths::GameContentDir());
+
+#if PLATFORM_WINDOWS
+		//!!!: I think Py_Initialize must be on main thread else problems ensure!
+		Py_Initialize();
+
+		FPythonLoading::JoyInit(this, GameDir);
+		//InitPython(GameDir);
+		//this->PythonLoaded.Broadcast();
+
+
+
+		this->categoryPredicted.AddDynamic(this, &UWardrobeManager::OnCategoryPredicted);
+
+		//UKinectFunctionLibrary::newRawColorFrame.Broadcast();
+		UKinectFunctionLibrary::newRawColorFrame.AddUObject(this, &UWardrobeManager::OnNewRawColorFrameReceived);
+
+		UKinectFunctionLibrary::newRawDepthFrame.AddUObject(this, &UWardrobeManager::OnNewRawDepthFrameReceived);
+
+#endif
+		//UKinectFunctionLibrary::newRawColorFrame.
+		//UKinectFunctionLibrary::newRawColorFrame.BindRaw();
+		//InitSensor();
+		this->isStarted = true;
+	}
+}
 void UWardrobeManager::GetClothesFromDB()
 {
 	if (database == NULL)
@@ -735,17 +773,18 @@ void UWardrobeManager::ScanForPrint()
 		RGBQUAD* cutRect = CutRectFromBuffer(pBuffer, colorWidth, colorHeight, start_x, start_y, distanceSize, distanceSize);
 		Image cutRectImage = CreateMagickImageFromBuffer(cutRect, distanceSize, distanceSize);
 		cutRectImage.write("print_testing.png");
-		/*if (FPrintTextureCreator::PrintCreator->IsThreadFinished() == true)
+
+
+		if (FPrintTextureCreator::PrintCreator->IsThreadFinished() == true)
 		{
 			FTextureCreator::Shutdown();
+			FPythonLoading::Shutdown();
 			FPrintTextureCreator::Shutdown();
 			FPrintTextureCreator::JoyInit(this, this->currentClothingItem.id);
-		}*/
+		}
 
-		addPrintToItemFromCWD(this->currentClothingItem.id);
-		FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, this->currentClothingItem.id);
-		UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
-		this->TshirtProcessed.Broadcast(finalTexture);
+		//addPrintToItemFromCWD(this->currentClothingItem.id);
+		
 
 		this->mode = EWardrobeMode::MM_None;
 	}
@@ -781,6 +820,23 @@ void UWardrobeManager::ScanForTShirt()
 
 	if (SUCCEEDED(hr))
 	{
+
+		if (this->shouldBePredicting)
+		{
+
+
+			hr = SaveBitmapToFile(reinterpret_cast<BYTE*>(pBuffer), colorWidth, colorHeight, sizeof(RGBQUAD) * 8, L"predict.bmp");
+
+			if (SUCCEEDED(hr))
+			{
+				if (FCategoryPredicting::Runnable->IsThreadFinished())
+				{
+					FCategoryPredicting::Shutdown();
+					FCategoryPredicting::JoyInit(this);
+				}
+			}
+		}
+
 		int distanceSize = 556;
 		if (scanningCategory.isTrousers)
 		{
@@ -867,6 +923,7 @@ void UWardrobeManager::ScanForTShirt()
 					finalImg.write("back2.png");
 					this->hasSecondScan = true;
 					this->timeSinceSecondScan = this->currentTime;
+					printw("Second Scan succeeded!")
 				}
 				else
 				{
@@ -881,6 +938,7 @@ void UWardrobeManager::ScanForTShirt()
 				//SetStatusMessage(L"Scanned TShirt! Prepare the next one!", 2000, true);
 				TshirtScanned.Broadcast();
 				ScanningStatusUpdate.Broadcast(FString::Printf(TEXT("%s scanned! Processing."), *filter.fullname));
+				this->shouldBePredicting = false;
 				/*int newItemID = createNewItemWithTextures("back1.png", "back2.png");
 				//LOG(INFO) << "Created new Clothing Item with ID: " << newItemID;
 				FString finalTexturePath = FString::Printf(TEXT("%stshirt/%04d/final_texture.png"), *texturePath, newItemID);
@@ -888,6 +946,9 @@ void UWardrobeManager::ScanForTShirt()
 				this->TshirtProcessed.Broadcast(finalTexture);*/
 				if (FTextureCreator::Runnable->IsThreadFinished())
 				{
+					printw("Processing picture!")
+					FCategoryPredicting::Runnable->EnsureCompletion();
+					FCategoryPredicting::Shutdown();
 					FTextureCreator::Shutdown();
 					FTextureCreator::JoyInit(this, scanningCategory);
 				}

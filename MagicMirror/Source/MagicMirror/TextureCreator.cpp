@@ -41,11 +41,14 @@ uint32 FTextureCreator::Run()
 	//While not told to stop this thread 
 	//		and not yet finished finding Prime Numbers
 #if PLATFORM_WINDOWS
+	gstate = PyGILState_Ensure();
 	int id = newItemWithTexturesFromCWD(category.id);
+	PyGILState_Release(gstate);
 #else
 	int id = 0;
 #endif
 	FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, id);
+	printw("Final Texture Path: %s", *finalTexturePath)
 	UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
 	manager->TshirtProcessed.Broadcast(finalTexture);
 

@@ -34,34 +34,57 @@ bool ErrorPrint()
 		char *pStrErrorMessage = PyString_AsString(pvalue);
 		char *errorType = PyString_AsString(ptype);
 		printe("%s:%s", *SFC(errorType), *SFC(pStrErrorMessage));
+		
 	}
 	else
 	{
 		char *pStrErrorMessage = PyString_AsString(pvalue);
 		printe("%s", *SFC(pStrErrorMessage));
+		
 	}
 
 
 	if (ptraceback != NULL)
 	{
-		PyThreadState *tstate = PyThreadState_GET();
-		if (NULL != tstate && NULL != tstate->frame) {
-			PyFrameObject *frame = tstate->frame;
+		PyObject *pystr, *module_name, *pyth_module, *pyth_func;
+		char *str;
 
-			printe("Python stack trace:");
-			while (NULL != frame) {
-				int line = frame->f_lineno;
-				const char *filename = PyString_AsString(frame->f_code->co_filename);
-				const char *funcname = PyString_AsString(frame->f_code->co_name);
-				printe("\t%s(%d): %s", *SFC(filename), *FString::FromInt(line), *SFC(funcname));
-				frame = frame->f_back;
+		/* See if we can get a full traceback */
+		module_name = PyString_FromString("traceback");
+		pyth_module = PyImport_Import(module_name);
+		Py_DECREF(module_name);
+
+		if (pyth_module == NULL) {
+
+		}
+		else{
+
+		
+
+			pyth_func = PyObject_GetAttrString(pyth_module, "format_exception");
+			if (pyth_func && PyCallable_Check(pyth_func)) {
+				PyObject *pyth_val;
+
+				pyth_val = PyObject_CallFunctionObjArgs(pyth_func, ptype, pvalue, ptraceback, NULL);
+
+				pystr = PyObject_Str(pyth_val);
+				str = PyString_AsString(pystr);
+				printe("%s", *SFC(str))
+				Py_DECREF(pyth_val);
+				Py_DECREF(ptraceback);
+				Py_DECREF(pyth_module);
+				Py_DECREF(pystr);
+
 			}
+
 		}
 	}
 
-	Py_DECREF(pvalue);
-	Py_DECREF(ptraceback);
 	Py_DECREF(ptype);
+	Py_DECREF(pvalue);
+	
+
+	
 
 	return true;
 
@@ -222,8 +245,9 @@ int newItemWithTexturesFromCWD(uint32 id)
 	}
 
 	Py_INCREF(func);
-
+	printe("Calling newWithTexturesFromCWD");
 	ret = PyObject_CallFunction(func, (char*)"i", id);
+	printe("Finished call");
 
 	//PyObject* ret = Py_CompileString("CInterface.createNewItemWithTexturesFromCWD();", "", Py_file_input);
 	ErrorPrint();
@@ -262,6 +286,86 @@ int newItemWithTexturesFromCWD(uint32 id)
 	return -1;
 }
 
+int predictCategoryFromCWD()
+{
+	PyObject* ret, *module, *dict, *func;
+
+	//PyRun_SimpleString((const char*)"import CInterface; CInterface.createNewItemWithTextures('E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back1.png', 'E:\\Unreal Engine\\Epic Games\\4.9\\Engine\\Binaries\\Win64\\back2.png')");
+
+	module = cInterfaceModule;
+	if (module == NULL)
+	{
+		printw("Module is NULL!")
+		return 420;
+	}
+
+	dict = PyModule_GetDict(module);
+
+	func = PyDict_GetItemString(dict, (const char*)"predictCategory");
+
+
+	if (func == NULL)
+	{
+		printw("Function is NULL!")
+		return 420;
+	}
+
+	Py_INCREF(func);
+	printw("Calling predictCategoryFromCWD")
+	ret = PyObject_CallFunction(func, NULL);
+
+	//PyObject* ret = Py_CompileString("CInterface.createNewItemWithTexturesFromCWD();", "", Py_file_input);
+	ErrorPrint();
+
+	if (ret == NULL)
+	{
+		printw("Return value is NULL!")
+		Py_DECREF(func);
+		return 420;
+	}
+
+	if (PyTuple_Check(ret))
+	{
+		PyObject* pNum  = PyTuple_GetItem(ret, 0);
+		PyObject* pProba = PyTuple_GetItem(ret, 1);
+		int num = PyNumber_AsSsize_t(pNum, nullptr);
+		double proba = PyFloat_AsDouble(pProba);
+		Py_DECREF(ret);
+		Py_DECREF(func);
+		Py_DECREF(pNum);
+		Py_DECREF(pProba);
+		//printd("Predicted Category: %i, with probability: %f", num, proba)
+		return num;
+	}
+	else if (PyNumber_Check(ret))
+	{
+		int num = PyNumber_AsSsize_t(ret, nullptr);
+		Py_DECREF(ret);
+		Py_DECREF(func);
+		//Py_DECREF(args);
+		//Py_DECREF(args);
+		//Py_DECREF(func);
+		//Py_DECREF(module);
+		//Py_DECREF(dict);
+		//printd("Predicted Category: %i", num)
+		return num;
+	}
+	else if (PyString_Check(ret))
+	{
+		//printw("Trallalal: %s", *SFC(PyString_AsString(ret)));
+		Py_DECREF(ret);
+		Py_DECREF(func);
+		return 420;
+	}
+	else
+	{
+		ErrorPrint();
+	}
+
+	return 420;
+}
+
+
 
 void addPrintToItemFromCWD(uint32 id)
 {
@@ -294,15 +398,15 @@ void addPrintToItemFromCWD(uint32 id)
 	//PyRun_SimpleString((const char*)"CInterface.addPrintToItemFromCWD(154)");
 	ErrorPrint();
 
-	if (ret == NULL)
+	if (ret != NULL)
 	{
 		Py_DECREF(ret);
 		Py_DECREF(func);
 		return;
 	}
 
-	Py_DECREF(ret);
-	Py_DECREF(func);
+	//Py_DECREF(ret);
+	//Py_DECREF(func);
 
 	return;
 }
@@ -360,9 +464,6 @@ return FString("");
 
 void InitPython(FString currentPath)
 {
-	Py_Initialize();
-
-
 
 	currentPath.Append("PythonProgram/");
 
@@ -378,11 +479,17 @@ void InitPython(FString currentPath)
 	//ErrorPrint();
 	PySys_SetObject("path", sysPath);*/
 
-	PyRun_SimpleString((const char*)"import sys; sys.path.insert(0, 'E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/');");
+
+	PyRun_SimpleString((const char*)"import sys; sys.path.insert(0, 'E:/Unreal Projects/IntelligentMirror/MagicMirror/Content/PythonProgram/');");
 	//PyRun_SimpleString((const char*)"if not 'CInterface' in sys.modules: import CInterface");
-	PyRun_SimpleString((const char*)"import CInterface; CInterface.initWithPath('E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/')");
+	PyRun_SimpleString((const char*)"import CInterface; CInterface.initWithPath('E:/Unreal Projects/IntelligentMirror/MagicMirror/Content/PythonProgram/')");
 	//PyRun_SimpleString("import C;");
+
+	//import sys; sys.path.insert(0, 'E:/Unreal Projects/IntelligentMirror/MagicMirror/Content/PythonProgram/'); import CInterface; CInterface.initWithPath('E:/Unreal Projects/IntelligentMirror/MagicMirror/Content/PythonProgram/')
+
 	cInterfaceModule = PyImport_ImportModule((const char*)"CInterface");
+
+	
 	//ErrorPrint();
 	//aa = PyTuple_New(1);
 	/*aa = Py_BuildValue((const char*)"(s)", (const char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/");;

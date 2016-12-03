@@ -98,6 +98,8 @@ int createNewItemWithTextures(char* backPath1, char* backPath2);
 
 int newItemWithTexturesFromCWD(uint32 id);
 
+int predictCategoryFromCWD();
+
 void addPrintToItemFromCWD(uint32 id);
 
 /*void testing()
