@@ -947,8 +947,9 @@ void UWardrobeManager::ScanForTShirt()
 				if (FTextureCreator::Runnable->IsThreadFinished())
 				{
 					printw("Processing picture!")
-					FCategoryPredicting::Runnable->EnsureCompletion();
 					FCategoryPredicting::Shutdown();
+					FPrintTextureCreator::Shutdown();
+					FPythonLoading::Shutdown();
 					FTextureCreator::Shutdown();
 					FTextureCreator::JoyInit(this, scanningCategory);
 				}
