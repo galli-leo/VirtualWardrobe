@@ -4,6 +4,7 @@
 #define PYTHONUTILS_H
 #include <include/Python.h>
 #include <include/frameobject.h>
+#include <tuple>
 //#include "HideWindowsPlatformTypes.h"
 #include "MagicMirror.h"
 #ifndef WINDOWS_PLATFORM_TYPES_GUARD
@@ -14,6 +15,8 @@
 FString SFC(char* arr);
 
 FString SFC(const char* arr);
+
+typedef std::tuple<int, double> prediction;
 
 //static PyObject* sysPath;
 //static PyObject* path;
@@ -98,7 +101,7 @@ int createNewItemWithTextures(char* backPath1, char* backPath2);
 
 int newItemWithTexturesFromCWD(uint32 id);
 
-int predictCategoryFromCWD();
+prediction predictCategoryFromCWD();
 
 void addPrintToItemFromCWD(uint32 id);
 

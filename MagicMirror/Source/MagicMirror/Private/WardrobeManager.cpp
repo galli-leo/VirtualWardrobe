@@ -134,13 +134,13 @@ void UWardrobeManager::ToggleAutoSelectingCategory()
 	}
 }
 
-void UWardrobeManager::OnCategoryPredicted(int32 id)
+void UWardrobeManager::OnCategoryPredicted(int32 id, float proba)
 {
 	if (id != 420)//#Blazeit
 	{
-		this->shouldBePredicting = false;
-		scanningCategory = GetCategory(id);
-		printw("Confidently predicted: %s", *scanningCategory.fullname);
+		//this->shouldBePredicting = false;
+		//scanningCategory = GetCategory(id);
+		//printw("Confidently predicted: %s", *scanningCategory.fullname);
 	}
 }
 
@@ -833,6 +833,10 @@ void UWardrobeManager::ScanForTShirt()
 				{
 					FCategoryPredicting::Shutdown();
 					FCategoryPredicting::JoyInit(this);
+				}
+				else
+				{
+					float no = 1;
 				}
 			}
 		}

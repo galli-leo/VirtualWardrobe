@@ -286,7 +286,7 @@ int newItemWithTexturesFromCWD(uint32 id)
 	return -1;
 }
 
-int predictCategoryFromCWD()
+prediction predictCategoryFromCWD()
 {
 	PyObject* ret, *module, *dict, *func;
 
@@ -296,7 +296,7 @@ int predictCategoryFromCWD()
 	if (module == NULL)
 	{
 		printw("Module is NULL!")
-		return 420;
+			return std::make_tuple(420, 0.0);
 	}
 
 	dict = PyModule_GetDict(module);
@@ -307,37 +307,43 @@ int predictCategoryFromCWD()
 	if (func == NULL)
 	{
 		printw("Function is NULL!")
-		return 420;
+			return std::make_tuple(420, 0.0);
 	}
 
 	Py_INCREF(func);
 	printw("Calling predictCategoryFromCWD")
 	ret = PyObject_CallFunction(func, NULL);
-
-	//PyObject* ret = Py_CompileString("CInterface.createNewItemWithTexturesFromCWD();", "", Py_file_input);
-	ErrorPrint();
-
+	Py_DECREF(func);
 	if (ret == NULL)
 	{
 		printw("Return value is NULL!")
-		Py_DECREF(func);
-		return 420;
+		return std::make_tuple(420, 0.0);
 	}
-
+	//return std::make_tuple(420, 0.0);
 	if (PyTuple_Check(ret))
 	{
-		PyObject* pNum  = PyTuple_GetItem(ret, 0);
-		PyObject* pProba = PyTuple_GetItem(ret, 1);
+		PyObject* pNum = PyTuple_GetItem(ret, 0);
+		Py_INCREF(pNum);
+		PyObject* pProba = PyTuple_GetItem(ret, 2);
+		Py_INCREF(pProba);
 		int num = PyNumber_AsSsize_t(pNum, nullptr);
 		double proba = PyFloat_AsDouble(pProba);
-		Py_DECREF(ret);
-		Py_DECREF(func);
+//		Py_DECREF(ret);
 		Py_DECREF(pNum);
 		Py_DECREF(pProba);
 		//printd("Predicted Category: %i, with probability: %f", num, proba)
-		return num;
+		return std::make_tuple(num, proba);
 	}
-	else if (PyNumber_Check(ret))
+
+	Py_DECREF(ret);
+
+	return std::make_tuple(420, 0.0);
+	//PyObject* ret = Py_CompileString("CInterface.createNewItemWithTexturesFromCWD();", "", Py_file_input);
+	ErrorPrint();
+
+
+
+	if (PyNumber_Check(ret))
 	{
 		int num = PyNumber_AsSsize_t(ret, nullptr);
 		Py_DECREF(ret);
@@ -348,21 +354,21 @@ int predictCategoryFromCWD()
 		//Py_DECREF(module);
 		//Py_DECREF(dict);
 		//printd("Predicted Category: %i", num)
-		return num;
+		return std::make_tuple(num, 0.5);
 	}
 	else if (PyString_Check(ret))
 	{
 		//printw("Trallalal: %s", *SFC(PyString_AsString(ret)));
 		Py_DECREF(ret);
 		Py_DECREF(func);
-		return 420;
+		return std::make_tuple(420, 0.0);
 	}
 	else
 	{
 		ErrorPrint();
 	}
 
-	return 420;
+	return std::make_tuple(420, 0.0);
 }
 
 

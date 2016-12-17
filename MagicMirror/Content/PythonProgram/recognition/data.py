@@ -13,7 +13,7 @@ from skimage.transform import resize
 
 def load_images_from_path(path):
     imgs = []
-    valid_images = [".jpg",".gif",".png",".tga"]
+    valid_images = [".jpg",".gif",".png",".tga", ".jpeg"]
     for f in os.listdir(path):
         ext = os.path.splitext(f)[1]
         if ext.lower() not in valid_images:

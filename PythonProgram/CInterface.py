@@ -119,7 +119,7 @@ def initWithPath(path):
     initRecogModel()
     return Vars.DBFILE
 
-def initRecogModel(model="E:\\DeepLearning\\Clothing Recognition\\protocol\\fifth attempt\\model_weights.pkl"):
+def initRecogModel(model="E:\\DeepLearning\\Clothing Recognition\\protocol\\seven\\model_weights.pkl"):
     recog.load(model)
 
 def purgeTMP():
@@ -136,7 +136,15 @@ def predictCategory():
     f = os.path.join(Vars.REALPATH, "tmp", "prediction", "{0}.bmp".format(t))
     print(f)
     shutil.copy("predict.bmp", f)
+    img = Image.open(f)
+    half_the_width = img.size[0] / 2
+    crop_width = 690 / 2
+    img = img.crop((half_the_width - crop_width, 0, half_the_width + crop_width, 1080))
+    img.save(f)
     result = recog.predict(f)
+    pred_str = "predicted_{0}_confidence_{1}.bmp".format(result[1], result[2])
+    shutil.move(f, os.path.join(Vars.REALPATH, "tmp", "prediction", pred_str))
+    return result
     proba = result[2]
     if proba < .01:
         return 1 #T-Shirt is the most difficult to detect, if uncertain just use T-Shirt (Could go wrong!!!)

@@ -113,7 +113,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTshirtProcessedDelegate, UTexture2D
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScanningStatusUpdate, FString, newStatus);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTshirtCategorizedDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPythonLoadedDelegate);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCategoryPredicted, int32, id);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCategoryPredicted, int32, id, float, proba);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectColorFrameEvent, const class UTexture2D*, ColorFrameTexture);
 
 
@@ -179,7 +179,7 @@ public:
 			FCategoryPredicted categoryPredicted;
 
 		UFUNCTION()
-			void OnCategoryPredicted(int32 id);
+			void OnCategoryPredicted(int32 id, float proba);
 
 		UPROPERTY(BlueprintReadWrite, Category = "Wardrobe|Scanning")
 			bool shouldBePredicting = false;

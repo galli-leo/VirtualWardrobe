@@ -105,8 +105,9 @@ def save_to_json(nn, training_history):
         new_row["max_epochs"] = nn.max_epochs
         new_row["estimate"] = (nn.max_epochs-row["epoch"])*row["dur"]
         new_row["dur"] = row["dur"]
+        new_row["t_next"] = int(row["dur"])+time.time()
+        new_row["t_fin"] = int(new_row["estimate"]) + time.time()
         train_hist.append(new_row)
-
     with open("training_history.json", "w+") as f:
         f.write(json.dumps(train_hist))
 
