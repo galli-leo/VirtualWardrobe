@@ -557,7 +557,7 @@ UWardrobeManager::~UWardrobeManager()
 	
 //	Py_DECREF(path);
 
-	Py_Finalize();
+//	Py_Finalize();
 #endif
 }
 

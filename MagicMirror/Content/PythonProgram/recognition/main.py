@@ -25,7 +25,7 @@ from lasagne import updates
 
 from nolearn.lasagne import NeuralNet, TrainSplit
 from nolearn.lasagne.handlers import SaveWeights
-from nolearn.lasagne.visualize import draw_to_file, plot_occlusion, plot_conv_activity, plot_conv_weights
+from nolearn.lasagne.visualize import draw_to_file, plot_occlusion, plot_conv_activity, plot_conv_weights, draw_to_notebook
 
 from skimage.io import imread
 from skimage.color import gray2rgb, rgba2rgb
@@ -168,6 +168,7 @@ def draw():
     global net
     net.initialize()
     draw_to_file(net, "layout.png", verbose=True)
+    draw_to_notebook(net)
 
 def train():
     global net
@@ -245,6 +246,6 @@ def plot_occ(path, real):
 
 
 if __name__ == '__main__':
-    #draw()
+    draw()
     #train()
-    load()
+    #load()
