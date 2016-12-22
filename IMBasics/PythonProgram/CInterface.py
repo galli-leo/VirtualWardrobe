@@ -114,12 +114,17 @@ def categorize(id, front_image):
 
 def initWithPath(path):
     global clothes
+    print path
     Vars.setRealPath(path)
     clothes = DBWrappers.loadCategories()
     initRecogModel()
+    Vars.DBFILE = os.path.join(path, "shirt_db.db")
+    Vars.TEXTURE_FOLDER = os.path.join(path, "textures")
     return Vars.DBFILE
 
 def initRecogModel(model="E:\\DeepLearning\\Clothing Recognition\\protocol\\seven\\model_weights.pkl"):
+    model = os.path.join(Vars.REALPATH, "recognition", "protocol", "seven", "model_weights.pkl")
+    print(model)
     recog.load(model)
 
 def purgeTMP():

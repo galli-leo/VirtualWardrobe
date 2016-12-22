@@ -33,6 +33,9 @@ FString UWardrobeManager::texturePath = FPaths::Combine(*FPaths::GameContentDir(
 
 SQLite::Database* UWardrobeManager::database = NULL;
 
+char* pyHomeLoc = "E:/MagicMirror/Content/Anaconda27_64";//TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::ConvertRelativePathToFull(FPaths::GameContentDir()), *FString("Anaconda27_64")));
+char* pyExeLoc = TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::ConvertRelativePathToFull(FPaths::GameContentDir()), *FString("Anaconda27_64"), *FString("python.exe")));
+
 TArray<FCategory> UWardrobeManager::categories;
 
 
@@ -196,7 +199,32 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 
 		FString GameDir = FPaths::ConvertRelativePathToFull(FPaths::GameContentDir());
 
+		FString WTF = FString(GameDir, 13);
+
+		const char* dir = TCHAR_TO_ANSI(*GameDir);
+		const char* extension = "Anaconda27_64";
+
 #if PLATFORM_WINDOWS
+		//FString pyHomeLocation = FPaths::Combine(*GameDir, *FString("Anaconda27_64"));
+		pyHomeLoc = (char*)malloc(strlen(dir)+strlen(extension)+1); /* make space for the new string (should check the return value ...) */
+		strcpy(pyHomeLoc, dir); /* copy name into the new var */
+		strcat(pyHomeLoc, extension); /* add the extension */
+		pyExeLoc = "E:/MagicMirror/Content/Anaconda27_64/python.exe";
+		char* asdf = TCHAR_TO_ANSI(*GameDir);
+		if (FPaths::DirectoryExists(FPaths::Combine(*GameDir, *FString("Anaconda27_64"))))
+		{
+			Py_SetPythonHome((char*)pyHomeLoc);
+			//Py_SetProgramName((char*)pyExeLoc);
+
+			printd("Initializing Python with PythonHome: %s and Exe Location: %s", *SFC(pyHomeLoc), *SFC(pyExeLoc))
+		}
+		else
+		{
+			printw("Anaconda Installation not found in Content dir! let's hope this computer has a python installation with the necessary tools, else the python part won't work.")
+		}
+		
+
+		FString test3 = FString("asdf");
 		//!!!: I think Py_Initialize must be on main thread else problems ensure!
 		Py_Initialize();
 

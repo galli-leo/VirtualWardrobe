@@ -382,6 +382,7 @@ void addPrintToItemFromCWD(uint32 id)
 	module = cInterfaceModule;
 	if (module == NULL)
 	{
+		printe("CInterface Module is NULL! Maybe it cannot find the right file(s)?");
 		return;
 	}
 
@@ -475,7 +476,12 @@ void InitPython(FString currentPath)
 
 	printd("Python Program path: %s", *currentPath);
 
+	FString insertPath = FString::Printf(TEXT("import sys; sys.path.insert(0, '%s');"), *currentPath);
+	FString callCInterface = FString::Printf(TEXT("import CInterface; CInterface.initWithPath('%s');"), *currentPath);
 	//PyObject *aa, *pModule, *pDict, *pFunc, *res;
+	char* fn = TCHAR_TO_ANSI(*insertPath);
+	char* fn2 = TCHAR_TO_ANSI(*callCInterface);
+	char* test = Py_GetPythonHome();
 
 	/*sysPath = PySys_GetObject("path");
 	//ErrorPrint();
@@ -486,9 +492,9 @@ void InitPython(FString currentPath)
 	PySys_SetObject("path", sysPath);*/
 
 
-	PyRun_SimpleString((const char*)"import sys; sys.path.insert(0, 'E:/Unreal Projects/IntelligentMirror/MagicMirror/Content/PythonProgram/');");
+	PyRun_SimpleString((const char*)fn);
 	//PyRun_SimpleString((const char*)"if not 'CInterface' in sys.modules: import CInterface");
-	PyRun_SimpleString((const char*)"import CInterface; CInterface.initWithPath('E:/Unreal Projects/IntelligentMirror/MagicMirror/Content/PythonProgram/')");
+	PyRun_SimpleString((const char*)fn2);
 	//PyRun_SimpleString("import C;");
 
 	//import sys; sys.path.insert(0, 'E:/Unreal Projects/IntelligentMirror/MagicMirror/Content/PythonProgram/'); import CInterface; CInterface.initWithPath('E:/Unreal Projects/IntelligentMirror/MagicMirror/Content/PythonProgram/')
