@@ -166,6 +166,6 @@ TArray<FVector> UMMBlueprintFunctions::GetWorldPositionFromHeadAndSpine(TArray<F
 	return Coords;
 
 #else
-	return FVector();
+	return TArray<FVector>();
 #endif
 }

@@ -29,7 +29,9 @@ public:
 
 private:
 	UTexture2D* finalTexture;
+#if PLATFORM_WINDOWS
 	PyGILState_STATE gstate;
+#endif
 	UTexture2D* LoadImageFromFile(FString file);
 public:
 

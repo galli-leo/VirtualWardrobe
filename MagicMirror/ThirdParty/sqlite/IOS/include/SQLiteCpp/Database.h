@@ -386,7 +386,7 @@ private:
             throw SQLite::Exception(mpSQLite, aRet);
         }
     }
-#if !UE_BUILD_SHIPPING
+#if UE_BUILD_SHIPPING + UE_BUILD_TEST != 1
 #define check(expr)				{ if(!(expr)) { FDebug::LogAssertFailedMessage( #expr, __FILE__, __LINE__ ); _DebugBreakAndPromptForRemote(); FDebug::AssertFailed( #expr, __FILE__, __LINE__ ); CA_ASSUME(expr); } }
 #else
 #define check(expr)

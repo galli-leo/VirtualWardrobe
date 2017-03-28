@@ -28,8 +28,9 @@ public:
 	FString dir;
 
 private:
-
+#if PLATFORM_WINDOWS
 	PyGILState_STATE gstate;
+#endif
 
 public:
 

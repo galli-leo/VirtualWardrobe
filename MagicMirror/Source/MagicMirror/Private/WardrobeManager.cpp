@@ -27,13 +27,20 @@ FString SFC(const char* arr)
 }
 #endif
 
+NSString *DocumentsFolder = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
 
+FString UWardrobeManager::documentsPath = FString(UTF8_TO_TCHAR([DocumentsFolder UTF8String]));
 
-FString UWardrobeManager::texturePath = FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("textures"));// FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
+#if PLATFORM_IOS
+//When loading files through UE4, the documents path is auto prepended
+FString UWardrobeManager::texturePath = FPaths::Combine(*FString("PythonProgram"), *FString("textures"));
+#else
+FString UWardrobeManager::texturePath = FPaths::Combine(*UWardrobeManager::documentsPath, *FString("PythonProgram"), *FString("textures"));// FString("E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/textures/");
+#endif
 
 SQLite::Database* UWardrobeManager::database = NULL;
 
-char* pyHomeLoc = "E:/MagicMirror/Content/Anaconda27_64";//TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::ConvertRelativePathToFull(FPaths::GameContentDir()), *FString("Anaconda27_64")));
+char* pyHomeLoc = (char*)"E:/MagicMirror/Content/Anaconda27_64";//TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::ConvertRelativePathToFull(FPaths::GameContentDir()), *FString("Anaconda27_64")));
 char* pyExeLoc = TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::ConvertRelativePathToFull(FPaths::GameContentDir()), *FString("Anaconda27_64"), *FString("python.exe")));
 
 TArray<FCategory> UWardrobeManager::categories;
@@ -159,15 +166,27 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 #if PLATFORM_WINDOWS
 		InitializeMagick("C:\\Program Files\\ImageMagick-7.0.2-Q16");
 #endif
-		//UWardrobeManager::database = SQLite::Database((char*)"E:/Unreal Projects/IntelligentMirror/MagicMirror/PythonProgram/shirt_db.db");
-
-		printd("SQLPath: %s", *FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
-		FString rel_ss = FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db")));
-		FString ss = FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"));
 
 		try
 		{
-			UWardrobeManager::database = new SQLite::Database(TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameContentDir(), *FString("PythonProgram"), *FString("shirt_db.db"))));
+            const ANSICHAR* dbPath = TCHAR_TO_ANSI(*FPaths::Combine(*UWardrobeManager::documentsPath, *FString("PythonProgram"), *FString("shirt_db.db")));
+            
+            
+            printd("SQLITE Temp Path: %s", *FString(sqlite3_temp_directory));
+            
+            printd("DB Path: %s", *FString(dbPath));
+            
+            printd("Documents dir: %s", *FString(UTF8_TO_TCHAR([DocumentsFolder UTF8String])));
+            
+            printd("Saved dir: %s", *FPaths::GameSavedDir());
+            
+            printd("Sandbox dir: %s", *FPaths::SandboxesDir());
+            
+            printd("User dir: %s", *FPaths::GameUserDir());
+            
+            //printd("What: %s, %s, %s", hmm, *FString("asdf"), (const ANSICHAR*)"asdf");
+            
+			UWardrobeManager::database = new SQLite::Database(dbPath);
 
 			SQLite::Statement query(*database, "SELECT id as id, fullname as fullname, name as name, layer as layer, istrousers as istrousers FROM categories");
 
@@ -179,6 +198,11 @@ void UWardrobeManager::StartWardrobeManager(EWardrobeMode mode = EWardrobeMode::
 
 			GetClothesFromDB();
 		}
+        catch (SQLite::Exception ex)
+        {
+            printe("SQL ERROR (%i, %i): %s", ex.getErrorCode(), ex.getExtendedErrorCode(), *FString(ex.getErrorStr()));
+            //const char* asdf = "wat";
+        }
 		catch (std::exception& e)
 		{
 			printe("SQL Error: %s", *SFC(e.what()));
@@ -281,6 +305,7 @@ void UWardrobeManager::GetClothesFromDB()
 
 FVector2D UWardrobeManager::MapSkeletonToScreenCoords(const FVector& cameraPoint, int32 ScreenSizeX, int32 ScreenSizeY)
 {
+    #if PLATFORM_WINDOWS
 	if (m_pCoordinateMapper == NULL)
 	{
 		return FVector2D(-1,-1);
@@ -297,6 +322,9 @@ FVector2D UWardrobeManager::MapSkeletonToScreenCoords(const FVector& cameraPoint
 	colorPoint.Y = colorSpace.Y / colorHeight * ScreenSizeY;
 
 	return colorPoint;
+#else
+    return FVector2D(-1,-1);
+#endif
 }
 
 TArray<FCategory> UWardrobeManager::GetCategories()

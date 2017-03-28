@@ -38,10 +38,11 @@ uint32 FCategoryPredicting::Run()
 	//Initial wait before starting
 	FPlatformProcess::Sleep(0.03);
 
-	prediction pred = std::make_tuple(420, 0.0);
+
 	//While not told to stop this thread 
 	//		and not yet finished finding Prime Numbers
 #if PLATFORM_WINDOWS
+    prediction pred = std::make_tuple(420, 0.0);
 	if (!isPythonBusy && FTextureCreator::Runnable->IsThreadFinished() && manager->mode != EWardrobeMode::MM_ScanningForPrint)
 	{
 		gstate = PyGILState_Ensure();
@@ -49,12 +50,13 @@ uint32 FCategoryPredicting::Run()
 		PyGILState_Release(gstate);
 		//FPlatformProcess::Sleep(2.0);
 	}
-	
+    int id = std::get<0>(pred);
+    float proba = std::get<1>(pred);
 #else
-	int id = 0;
+    int id = 420;
+    float proba = 0.0;
 #endif
-	int id = std::get<0>(pred);
-	float proba = std::get<1>(pred);
+	
 	manager->categoryPredicted.Broadcast(id, proba);
 
 	this->IsFinished = true;

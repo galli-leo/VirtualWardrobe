@@ -40,16 +40,18 @@ uint32 FPrintTextureCreator::Run()
 {
 	//Initial wait before starting
 	FPlatformProcess::Sleep(0.1);
+    #if PLATFORM_WINDOWS
 	gstate = PyGILState_Ensure();
 	//While not told to stop this thread 
 	//		and not yet finished finding Prime Numbers
-#if PLATFORM_WINDOWS
+
 	addPrintToItemFromCWD(this->id);
+    PyGILState_Release(gstate);
 #endif
 	//FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, this->id);
 	//UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);
 	//manager->TshirtProcessed.Broadcast(finalTexture);
-	PyGILState_Release(gstate);
+
 
 	FString finalTexturePath = FString::Printf(TEXT("%s/tshirt/%04d/final_texture.png"), *UWardrobeManager::texturePath, this->id);
 	UTexture2D* finalTexture = this->LoadImageFromFile(finalTexturePath);

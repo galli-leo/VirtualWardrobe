@@ -40,16 +40,19 @@ uint32 FPythonLoading::Run()
 {
 	//Initial wait before starting
 	FPlatformProcess::Sleep(0.03);
-	gstate = PyGILState_Ensure();
+    
+
 	//While not told to stop this thread 
 	//		and not yet finished finding Prime Numbers
 #if PLATFORM_WINDOWS
+    	gstate = PyGILState_Ensure();
 	printd("Initializing Python with Dir: %s", *this->dir)
 	InitPython(this->dir);
+    	PyGILState_Release(gstate);
 #else
-	
+    printd("Not on windows -> No python");
 #endif
-	PyGILState_Release(gstate);
+
 	this->manager->PythonLoaded.Broadcast();
 
 	this->IsFinished = true;

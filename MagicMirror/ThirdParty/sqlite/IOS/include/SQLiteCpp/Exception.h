@@ -14,7 +14,8 @@
 #include <string>
 
 // Forward declaration to avoid inclusion of <sqlite3.h> in a header
-struct sqlite3;
+//BAD!!!!!
+#include <sqlite3.h>
 
 /// Compatibility with non-clang compilers.
 #ifndef __has_feature
@@ -89,5 +90,22 @@ private:
     const int mExtendedErrcode; ///< Detailed error code if any
 };
 
+// Return the result code (if any, otherwise -1).
+inline int Exception::getErrorCode() const noexcept // nothrow
+{
+    return mErrcode;
+}
+
+// Return the extended numeric result code (if any, otherwise -1).
+inline int Exception::getExtendedErrorCode() const noexcept // nothrow
+{
+    return mExtendedErrcode;
+}
+
+// Return a string, solely based on the error code
+inline const char* Exception::getErrorStr() const noexcept // nothrow
+{
+    return sqlite3_errstr(mErrcode);
+}
 
 }  // namespace SQLite

@@ -21,6 +21,7 @@
 #endif
 #endif
 #include <SQLiteCpp/SQLiteCpp.h>
+#include <SQLiteCpp/Exception.h>
 #include <SQLiteCpp/VariadicBind.h>
 #if PLATFORM_WINDOWS
 #include "HideWindowsPlatformTypes.h"
@@ -30,6 +31,10 @@
 #if PLATFORM_WINDOWS
 #include "KinectFunctionLibrary.h"
 #include "PythonUtils.h"
+#else
+//fuck libstdc++
+#include <string>
+typedef int prediction;
 #endif
 #include "Tickable.h"
 
@@ -188,6 +193,8 @@ public:
 			bool autoSelectingCategory = false;
 
 		static FString texturePath;
+    
+        static FString documentsPath;
 
 		~UWardrobeManager();
 

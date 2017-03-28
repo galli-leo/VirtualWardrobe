@@ -27,7 +27,9 @@ public:
 
 
 private:
+#if PLATFORM_WINDOWS
 	PyGILState_STATE gstate;
+#endif
 public:
 
 	int32				TotalPrimesToFind;
