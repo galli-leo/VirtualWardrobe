@@ -7,8 +7,8 @@ scanning for new ones. Furthermore, a convolutional neural network was trained t
 which category a clothing item belongs to. It recognized the different categories very well
 and - for example - had a confidence of around 92% when predicting jeans.
 
-#Download
+## Download
 To download a precompiled binary version click [here](https://github.com/galli-leo/IntelligentMirror/releases/latest).
 
-#License
-All rights, titles to, ownership of and all intellectual property rights and all other proprietary rights in the Software belong to, vest in and shall remain by Leonardo Galli (2016). Exceptions include personal and educational use.
+## License
+All rights, titles to, ownership of and all intellectual property rights and all other proprietary rights in the Software belong to, vest in and shall remain by Leonardo Galli (2018). Exceptions include personal and educational use.
